@@ -1,0 +1,34 @@
+#!/bin/tcsh
+#
+#SBATCH -J prepbufr_RAOB
+#SBATCH --mail-user=verif-amb.gsl@noaa.gov
+#SBATCH --mail-type=FAIL
+#SBATCH -A amb-verif
+#SBATCH -n 1
+#SBATCH -p service
+#SBATCH -t 00:10:00
+#SBATCH -D .
+#SBATCH --mem=16G
+#SBATCH -o tmp/%x.oe.%j.job
+#
+#
+source $HOME/.cshrc
+#set dir=`/usr/bin/dirname $0`
+cd $HOME/prepbufr_raob/
+#echo "PWD is $PWD"
+# remove files in the tmp directory older than 24 h
+echo "removing 24h old files in the tmp/ directory"
+find ./tmp/ -mmin +1440 -name "*.*" -exec rm -f {} \;
+echo ""
+echo "loading prepBUFR RAOBS into the soundings_pb.RAOB_raob_sites table..."
+./get_prepbufr_raobs.py $1 $2 $3
+echo ""
+echo "Interpolating RAOB soundings to 10mb levels into the ruc_ua_pb.RAOB table..."
+set cal_secs=`get_cal_secs.py $1`
+echo "cal_secs is $cal_secs"
+setenv CLASSPATH "/home/amb-verif/javalibs/mysql-connector-java-5.1.6/mysql-connector-java-5.1.6-bin.jar:."
+java Verify3 dummy RAOB $cal_secs $cal_secs 0
+echo ""
+echo "comparing prepBUFR RAOB locaations for the past month with the old RAOB locations in the ruc_ua db..."
+./update_metadata2.py
+echo ""

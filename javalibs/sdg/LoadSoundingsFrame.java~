@@ -1,0 +1,164 @@
+package sdg;
+	
+import lib.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import java.io.*;
+import java.lang.System;
+import java.lang.Runtime;
+import java.net.*;
+
+/**
+* Loads new soundings
+* Revision history
+* 30-Sep-99 - changed to ask for a start and end date
+*  3-Jan-02 - upgraded to Java 1.1 event model
+*/
+
+class LoadSoundingsFrame extends Frame
+    implements MyButtonListener {
+
+
+  SoundingPanel creator;
+  MyButton get_maps;
+  MyButton get_ruc;
+  MyButton get_raobs;
+  MyButton get_prof; //get profiler data
+  MyButton get_acars;
+  TextField apt;
+  TextField start_year_tf;
+  Choice start_month_name_ch;
+  Choice start_mday_ch;
+  Choice start_hour_ch;
+  TextField n_hrs_tf;
+  int start_year;
+  String start_month_name;
+  int start_mday;
+  int start_hour;
+  UTCDate start_date;
+  double n_hrs;
+  Font f;
+  boolean closed=false;
+  boolean action=false;
+
+public LoadSoundingsFrame(SoundingPanel _creator) {
+  creator=_creator;
+
+  // handle window closing
+  addWindowListener(new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {
+	closed=true;
+	action=false;
+	creator.frameAction(LoadSoundingsFrame.this,action,closed);
+      }});
+    
+    f = creator.f;
+    start_date = new UTCDate(creator.startSecs);
+    n_hrs = (creator.endSecs - creator.startSecs)/3600.;
+    start_year = start_date.getYear();
+    start_month_name = start_date.getMonthName();
+    start_mday = start_date.getDay();
+    start_hour = start_date.getHour();
+
+    setTitle(" Choose Sounding");
+    //Debug.println("Creating LoadFrame");
+
+    //set things up
+    setLayout(new GridLayout(5,1));
+
+    Panel north = new Panel();
+    Label lab = new Label("Choose a site or lat,lon: ");
+    north.add(lab);
+    apt = new TextField(creator.desired_airport,7);
+    north.add(apt);
+    add(north);
+
+    Panel center = new Panel();
+    Label lab2 = new Label("Start date: ");
+    center.add(lab2);
+    start_year_tf = new TextField(""+start_year,5);
+    center.add(start_year_tf);
+
+    start_month_name_ch = new MonthChoice();
+    start_month_name_ch.select(start_month_name);
+    center.add(start_month_name_ch);
+
+    start_mday_ch = new MonthDaysChoice();
+    start_mday_ch.select(""+start_mday);
+    center.add(start_mday_ch);
+
+    start_hour_ch = new HoursChoice();
+    start_hour_ch.select(""+start_hour);
+    center.add(start_hour_ch);
+
+    add(center);
+
+    Panel center2 = new Panel();
+    Label lab22 = new Label(" Number of hours to load: ");
+    center2.add(lab22);
+    n_hrs_tf = new TextField(""+n_hrs,5);
+    center2.add(n_hrs_tf);
+    add(center2);
+
+    Panel south = new Panel();
+    Label load_lab = new Label("Load: ");
+    south.add(load_lab);
+    get_maps = new MyButton(f," MAPS ",false);
+    get_maps.addListener(this);
+    south.add(get_maps);
+    get_ruc = new MyButton(f," RUC2 ",false);
+    get_ruc.addListener(this);
+    south.add(get_ruc);
+    get_raobs = new MyButton(f," RAOB(s) ",false);
+    get_raobs.addListener(this);
+    south.add(get_raobs);
+    add(south);
+
+    Panel south2 = new Panel();
+    Label load_lab2 = new Label("Or load: ");
+    south2.add(load_lab2);
+    get_prof = new MyButton(f," Profiler(s) ",false);
+    get_prof.addListener(this);
+    south2.add(get_prof);
+    get_acars = new MyButton(f," ACARS (restricted) ",false);
+    get_acars.addListener(this);
+    south2.add(get_acars);
+    add(south2);
+}
+  
+public void myAction(MyButton b) {
+  if(b == get_maps || b == get_ruc ||
+     b == get_raobs || b == get_prof ||
+     b == get_acars) {
+    creator.desired_airport = apt.getText();
+    start_date = new UTCDate(
+		       MyUtil.atoi(start_year_tf.getText()),
+		       start_month_name_ch.getSelectedItem(),
+		       MyUtil.atoi(start_mday_ch.getSelectedItem()),
+		       MyUtil.atoi(start_hour_ch.getSelectedItem())
+		       ,0,0);
+    creator.startSecs = start_date.get1970Secs();
+    // put on an hour boundry
+    creator.startSecs -= creator.startSecs%3600;
+    creator.endSecs = creator.startSecs +
+      (int)(3600*MyUtil.atof(n_hrs_tf.getText()));
+    
+    if(b == get_maps) {
+      creator.data_source = "MAPS";
+    } else if(b == get_ruc) {
+      creator.data_source = "RUC2";
+    } else if(b == get_raobs) {
+      creator.data_source = "RAOB";
+    } else if(b == get_prof) {
+      creator.data_source = "PROF";
+    } else if(b == get_acars) {
+      creator.data_source = "ACARS";
+    } else {
+      creator.data_source = "unknown";
+    }
+    creator.frameAction(this,true,false);
+  }
+}
+
+} //end of class LoadSoundingsFrame

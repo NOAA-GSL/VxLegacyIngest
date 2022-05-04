@@ -1,0 +1,124 @@
+package sdg;
+	
+import lib.*;
+import java.net.*;
+import java.io.*;
+
+public class Bat {
+
+    //class variables
+    static Bat [] dry_adiabat;
+    static int n_dry_adiabats=0;
+    static Bat [] sat_adiabat;
+    static int n_sat_adiabats=0;
+
+    //instance variables
+    float t_1000;  //temp at 1000 mb in Celsius
+    int n_points;
+    float[] t;  //temperature in Celsius at...
+    float[] p;  //this pressure in mb
+
+//constructor
+public Bat() {
+}
+
+public Bat(DataInputStream in) throws IOException {
+
+    t_1000 = in.readFloat();
+    //System.out.println("adiabat: "+t_1000);
+    if(t_1000 == -1) {
+        return;
+    } else {
+        t = new float[70];
+        p = new float[70];
+        n_points=0;
+        while(true) {
+            float tt = in.readFloat();
+            if(tt == -1) {
+                break;
+            } else {
+                t[n_points]=tt;
+                p[n_points]=in.readFloat();
+                n_points++;
+            }
+        }
+    }
+    return;
+}
+
+//initializer
+static void init() {
+   dry_adiabat = new Bat[100];
+   sat_adiabat = new Bat[100];
+   InputStream fin=null;
+   boolean bad=false;
+   Exception ex=null;
+   Error err=null;
+   String adiabats_file="adiabats.xbm";
+   try {
+    Bat b = new Bat();
+    fin = b.getClass().getResourceAsStream(adiabats_file);
+    if(fin == null) {
+        bad=true;
+    }
+   } catch (Error _err) {
+    //old versions of java dont have getClass()
+    err=_err;
+    bad=true;
+   }
+   catch (Exception _ex) {
+    //maybe some other kind of trouble with the jar file
+    ex=_ex;
+    bad=true;
+   }
+
+   if(bad) {
+        Debug.println("Problem reading "+adiabats_file+" from jar. err: "+err+
+                      ", exception: "+ex+"\nnow trying the server...");
+        try {
+            URL adiabatsURL = new URL(SoundingPanel.code_base,
+				      adiabats_file);
+            fin = adiabatsURL.openStream();
+            if(fin != null) {
+                bad=false;
+            }
+        } catch (Exception e2) {
+            Debug.println("Exception reading server for adiabats: "+e2);
+            bad = true;
+        }
+   }
+
+   if( ! bad) {
+    try {
+      BufferedInputStream bfin = new BufferedInputStream(fin,4096);
+      DataInputStream in = new DataInputStream(bfin);
+
+      n_dry_adiabats=0;
+      while(true) {
+        Bat temp = new Bat(in);
+        if(temp.t_1000 != -1) {
+            dry_adiabat[n_dry_adiabats++] = temp;
+        } else {
+            break;
+        }
+      }
+      n_sat_adiabats=0;
+      while(true) {
+        Bat temp = new Bat(in);
+        if(temp.t_1000 != -1) {
+            sat_adiabat[n_sat_adiabats++] = temp;
+        } else {
+            break;
+        }
+      }
+   } catch (Exception e) {
+    Debug.println("Bat exception (EOF is normal): "+e);
+   }
+   } else {
+    Debug.println("Couldn't read adiabats!");
+   }
+}
+
+}
+
+

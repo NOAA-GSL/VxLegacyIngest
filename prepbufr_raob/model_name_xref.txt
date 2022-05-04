@@ -1,0 +1,26 @@
+MySQL [ruc_ua_pb_sums2]> select model, display_text from ruc_ua.regions_per_model_mats_all_categories where model != display_text order by display_category, display_order;
++-----------------------+--------------------+
+| model                 | display_text       |
++-----------------------+--------------------+
+| isoRRrapx             | RAP_OPS_iso_130    |
+| RAP                   | RAP_GSL            |
+| RAP_130               | RAP_GSL_130        |
+| RAP_iso_130           | RAP_GSL_iso_130    |
+| HRRR                  | HRRR_GSL           |
+| HRRR_iso              | HRRR_GSL_iso       |
+| HRRR_AK               | HRRR_AK_GSL        |
+| HRRR_AK_iso           | HRRR_AK_GSL_iso    |
+| HRRR_HI               | HRRR_HI_GSL        |
+| HRRR_HI_iso           | HRRR_HI_GSL_iso    |
+| RTMA_3D_GSD           | RTMA_3D_GSL        |
+| RTMA_3D_GSD_dev1      | RTMA_3D_GSL_dev1   |
+| RTMA_3D_AK            | RTMA_3D_AK_GSL     |
+| RTMA_3D_RU_GSD        | RTMA_3D_RU_GSL     |
+| persis                | Persistence        |
+| rt_ccpp_gsd_L128      | FV3_GSL_L127       |
+| FV3CCPP_C384          | FV3_GSL_C384       |
+| FV3CCPP_Chem          | FV3_GSL_Chem       |
+| rt_gfsv16_gf          | GFSv16_gf          |
+| rt_gfsv16_mynn        | GFSv16_mynn        |
+| rt_gfsv16_thmp_subcyc | GFSv16_thmp_subcyc |
++-----------------------+--------------------+

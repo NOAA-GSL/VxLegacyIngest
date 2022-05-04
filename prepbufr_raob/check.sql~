@@ -1,0 +1,7 @@
+use soundings;
+
+select site,count(*) as N,group_concat(mean_h_diff) as diffs
+from hypsometric_summary
+group by site
+having N > 2
+order by site;

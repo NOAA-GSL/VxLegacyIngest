@@ -1,0 +1,13 @@
+&setup
+obsdate=YMDH
+obsmin=0,
+obsPath='/public/data/grids/gdas/prepbufr/restricted',
+obsfilename='YJDH00.gdas.tHHz.prepbufr.YMDonly',
+savePath='./',
+prefixobssavename='conv',
+/
+&obsset
+numobstype=1,
+obstype=120
+timewindow=6.0,
+/

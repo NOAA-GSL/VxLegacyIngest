@@ -1,0 +1,37 @@
+describe
+select pb.fcst_len
+,count(distinct pb.date,pb.hour) Npb
+,count(distinct o1.date,o1.hour) Nold 
+from rt_ccpp_gsd_L128_Areg7 as pb  left join  ruc_ua_sums2.rt_ccpp_gsd_L128_Areg7 as o1 on(
+pb.date = o1.date
+and pb.hour = o1.hour
+and pb.fcst_len = o1.fcst_len
+and pb.mb10 = o1.mb10)
+where 1=1
+#and o1.date is null
+group by pb.fcst_len
+order by pb.fcst_len;
+
+select hs.wmoid,name,descript,count(*) as N
+,round(avg(mean_h_diff_500)/10,1) as avg500
+,round(std(mean_h_diff_500)/10,1) as std500
+,round(abs(avg(mean_h_diff_500))/std(mean_h_diff_500),1) r
+,round(avg(mean_h_diff)/10,1) as avg1
+,round(std(mean_h_diff)/10,1) as std1
+from hypsometric_summary hs, ruc_ua_pb.metadata m
+where 1=1
+and hs.wmoid = m.wmoid
+#and hs.wmoid = 89664
+and n_h_diff_500 > 0
+and time >= 1646870400  # Thu 10 Mar 2022 00:00:00
+group by wmoid
+having N > 11
+order by abs(avg(mean_h_diff_500))/std(mean_h_diff_500);
+
+use ruc_ua_pb;
+create table mark (
+press mediumint not null,
+height mediumint not null,
+temp mediumint not null,
+primary key (press)
+);

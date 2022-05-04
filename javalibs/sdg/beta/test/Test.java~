@@ -1,0 +1,15 @@
+import lib.*;
+import java.util.*;
+import java.io.*;
+
+public class Test {
+
+public static void main(String args[]) {
+  float z =MyUtil.atoi(args[0]);
+  double p1 = sdg.getStdPressure(z/0.3048); // wants z in ft
+  double p2 = ztopsa(z);
+  System.out.println("p1 "+p1+", p2 "+p2);
+}
+
+public double ztopsa(double z) {
+  double ztopsa = 226.0971*Math.pow(10,(11000

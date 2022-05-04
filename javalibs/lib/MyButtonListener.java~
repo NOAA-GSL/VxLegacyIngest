@@ -1,0 +1,7 @@
+package lib;
+/**
+ * interface for listening to a MyButton
+ */
+public interface MyButtonListener {
+  public void myAction(MyButton b);
+} 

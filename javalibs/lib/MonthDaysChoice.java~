@@ -1,0 +1,40 @@
+package lib;
+import java.awt.*;
+
+class MonthDaysChoice extends Choice {
+
+public MonthDaysChoice() {
+  super();
+  addItem("1");
+  addItem("2");
+  addItem("3");
+  addItem("4");
+  addItem("5");
+  addItem("6");
+  addItem("7");
+  addItem("8");
+  addItem("9");
+  addItem("10");
+  addItem("11");
+  addItem("12");
+  addItem("13");
+  addItem("14");
+  addItem("15");
+  addItem("16");
+  addItem("17");
+  addItem("18");
+  addItem("19");
+  addItem("20");
+  addItem("21");
+  addItem("22");
+  addItem("23");
+  addItem("24");
+  addItem("25");
+  addItem("26");
+  addItem("27");
+  addItem("28");
+  addItem("29");
+  addItem("30");
+  addItem("31");
+}
+}

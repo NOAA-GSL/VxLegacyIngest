@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+use strict;
+my $DEBUG=1;
+
+my $model = $ARGV[1] ||
+    die "usage: prepare_new_model.pl <model name>\n";
+
+use DBI;
+#set database connection parameters
+$ENV{DBI_DSN} = "DBI:mysql:ruc_ua_pb_sums2:wolphin.fsl.noaa.gov";
+$ENV{DBI_USER} = "UA_realtime";
+$ENV{DBI_PASS} = "newupper";
+# connect to the database
+my $dbh = DBI->connect(undef,undef,undef, {RaiseError => 1});
+my $sth;
+my $query="";
+$dbh->do("use ruc_ua_pb");
+$query = qq(select calculator from ruc_ua.dp_to_rh_calculator_per_model where model = "$model");
+print "in ruc_ua_pb db: $query\n";
+my $rh_calculator = $dbh->selectrow_array($query);
+print "calculator: |$rh_calculator|\n";
+

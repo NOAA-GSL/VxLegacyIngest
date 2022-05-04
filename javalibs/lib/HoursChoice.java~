@@ -1,0 +1,33 @@
+package lib;
+import java.awt.*;
+
+class HoursChoice extends Choice {
+
+public HoursChoice() {
+  super();
+  addItem("0");
+  addItem("1");
+  addItem("2");
+  addItem("3");
+  addItem("4");
+  addItem("5");
+  addItem("6");
+  addItem("7");
+  addItem("8");
+  addItem("9");
+  addItem("10");
+  addItem("11");
+  addItem("12");
+  addItem("13");
+  addItem("14");
+  addItem("15");
+  addItem("16");
+  addItem("17");
+  addItem("18");
+  addItem("19");
+  addItem("20");
+  addItem("21");
+  addItem("22");
+  addItem("23");
+}
+}

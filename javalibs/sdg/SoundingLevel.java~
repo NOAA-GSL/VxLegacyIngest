@@ -1,0 +1,68 @@
+package sdg;
+	
+import lib.*;
+import java.awt.*;
+import java.util.*;
+import java.io.*;
+
+/** Stores a level for a sounding
+*/
+public class SoundingLevel {
+    int n_level;    //index of this level in a sounding
+    float p;       //in millibars
+    float z;       //in meters
+    float t;       //in Centigrade
+    float dp;      //in Centigrade
+    float wd;      //in degrees true
+    float ws;      //in knots
+    float bearing; //from release point or airport
+    float range;   //ditto, in nautical miles
+    UTCDate date;
+
+public SoundingLevel(int _n_level,float _p, float _z, float _t, float _dp,
+                     float _wd, float _ws) {
+    n_level=_n_level;
+    p=_p;
+    z=_z;
+    t=_t;
+    dp=_dp;
+    wd=_wd;
+    if(wd == 360) wd = 0;
+    ws=_ws;
+    bearing=Sounding.MISSING;
+    range=Sounding.MISSING;
+    date=null;
+}
+
+public SoundingLevel(int n_level,float p, float z, float t, float dp,
+                     float wd, float ws, float bearing, float range,
+		     UTCDate date) {
+   this(n_level,p,z,t,dp,wd,ws);
+   this.bearing=bearing;
+   this.range=range;
+   this.date = date;
+}
+
+public String toString() {
+    String zs = MyUtil.goodRoundString(z/0.3048,-1000,
+                                       1.e10,"------",0,6)+" ";
+    String ps = MyUtil.goodRoundString(p,0,1200,"----",0,4)+" ";
+    String ts = MyUtil.goodRoundString(t,-200,200,"----",1,5)+"/";
+    String dps = MyUtil.goodRoundString(dp,-200,200,"-----",1,-5)+"    ";
+    String wds = MyUtil.goodRoundString(wd,0,359,"---",0,3)+"\u00b0/";
+    String wss = MyUtil.goodRoundString(ws,0,300,"---",0,-3);
+    String bs="";
+    String rs="";
+    if(bearing != Sounding.MISSING) {
+        bs = "  "+MyUtil.goodRoundString(bearing,0,360,"---",0,3)+"\u00b0/";
+        rs = MyUtil.goodRoundString(range,0,1.e10,"---",0,-3);
+    }
+    String time_s="";
+    if(date != null) {
+        double tt = MyUtil.atof(date.getHHMM());
+        time_s = "   "+MyUtil.goodRoundString(tt,0,2359,"",0,-4)+" UTC";
+    }
+    return zs + ps + ts + dps + wds + wss + bs + rs + time_s;
+}
+
+}

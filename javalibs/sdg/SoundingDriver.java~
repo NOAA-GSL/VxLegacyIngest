@@ -1,0 +1,31 @@
+package sdg;
+
+import java.net.*;
+
+public interface SoundingDriver {
+
+  static final double default_p_lower = 1050.0;
+  static final double default_p_upper = 150.0;
+  static final double default_t_min = -40.0;
+  static final double default_t_max = 50.0;
+  
+// should provide the name of the log file, or null if none
+public String get_log_file();
+  
+// should provide the code_base
+public URL get_code_base();
+
+// don't know
+public boolean get_initial_load();
+
+public String get_load_btn_title();
+
+public int get_plot_width();
+
+public int get_plot_height(); 
+
+public void set_showing_soundingsFrame(boolean visible);
+
+public void set_soundingsFrame_btn(String s); 
+ 
+}

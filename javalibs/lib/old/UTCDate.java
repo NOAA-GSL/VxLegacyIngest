@@ -1,0 +1,663 @@
+/*
+Open Source License/Disclaimer, 
+Forecast Systems Laboratory
+NOAA/OAR/FSL
+325 Broadway Boulder, CO 80305 
+
+This software is distributed under the Open Source Definition, which
+may be found at http://www.opensource.org/osd.html. In particular,
+redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:  
+<ul>
+<li> Redistributions of source code must retain this notice, this list of
+  conditions and the following disclaimer. 
+
+<li> Redistributions in binary form must provide access to this notice,
+  this list of conditions and the  following disclaimer, and the
+  underlying source code.
+  
+<li> All modifications to this software must be clearly documented, and
+  are solely the responsibility of the agent making the
+  modifications.
+  
+<li> If significant modifications or enhancements are made to this
+  software, the Forecast Systems Laboratory should be notified.
+</ul>
+    
+THIS SOFTWARE AND ITS DOCUMENTATION ARE IN THE PUBLIC DOMAIN AND ARE
+FURNISHED "AS IS." THE AUTHORS, THE UNITED STATES GOVERNMENT, ITS
+INSTRUMENTALITIES, OFFICERS, EMPLOYEES, AND AGENTS MAKE NO WARRANTY,
+EXPRESS OR IMPLIED, AS TO THE USEFULNESS OF THE SOFTWARE AND
+DOCUMENTATION FOR ANY PURPOSE. THEY ASSUME NO RESPONSIBILITY (1) FOR THE
+USE OF THE SOFTWARE AND DOCUMENTATION; OR (2) TO PROVIDE TECHNICAL
+SUPPORT TO USERS. 
+*/
+package lib;
+
+import java.util.*;
+
+/* Adapted by Bill Moninger from ...
+ * Gary Cornell and Cay S. Horstmann, Core Java (Book/CD-ROM)
+ * Published By SunSoft Press/Prentice-Hall
+ * Copyright (C) 1996 Sun Microsystems Inc.
+ * All Rights Reserved. ISBN 0-13-565755-5
+ */
+
+/**
+ * Store dates and perform date arithmetic
+ * (another Date class, but more useful that
+ * java.util.Date)
+ * @version 1.1, 18-May-99
+ * @author Bill Moninger
+ *
+ * revision history
+ * 17-May-99 - shortString made Y2K compliant (previous version returned
+ *             year = 100 in year 2000, now returns year = 0.
+ * earlier   - added a constructor to get the Date from a day-of-year
+ *             (in range 1-366)
+ *           - added public variables MIN and MAX.
+ */
+
+public class UTCDate implements Cloneable
+{  /**
+    *  Constructs today's date
+    */
+
+private static int JULIAN_1970 = 2440588; //Julian day of 1/1/1970
+  //Julian day of adoption of Gregorian cal.
+private static int JGREG = 2299161; 
+private static String[] month_name =
+{"Jan","Feb","Mar","Apr","May","Jun",
+ "Jul","Aug","Sep","Oct","Nov","Dec"};
+private static int[][] daytab = {
+  {0,31,28,31,30,31,30,31,31,30,31,30,31},
+  {0,31,29,31,30,31,30,31,31,30,31,30,31}
+};
+public static UTCDate MIN = new UTCDate(0,1,1);
+public static UTCDate MAX = new UTCDate(2222,1,1);
+public static UTCDate BAD = new UTCDate(0);
+  
+private int sec_of_day;  //0 - 86399
+private int julian_day; //2440000 = May 23, 1968
+  
+  /**
+   * test interface
+   */
+public static void main(String args[]) {
+  UTCDate d = new UTCDate();
+  System.out.println("todays date is "+d);
+  UTCDate d1 = new UTCDate(900950400);
+  boolean before = d.isBefore(d1);
+  System.out.println(""+d+" is before "+d1+"? "+before);
+  
+  System.out.println("julian day is "+d.getJulian());
+  for(int i=0;i<12;i++) {
+    d.addMonths(-1);
+    System.out.println("1 month earlier is "+d);
+    int j=0;
+    while (j < 1.e7) {  //this adds about 1.8 seconds on my 166 MHz pc.
+      j++;
+    }
+  }
+  /* //loop forever so the dos window doesn't disappear until I hit ^c
+     while(true) {
+     int k = 1;
+     }*/
+}
+  
+  /**
+   * Constructs the current date (uses Calendar class)
+   */
+public UTCDate() {
+  Calendar today = Calendar.getInstance();
+  int ymdhms[] = new int[6];
+  ymdhms[0] = today.get(Calendar.YEAR);
+  ymdhms[1] = today.get(Calendar.MONTH) + 1;
+  ymdhms[2] = today.get(Calendar.DAY_OF_MONTH);  //day of month
+  ymdhms[3]= today.get(Calendar.HOUR_OF_DAY);
+  ymdhms[4]= today.get(Calendar.MINUTE);
+  ymdhms[5]= today.get(Calendar.SECOND);
+  setSecsDays(ymdhms);
+  //convert to UTC
+  int offset = (today.get(Calendar.ZONE_OFFSET) +
+    today.get(Calendar.DST_OFFSET))/60000;
+  //System.out.println("offset is "+offset);
+  addMinutes(-offset);
+}
+  
+  /**
+   * Constructs a specific date
+   * @param yyyy year (full year, e.g., 1996,
+   * <i>not</i> starting from 1900)
+   * @param m month
+   * @param d day
+   * @exception IllegalArgumentException if yyyy m d not a
+   * valid date
+   */
+public UTCDate(int yyyy, int m, int d)
+  {
+    this(yyyy,m,d,0,0,0);
+  }
+  
+   /**
+    * Constructs a specific date
+    * @param yyyy year (full year, e.g., 1996,
+    * <i>not</i> starting from 1900)
+    * @param y_day (1-366) day of year
+    * @param h hour
+    * @param m minute
+    * @param s second
+    */
+public UTCDate(int yyyy,int y_day,int hour, int min, int sec) {
+     int i,leap, month,mday;
+     // get month and day from julian day
+     //see p 111 of Kernighan and Richie, 2nd ed.
+     if( (yyyy%4 == 0 && yyyy%100 != 0) || yyyy%400 == 0) {
+       leap=1;
+     } else {
+       leap=0;
+     }
+     for(i=1;y_day>daytab[leap][i];i++) {
+       y_day -= daytab[leap][i];
+     }
+     month = i;
+     mday = y_day;  //julday has been decremented to just be day of the month
+     int ymdhms[] = new int[6];
+     ymdhms[0] = yyyy;
+     ymdhms[1] = month;
+     ymdhms[2] = mday;
+     ymdhms[3]=hour;
+     ymdhms[4]=min;
+     ymdhms[5]=sec;
+     setSecsDays(ymdhms);
+   }
+
+   /**
+    * Constructs a specific date
+    * @param yyyy year (full year, e.g., 1996,
+    * <i>not</i> starting from 1900)
+    * @param m month (1 -12)
+    * @param d day
+    * @param h hour
+    * @param m minute
+    * @param s second
+    */
+public UTCDate(int yyyy, int m, int d, int h, int min, int s) {
+    int ymdhms[] = new int[6];
+      ymdhms[0] = yyyy;
+      ymdhms[1] = m;
+      ymdhms[2] = d;
+      ymdhms[3]=h;
+      ymdhms[4]=min;
+      ymdhms[5]=s;
+      setSecsDays(ymdhms);
+}
+
+public UTCDate(int yyyy, String m_name, int d, int h, int min, int s) {
+    int m = get_month_num(m_name);
+      int ymdhms[] = new int[6];
+      ymdhms[0] = yyyy;
+      ymdhms[1] = m;
+      ymdhms[2] = d;
+      ymdhms[3]=h;
+      ymdhms[4]=min;
+      ymdhms[5]=s;
+      setSecsDays(ymdhms);
+}
+
+   /**
+    * Construsts a specific date
+    * @param cal_secs seconds since 1/1/1970
+    */
+public UTCDate(int cal_secs) {
+    //get number of days since 1/1/1970
+    int days_since_1970 = cal_secs/86400;
+    julian_day = JULIAN_1970 + days_since_1970;
+    sec_of_day = cal_secs - days_since_1970 * 86400;
+}
+
+  /**
+   * Construct a date from an SQL format DATETIME
+   */
+public UTCDate(String sdate) {
+      int ymdhms[] = new int[6];
+      ymdhms[0] = MyUtil.atoi(sdate.substring(0,4));
+      ymdhms[1] = MyUtil.atoi(sdate.substring(5,7));
+      ymdhms[2] = MyUtil.atoi(sdate.substring(8,10));
+      ymdhms[3]=  MyUtil.atoi(sdate.substring(11,13));
+      ymdhms[4]=  MyUtil.atoi(sdate.substring(14,16));
+      ymdhms[5]=  MyUtil.atoi(sdate.substring(17,19));
+      setSecsDays(ymdhms);
+}
+  
+
+   /**
+    * Advances this day by n days. For example.
+    * d.addDays(30) adds thirty days to d
+    * @param n the number of days by which to change this
+    * day (can be < 0)
+    */
+public void addDays(int n) {
+  if(n == 0) {
+    return;
+  }
+  julian_day += n;
+}
+
+  /**
+    * Advances this day by h hours. For example.
+    * d.addHours(3) adds three hours to d
+    * @param h the number of hours by which to change this
+    * day (can be < 0)
+    */
+public void addHours(int h) {
+     if(h == 0) {
+         return;
+     }
+     sec_of_day += h*3600;
+     adjust(sec_of_day);
+}
+
+    /**
+    * Advances this day by m minutes. For example.
+    * d.addMinutes(3) adds three minutes to d
+    * @param m the number of minutes by which to change this
+    * day (can be < 0)
+    */
+public void addMinutes(int m) {
+     if(m == 0) {
+         return;
+     }
+     sec_of_day += m*60;
+     adjust(sec_of_day);
+}
+
+   /**
+    * Advances this day by n months. For example.
+    * d.addMonths(3) adds three months to d
+    * @param m the number of months by which to change this
+    * day (can be < 0)
+    */
+public void addMonths(int m) {
+  if(m == 0) {
+    return;
+  }
+  int[] ymd = fromJulian();
+  int year=ymd[0];
+  int month=ymd[1];
+  int day=ymd[2];
+  int years_to_add = m/12;
+  int months_to_add = m - 12*years_to_add;
+  year += years_to_add;
+  month += months_to_add;
+  if(month > 12) {
+    month -= 12;
+    year++;
+  } else if (month < 1) {
+    month += 12;
+    year--;
+  }
+  ymd[0]=year;
+  ymd[1]=month;
+  ymd[2]=day;
+  setJulian(ymd);
+}
+
+   /**
+    * Advances this day by s seconds. For example.
+    * d.addSeconds(3) adds three seconds to d
+    * @param s the number of seconds by which to change this
+    * day (can be < 0)
+    */
+public void addSecs(int s) {
+     if(s == 0) {
+         return;
+     }
+     sec_of_day += s;
+     adjust(sec_of_day);
+}
+
+  /**
+    * Makes a bitwise copy of a Day object
+    * @return a bitwise copy of a Day object
+    */
+public UTCDate cloneDate() {
+  try
+    {  return (UTCDate)super.clone();
+    } catch (CloneNotSupportedException e)
+      {  // this shouldn't happen, since we are Cloneable
+	return null;
+      }
+}
+
+   /**
+    * The number of days between this and day parameter
+    * @param b any date
+    * @return the number of days between this and day parameter
+    * and b (> 0 if this day comes after b)
+    */
+public int daysBetween(UTCDate b) {
+  return julian_day - b.julian_day;
+}
+
+public boolean equals(UTCDate other) {
+  return sec_of_day == other.sec_of_day &&
+    julian_day == other.julian_day;
+}
+
+   /**
+    * @return the seconds since 1/1/1970
+    */
+public int get1970Secs() {
+  return (julian_day - JULIAN_1970) * 86400 + sec_of_day;
+}
+     
+  /**
+    * @return the hour of the day (0 - 23)
+    */
+public int getHour() {
+  return sec_of_day/3600;
+}
+
+  /**
+    * @return the minute of the hour (0 - 59)
+    */
+public int getMinute() {
+  return (sec_of_day - getHour()*3600)/60;
+}
+
+  /**
+    * @return the second of the minute (0 -59)
+    */
+public int getSecond() {
+  return sec_of_day - 60*getMinute() - 3600*getHour();
+}
+
+  /**
+    * Gets the day of the month
+    * @return the day of the month (1...31)
+    */
+public int getDay() {
+  int[] r = fromJulian();
+  return r[2];
+}
+
+    /**
+    * A string representation of the time of day
+    * @return a string representation of the time of day
+    */
+public String getHHMM() {
+  if (equals(BAD)) {
+    return "----";
+  } else {
+    return leadingZero(getHour())+leadingZero(getMinute());
+  }
+}
+
+  /**
+   * Gets the Julian day
+   * @return the Julian day (2440588 is 1-Jan-1970)
+   */
+public int getJulian() {
+  return julian_day;
+}
+
+    /**
+    * A string representation of the day-month_name-year
+    * @return a string representation 
+    */
+public String getMDY() {
+  if (equals(BAD)) {
+    return "----";
+  } else {
+    return leadingZero(getDay())+"-"+
+      getMonthName()+"-"+leadingZero(getYear()%100);
+  }
+}
+
+   /**
+    * A string representation of the DD/MM/YY
+    * @return a string representation 
+    */
+public String getDDMMYY() {
+  if (equals(BAD)) {
+    return "--/--/--";
+  } else {
+    return leadingZero(getDay())+"/"+
+      leadingZero(getMonth())+"/"+leadingZero(getYear()%100);
+  }
+}
+
+   /**
+    * Gets the month
+    * @return the month (1...12)
+    */
+public int getMonth() {
+  int[] r = fromJulian();
+  return r[1];
+}
+
+  /**
+    * Gets the month name
+    * @return the month ("Jan"..."Dec")
+    */
+public String getMonthName() {
+  int[] r = fromJulian();
+  return month_name[r[1]-1];
+}
+
+
+public static int get_month_num(String m_name) {
+     int i=0;
+     for(;i<month_name.length;i++) {
+        if(month_name[i].equalsIgnoreCase(m_name)) {
+            break;
+        }
+     }
+     return i+1;
+}
+   /**
+    * @return the second in the day (0 - 86399)
+    */
+public int getSecs() {
+  return sec_of_day;
+}
+
+   /**
+    * Gets the year
+    * @return the year (counting from 0, <i>not</i> from 1900)
+    */
+public int getYear() {
+  int[] r = fromJulian();
+  return r[0];
+}
+
+   /**
+    * @param u any UTCDate
+    * @return true iff 'this' is after u
+    */
+public boolean isAfter(UTCDate u) {
+  boolean after=false;
+  int day_dif = this.julian_day - u.julian_day;
+  if(day_dif > 0) {
+    after=true;
+  } else if (day_dif < 0) {
+    after=false;
+  } else {
+    int sec_dif = this.sec_of_day - u.getSecs();
+    if(sec_dif > 0) {
+      after=true;
+    }
+  }
+  return after;
+}
+
+   /**
+    * @param u any UTCDate
+    * @return true iff 'this' is before u
+    */
+public boolean isBefore(UTCDate u) {
+  boolean before=false;
+  int day_dif = this.julian_day - u.julian_day;
+  if(day_dif < 0) {
+    before=true;
+  } else if (day_dif > 0) {
+    before=false;
+  } else {
+    int sec_dif = this.sec_of_day - u.getSecs();
+    if(sec_dif < 0) {
+      before=true;
+    }
+  }
+  return before;
+}
+
+public static String leadingZero(int val) {
+        String result = ""+val;
+        if(val < 10) {
+            result = "0"+val;
+        }
+        return result;
+}
+
+   /**
+    * The number of seconds between this and b (+ if this is LATER)
+    * @param b any date
+    * @return the number of days between this and day parameter
+    * and b (> 0 if this day comes after b)
+    */
+public int secsAfter(UTCDate b) {
+  int secs_between_days = daysBetween(b) * 86400;
+  return secs_between_days + this.sec_of_day - b.sec_of_day;
+}
+
+public String shortString() {
+  //returns a short versiion of the date
+  return getMDY()+" "+getHHMM();
+}
+  
+   /**
+    * A string representation of the day
+    * @return a string representation of the day
+    */
+public String toString() {
+  return leadingZero(getDay())+"-"+month_name[getMonth()-1]+
+    "-"+getYear()+" "+
+    leadingZero(getHour())+":"+leadingZero(getMinute())
+    +":"+leadingZero(getSecond());
+}
+  
+   /**
+    * Gets the weekday
+    * @return the weekday (0 = Sunday, 1 = Monday, ...,
+    * 6 = Saturday)
+    */
+public int weekday() { return (julian_day + 1)% 7; }
+
+   /**
+    * Sets the julian day and sec_of_day given hour,min, and second
+    */
+private void setSecsDays(int[] ymdhms) {
+  julian_day = toJulian(ymdhms);
+  sec_of_day = ymdhms[5] + 60*ymdhms[4] + 3600*ymdhms[3];
+}
+
+  /**
+    * Sets the julian day and sec_of_day given hour,min, and second
+    */
+private void setJulian(int[] ymd) {
+  julian_day = toJulian(ymd);
+}
+
+    /**
+    * @return The Julian day number that begins at noon of
+    * this day
+    * Positive year signifies A.D., negative year B.C.
+    * Remember that the year after 1 B.C. was 1 A.D.
+    *
+    * A convenient reference point is that May 23, 1968 noon
+    * is Julian day 2440000.
+    *
+    * Julian day 0 is a Monday.
+    *
+    * This algorithm is from Press et al., Numerical Recipes
+    * in C, 2nd ed., Cambridge University Press 1992
+    */
+private int toJulian(int[] ymdhms) {
+  int year=ymdhms[0];
+  int month=ymdhms[1];
+  int day=ymdhms[2];
+  int jy = year;
+  if (year < 0) jy++;
+  int jm = month;
+  if (month > 2) jm++;
+  else
+    {  jy--;
+    jm += 13;
+    }
+  int jul = (int) (java.lang.Math.floor(365.25 * jy)
+		   + java.lang.Math.floor(30.6001*jm) + day + 1720995.0);
+  
+  int IGREG = 15 + 31*(10+12*1582);
+  // Gregorian Calendar adopted Oct. 15, 1582
+  
+  if (day + 31 * (month + 12 * year) >= IGREG)
+    // change over to Gregorian calendar
+    {  int ja = (int)(0.01 * jy);
+    jul += 2 - ja + (int)(0.25 * ja);
+    }
+  return jul;
+}
+
+   /**
+    * Converts a Julian day to a calendar date
+    * This algorithm is from Press et al., Numerical Recipes
+    * in C, 2nd ed., Cambridge University Press 1992
+    */
+private int[] fromJulian() {
+  int j = julian_day;
+  int year,month,day;
+  int result[] = new int[3];
+  int ja = j;
+  
+
+      if (j >= JGREG)
+      /* cross-over to Gregorian Calendar produces this
+         correction
+      */
+      {  int jalpha = (int)(((float)(j - 1867216) - 0.25)
+             / 36524.25);
+         ja += 1 + jalpha - (int)(0.25 * jalpha);
+      }
+      int jb = ja + 1524;
+      int jc = (int)(6680.0 + ((float)(jb-2439870) - 122.1)
+          /365.25);
+      int jd = (int)(365 * jc + (0.25 * jc));
+      int je = (int)((jb - jd)/30.6001);
+      day = jb - jd - (int)(30.6001 * je);
+      month = je - 1;
+      if (month > 12) month -= 12;
+      year = jc - 4715;
+      if (month > 2) --year;
+      if (year <= 0) --year;
+
+   result[0]=year;
+   result[1]=month;
+   result[2]=day;
+   return result;
+ }
+
+private void adjust(int s) {
+  sec_of_day = s;
+  while(sec_of_day > 86399) {
+    sec_of_day -= 86400;
+    julian_day++;
+  }
+  while(sec_of_day < 0) {
+    sec_of_day += 86400;
+    julian_day--;
+  }
+}
+  
+}

@@ -1,0 +1,54 @@
+package lib;
+import java.net.*;
+
+public class Logger extends Thread {
+    static int n_entries=0;
+
+    URL code_base;
+    String log_file;
+    String args;
+
+   public Logger(URL code_base,String log_file, String args) {
+    this.code_base=code_base;
+    this.log_file=log_file;
+    this.args = args;
+
+    this.start();
+   }
+
+///////////////////////////////////////////////////////////////
+  public void run() {
+    setPriority(Thread.MIN_PRIORITY);
+    //Debug.println("Into logger");
+    log_item();
+  }  //end of method run
+
+///////////////////////////////////////////////////////////////
+public void log_item() {
+    String log_file_get=null;
+    //log this access
+     long t1 = System.currentTimeMillis();
+      String Version="";
+      try {
+	    Version = new String(System.getProperty("os.name")+ " " +
+			     System.getProperty("os.version"));
+        if(log_file != null &&
+	       (Version.indexOf("OS/2") == -1)) {
+            log_file_get= log_file+"?"+args+"&n_entries="+n_entries;
+            n_entries++;
+            URL logURL = new URL(code_base,log_file_get);
+            Debug.println("Log info to "+logURL);
+            URLConnection loguc = logURL.openConnection();
+            loguc.connect();
+            String status = loguc.getHeaderField("Status"); //force a cgi call in IE
+            //Debug.println("Status is "+status);
+       }
+      } catch (Exception e) {
+        Debug.println("trouble writing log file: "+e);
+      }
+    long t2 = System.currentTimeMillis();
+    long t21 = t2 - t1;
+    //Debug.println("Time send to log file = "+t21+" milliseconds");
+}
+
+}

@@ -1,0 +1,4 @@
+
+      // keep separate memory locations
+      pt_last.x = pt_this.x;
+      pt_last.y = pt_this.y;

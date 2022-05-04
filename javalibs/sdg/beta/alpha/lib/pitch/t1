@@ -1,0 +1,74 @@
+88,89d87
+< 
+<   Feb-2004   Added method setTitleMinMax.
+174,183d171
+<   this.showing_colors=false;
+<   this.slider_listeners = new Vector();
+<   f = new Font("Helvetica",Font.PLAIN,10);
+<   FontMetrics fm = getFontMetrics(f);
+<   f_height = fm.getHeight();
+<   setSize(size);
+<   addListener(this);
+<   addMouseListener(this);
+<   addMouseMotionListener(this);
+<   
+185a174,175
+>   this.showing_colors=false;
+>   slider_listeners = new Vector();
+217a208,214
+>   f = new Font("Helvetica",Font.PLAIN,10);
+>   FontMetrics fm = getFontMetrics(f);
+>   f_height = fm.getHeight();
+>   setSize(size);
+>   addListener(this);
+>   addMouseListener(this);
+>   addMouseMotionListener(this);
+729c726
+< 	t2 += " < ";
+---
+> 	t2 += "< ";
+734c731
+<       t2 += " UNLIMITED";
+---
+>       t2 += "UNLIMITED";
+747,778d743
+< public void setTitleMinMax(String title,double min, double max) {
+<   Debug.println("in Slider "+title+" "+min+" "+max);
+<   this.title = title;
+<   default_min_val = min;
+<   default_max_val = max;
+<   desired_min_val = default_min_val;
+<   desired_max_val = default_max_val;
+<   linear = (default_max_val - default_min_val) /
+<     (size_a - n_beads*beadsize_a);
+<   bead1_a = 0;
+<   bar_a = size_a - n_beads*beadsize_a;
+<   barstart_a = bottom;
+<   bead2_a = size_a - beadsize_a;
+<   // reset increment (and decimal) to be consistent with
+<   // this range of values
+<   int ilog10 = (int)Math.round(Math.log((max - min)/20)/2.3);
+<   increment = Math.pow(10,ilog10);
+<   decimals = 0;
+<   if(ilog10 < 0) {
+<     decimals = Math.abs(ilog10);
+<   }
+<   dm1 = decimals;
+<   Debug.println("increment +"+increment+" decimals = "+decimals);
+<   get_min_max();
+<   // reset defaults to be consistent with quantization
+<   default_min_val = desired_min_val;
+<   default_max_val = desired_max_val;
+<   set_label_text();
+<   loadBuffer();
+<   repaint();
+< }
+<   
+781c746
+<   if(desired_min_val != default_min_val &&
+---
+>   if(bead1_a != 0 &&
+784c749
+<   } else if(desired_max_val != default_max_val &&
+---
+>   } else if(bead2_a != size_a - beadsize_a &&

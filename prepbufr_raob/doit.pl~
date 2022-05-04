@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+use strict;
+
+use lib "/misc/whome/moninger/DBD-mysql-2.9004/lib";
+use lib "/misc/whome/moninger/DBD-mysql-2.9004/blib/arch/auto/DBD/mysql";
+use DBI;
+#set database connection parameters
+require "./set_connection.pl";
+$ENV{DBI_DSN} = "DBI:mysql:ruc_ua_pb:wolphin.fsl.noaa.gov";
+
+# connect to the database
+my $dbh = DBI->connect(undef,undef,undef, {RaiseError => 1});
+
+while(<>) {
+    my @item = split;
+    my $press = $item[0]; #*10;
+    my $height = $item[1];
+    my $temp = $item[2]*10;
+
+    print("$press $height $temp\n");
+
+    my $query = "replace into hypso values($press,$height,$temp)";
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+}
+#$sth->finish();
+$dbh->disconnect();

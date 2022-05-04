@@ -1,0 +1,21 @@
+package lib;
+import java.awt.*;
+
+class MonthChoice extends Choice {
+
+public MonthChoice() {
+  super();
+  addItem("Jan");
+  addItem("Feb");
+  addItem("Mar");
+  addItem("Apr");
+  addItem("May");
+  addItem("Jun");
+  addItem("Jul");
+  addItem("Aug");
+  addItem("Sep");
+  addItem("Oct");
+  addItem("Nov");
+  addItem("Dec");
+}
+}

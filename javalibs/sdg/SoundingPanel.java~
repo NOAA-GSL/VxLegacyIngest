@@ -1,0 +1,315 @@
+package sdg;
+	
+import lib.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.ImageProducer;
+import java.applet.Applet;
+import java.io.*;
+import java.lang.System;
+import java.lang.Runtime;
+import java.net.*;
+
+/**
+*  Class SoundingPanel plots soundings
+*
+*  @version a2.0 31-Aug-98<p>
+*
+*  @author Bill Moninger, NOAA, Forecast Systems Laboratory<p>
+*/
+public class SoundingPanel extends Panel
+  implements MyButtonListener, FrameParent {
+
+  SoundingDriver sd;
+  SoundingCanvas displayArea;
+  MyButton load_soundings_btn;
+  MyButton text_sounding_btn;
+  MyButton reset_btn;
+  MyButton mb10_btn;
+  Panel control_panel;
+  LoadSoundingsFrame load_soundings_frame;
+  boolean showing_load_soundings_frame;
+  public InfoFrame notASoundingFrame;
+  InfoFrame tif;
+  public boolean showing_notASoundingFrame=false;
+  boolean background_loaded=false;
+  boolean soundings_loaded=false;
+  static boolean loading_soundings=false;
+  String data_source;
+  URL logURL=null;
+  Sounding[] sounding = new Sounding[100];  //ought to be enough
+  MyButton[] sounding_btn = new MyButton[100];
+  int max_soundings=12;  //determined by number of buttons
+  long freeMemory,totalMemory;
+  static String log_file;
+  String desired_airport="den";
+  boolean initial_load=true;
+  int startSecs = 938736000;// 1-Oct-99 0Z
+  int endSecs = 938743200;  // 1-Oct-99 2Z
+  boolean latest = false;   // true if the 'latest' data is desired
+  Font f;
+  boolean action;
+  boolean closed;
+  static URL code_base;
+  int plot_width;
+  int plot_height;
+
+  // Initialize.  Set our size and load the images
+public SoundingPanel(SoundingDriver p) {
+  this.sd=p;
+  initial_load = sd.get_initial_load();
+  log_file = sd.get_log_file();
+  code_base = sd.get_code_base();
+  plot_width = sd.get_plot_width();
+  plot_height = sd.get_plot_height();
+  Sounding.n_soundings=0;
+  Sounding.n_soundings_to_plot=0;
+}
+
+public void init() {
+  //this is called AFTER the panel is added to a frame,
+  //so that a Peer has been created.
+  
+  //set up the screen
+  //lay out the page
+  setLayout(new BorderLayout());
+  
+  //add the display area
+  displayArea = new SoundingCanvas(this);
+  add("Center",displayArea);
+  displayArea.init();
+  displayArea.load_buffer();
+  
+  //Debug.println("1 Preferred size of SoundingFrame is "+
+  //              getPreferredSize());
+  //Debug.println("1 min size of SoundingFrame is "+getMinimumSize());
+  //minimumSize and PreferredSize dont work in Navigator for unix.
+  int btn_width = 175; //getMinimumSize().width/4;
+  control_panel = new Panel();
+  control_panel.setLayout(new GridLayout(4,4));
+  f = new Font("Helvetica", Font.PLAIN, 12);
+  setFont(f);
+  //FontMetrics val_fm=offScrGC.getFontMetrics(val_font);
+  //int val_height = val_fm.getHeight();
+  control_panel.setFont(f);
+  load_soundings_btn = new MyButton(f,sd.get_load_btn_title(),
+				    true,btn_width);
+  load_soundings_btn.addListener(this);
+  control_panel.add(load_soundings_btn);
+  text_sounding_btn = new MyButton(f,"Get text frame",false,btn_width);
+  text_sounding_btn.addListener(this);
+  control_panel.add(text_sounding_btn);
+  reset_btn = new MyButton(f,"Reset scale",false,btn_width);
+  reset_btn.addListener(this);
+  control_panel.add(reset_btn);
+  mb10_btn = new MyButton(f,"10mb scale",true,btn_width);
+  mb10_btn.addListener(this);
+  control_panel.add(mb10_btn);
+  for(int i = 0;i<max_soundings;i++) {
+    sounding_btn[i]=new MyButton(f,"  ",false,btn_width);
+    sounding_btn[i].addListener(this);
+    control_panel.add(sounding_btn[i]);
+  }
+  add("South",control_panel);
+  //Debug.println("2 Preferred size of SoundingFrame is "+getPreferredSize());
+  
+  //load the initial data
+  if(initial_load) {
+    start_load();
+    initial_load=false;
+  }
+  
+}
+  
+public void stop() {
+  Debug.println("SoundingPanel stop called");
+  SoundingLoader.stop_loader();
+  
+  if(load_soundings_frame != null) {
+    load_soundings_frame.setVisible(false);
+    load_soundings_frame.dispose();
+    load_soundings_frame = null;
+    showing_load_soundings_frame=false;
+    load_soundings_btn.unIndent();
+  }
+  if(notASoundingFrame != null) {
+    notASoundingFrame.dispose();
+    notASoundingFrame=null;
+    showing_notASoundingFrame=false;
+  }
+  //dispose the text sounding frame if needed
+  if(tif != null) {
+    tif.dispose();
+    tif=null;
+  }
+  sd.set_showing_soundingsFrame(false);
+  sd.set_soundingsFrame_btn("reset");
+}
+
+public void destroy() {
+    Debug.println("Destroy called");
+    SoundingLoader.stop_loader();
+
+    if(load_soundings_frame != null) {
+      load_soundings_frame.setVisible(false);
+      load_soundings_frame.dispose();
+      load_soundings_frame=null;
+    }
+  }
+
+public void start_load() {
+    new SoundingLoader(this);
+  }
+
+
+public void myAction(MyButton b){
+  if(b == load_soundings_btn ) {
+    if(load_soundings_frame != null) {
+      load_soundings_frame.dispose();
+      load_soundings_frame=null;
+    }
+    load_soundings_frame = new LoadSoundingsFrame(this);
+    load_soundings_frame.pack();
+    if(showing_load_soundings_frame) {
+      load_soundings_frame.setVisible(false);
+      load_soundings_frame.dispose();
+      showing_load_soundings_frame=false;
+    } else {
+      load_soundings_frame.setVisible(false);
+      load_soundings_frame.show();
+      showing_load_soundings_frame=true;
+    }
+  } else if (b == text_sounding_btn) {
+    if(Sounding.n_soundings_to_plot == 1) {
+      Sounding s = sounding[Sounding.soundings_to_plot[0]];
+      String text = s.getFullText();
+      //Debug.println(text);
+      if(tif != null) {
+	tif.dispose();
+	tif=null;
+      }
+      tif = new InfoFrame(text, 780,580,
+			  new Font("Courier",Font.PLAIN,12));
+      tif.show();
+      String log_argument="sdg_text="+s.getShortTitle();
+      Logger logger =
+	new Logger(sd.get_code_base(),sd.get_log_file(),
+		   log_argument);
+    }
+  } else if (b == reset_btn) {
+    //reset_btn.indent();
+    mb10_btn.unIndent();
+    displayArea.reset();
+  } else if (b == mb10_btn) {
+    //reset_btn.unIndent();
+    mb10_btn.indent();
+    displayArea.set_10mb();
+    
+  } else {
+    for(int i = 0;i<Sounding.n_soundings;i++) {
+      if(b == sounding_btn[i]) {
+	if(b.controlDown() && sounding[i] != null) {
+	  //delete sounding
+	  reset_buttons();
+	  //Debug.println("Deleting sounding "+sounding[i]);
+	  Sounding.n_soundings_to_plot=0;
+	  for(int j = i;j<Sounding.n_soundings;j++) {
+	    sounding[j] = sounding[j+1];
+	    sounding[j+1]=null;
+	    sounding_btn[j].setLabel(sounding_btn[j+1].getLabel());
+	    sounding_btn[j+1].setLabel("");
+	  }
+	  Sounding.n_soundings--;
+	  //Debug.println("now there are this many "+Sounding.n_soundings);
+	  displayArea.plot_sounding();
+	  displayArea.repaint();
+	} else if(b.shiftDown() && sounding[i] != null) {
+	  //add a sounding to the plot
+	  int new_plot_index = Sounding.n_soundings_to_plot;
+	  Sounding.soundings_to_plot[new_plot_index]=i;
+	  Sounding.n_soundings_to_plot++;
+	  //Debug.println("Now there are these soundings to plot "+
+	  //Sounding.n_soundings_to_plot);
+	  sounding_btn[i].indent();
+	  sounding_btn[i].setBackground(
+			  SkewTPlot.sounding_color[new_plot_index]);
+	  displayArea.plot_sounding();
+	  displayArea.repaint();
+	} else {
+	  //show sounding
+	  reset_buttons();
+	  sounding_btn[i].indent();
+	  Sounding.n_soundings_to_plot=1;
+	  Sounding.soundings_to_plot[0]=i;
+	  displayArea.plot_sounding();
+	  displayArea.repaint();
+	}
+      }
+    }
+  }
+}
+
+public void reset_buttons() {
+  for(int i =0;i<Sounding.n_soundings;i++) {
+    sounding_btn[i].reset();
+    sounding_btn[i].setBackground(Color.lightGray);
+  }
+}
+
+public void add_show_sounding(Sounding s) {
+  //push down other soundings
+  Debug.println("pushing down soundings");
+  if(Sounding.n_soundings == max_soundings) {
+    Debug.println("nulling out sounding "+max_soundings);
+    sounding[max_soundings-1]=null;
+    Sounding.n_soundings--;
+  }
+  for(int j = Sounding.n_soundings-1;j>=0;j--) {
+    sounding[j+1] = sounding[j];
+    sounding_btn[j+1].setLabel(""+sounding[j+1]);
+  }
+  sounding[0] = s;
+  Sounding.n_soundings_to_plot=1;
+  Sounding.soundings_to_plot[0]=0;
+  Sounding.n_soundings++;
+  sounding_btn[0].setLabel(""+s);
+  reset_buttons();
+  sounding_btn[0].indent();
+  displayArea.plot_sounding();
+  displayArea.repaint();
+  //set up default airport for use in the loadSoundingsFrame
+  desired_airport = s.station_name;
+  // date for log file
+  UTCDate d = s.ground_date;
+  int year = d.getYear();
+  String month_name = d.getMonthName();
+  int mday = d.getDay();
+  int hour = d.getHour();
+  String log_argument = "sounding="+s.getShortTitle()+
+    "&year="+year+"&month_name="+month_name+
+    "&mday="+mday+"&hour="+hour;
+  Logger logger = new Logger(sd.get_code_base(),log_file,log_argument);
+  //for the first sounding only, update the default times
+  //used by LoadSoundingsFrame
+  if(Sounding.n_soundings==1) {
+    startSecs = d.get1970Secs();
+    endSecs = startSecs+3600;
+  }
+}
+
+public void frameAction(Frame f, boolean action, boolean closed) {
+  if(f == load_soundings_frame) {
+    if(action) {
+      latest=false;
+      start_load();
+    }
+    if(closed) {
+      load_soundings_frame.setVisible(false);
+    }
+  }
+}
+
+}  //end of class SoundingPackage
+
+
+

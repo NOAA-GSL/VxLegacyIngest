@@ -1,0 +1,7 @@
+package lib;
+/**
+ * Interface for listening to a slider
+ */
+public interface RangeChangedListener {
+    public void rangeChanged(double min, double max);
+} 
