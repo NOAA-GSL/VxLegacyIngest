@@ -1,0 +1,19 @@
+# IDE-specific directories
+.vscode
+
+# VI/VIM temporary files
+*~
+
+# C/C++ intermediate compilation targets & binaries
+*.o
+*.x
+
+# Python bytecode
+*.pyc
+
+# Java bytecode
+*.class
+
+# Other executables
+*.exe
+
