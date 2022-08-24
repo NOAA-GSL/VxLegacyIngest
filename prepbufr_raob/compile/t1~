@@ -1,8 +1,0 @@
-ifort -g -traceback -ftz -O3 -no-wrap-margin  -c kinds.f90
-ifort -g -traceback -ftz -O3 -no-wrap-margin  -c module_time.f90
-ifort -g -traceback -ftz -O3 -no-wrap-margin  -c module_obs_base.f90
-ifort -g -traceback -ftz -O3 -no-wrap-margin  -c module_fix_raob_heights.f90
-ifort -g -traceback -ftz -O3 -no-wrap-margin  -c module_obs_conv_pt.f90
-ifort -g -traceback -ftz -O3 -no-wrap-margin  -c module_prepbufr.f90
-ifort -g -traceback -ftz -O3 -no-wrap-margin  -c prepbufr2txt.f90
-ifort -o prepbufr2txt_B.exe -g -traceback -ftz -O3 -no-wrap-margin kinds.o module_time.o module_obs_base.o module_fix_raob_heights.o module_obs_conv_pt.o module_prepbufr.o prepbufr2txt.o /lfs4/HFIP/hfv3gfs/nwprod/hpc-stack/libs/intel-18.0.5.274/bufr/11.4.0/lib/libbufr_4.a 
