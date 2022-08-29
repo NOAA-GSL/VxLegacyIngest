@@ -14,6 +14,8 @@ They call out to other scripts as follows:
 
 ### `do_prepbufr_raobs.pl`
 
+This script handles parsing the PrepBUFR RAOB files and loading them into the MySQL/MariaDB database.
+
 Calls out to:
 
 * `get_prepbufr_raobs.py`
@@ -24,6 +26,8 @@ Calls out to:
 
 ### `gen_persis.pl`
 
+Unrelated to `do_prepbufr_raobs.pl`. Generates the ["persistence"](https://forecast.weather.gov/glossary.php?word=persistence%20forecast) variables for comparison to the developmental model.
+
 Calls out to:
 
 * `get_RR_file.pl`
@@ -32,6 +36,8 @@ Calls out to:
 * `VerifyPersis.java`
 
 ### `agen_raob_sites.pl`
+
+This scripts matches the various models with the PrepBUFR RAOB observations.
 
 Calls out to:
 
@@ -50,6 +56,10 @@ Calls out to:
 These appear to call out to various other shell, perl, python, Java, C, and fortran executables in the repo. They all also use `mysql-connector-java-5.1.6-bin.jar`.
 
 Main makefile for prepBUFR RAOB fortran code is in `prepbufr_raob/compile/makefile`. `prepbufr_raob/makefile` targets the C/C++ in the `prepbufr_raob/` directory.
+
+## Getting started
+
+The java code here is compiled with `javac *.java`. The fortran in `.../compile` should be compilable with the included `makefile`. You may need to update it based on the location you put the libbufr dependency. More on libbufr in [the dependencies section below](#dependencies). Otherwise, for the C dependencies, you should be able to reference the makefile in this directory.
 
 ## Dependencies
 
@@ -79,6 +89,6 @@ ctest # This probably won't work on Jet
 make DESTDIR=`pwd`/../bufr-install install
 ```
 
-And there should be a libbufr located at `/home/path/to/bufr-install/usr/local/lib64/libbufr_d.a`. It'd be good to test a library built like this with Bill's code to make sure that everything works as anticipated. We could also make this part of his build process.
+And there should be a libbufr located at `/home/path/to/bufr-install/usr/local/lib64/libbufr_d.a`.
 
 Note - the initial `cmake` configuration should attempt to download a `bufr` test data file and fail. It will give you a message that it won't build the tests. This is desirable as Jet can't download the EMC test data file. (See - [NOAA-EMC/NCEPLIBS-bufr#150 (comment)](https://github.com/NOAA-EMC/NCEPLIBS-bufr/issues/150#issuecomment-900458971)) If this process errors out, I've had better luck building in `/lfs4` as my user than as the amb-verif user for some reason.
