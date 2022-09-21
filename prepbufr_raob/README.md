@@ -26,7 +26,7 @@ Calls out to:
 
 ### `gen_persis.pl`
 
-not needed for ingest of pbRAOBS, but since this involves only RAOB data, it should probably be factored into the RAOB load section. It generatespersistence forecasts. Unrelated to `do_prepbufr_raobs2.pl`. Generates the ["persistence"](https://forecast.weather.gov/glossary.php?word=persistence%20forecast) variables for comparison to the developmental model.
+not needed for ingest of pbRAOBS, but since this involves only RAOB data, it should probably be factored into the RAOB load section. It generates persistence forecasts. Unrelated to `do_prepbufr_raobs2.pl`. Generates the ["persistence"](https://forecast.weather.gov/glossary.php?word=persistence%20forecast) variables for comparison to the developmental model.
 
 Calls out to:
 
