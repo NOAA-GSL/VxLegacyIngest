@@ -12,21 +12,21 @@ According to the crontab on Jet, the entrypoints for prepBUFR RAOB are `do_prepb
 
 They call out to other scripts as follows:
 
-### `do_prepbufr_raobs.pl`
+### `do_prepbufr_raobs2.pl`
 
 This script handles parsing the PrepBUFR RAOB files and loading them into the MySQL/MariaDB database.
 
 Calls out to:
 
-* `get_prepbufr_raobs.py`
-  * `prepbufr2txt.exe` (fortran - in the `/compile` dir)
+* `get_prepbufr_raobs2.py`
+  * `prepbufr2txt.ian.exe` (fortran - in the `compile2/` subdir, with links to the BUFR lib (libbufr) -- see below) -- to pull RAOBs from prepBUFR files into a text file, which get_prepbufr_raobs2.py puts into the soundings_pb database.
 * `get_cal_secs.py`
-* `Verify3.java`
-* `update_metadata2.py`
+* `Verify3.java` -- Takes the pbRAOBs in the soundings_pb database, generates interpolated RAOB soundings and stores them in the ruc_ua_pb database. This is NOT the same as Verify3.java in the verification done using Mark Govett's RAOBs.
+* `update_metadata2.py`-- compares the pbRAOBs to Mark Govett's RAOBs. Useful for comparing the two kinds of RAOBs, but probably not useful once we lay down Mark's RAOBs.
 
 ### `gen_persis.pl`
 
-Unrelated to `do_prepbufr_raobs.pl`. Generates the ["persistence"](https://forecast.weather.gov/glossary.php?word=persistence%20forecast) variables for comparison to the developmental model.
+NOT NEEDED for ingest of pbRAOBS. This is used to generate persistence forecasts. Unrelated to `do_prepbufr_raobs2.pl`. Generates the ["persistence"](https://forecast.weather.gov/glossary.php?word=persistence%20forecast) variables for comparison to the developmental model.
 
 Calls out to:
 
@@ -37,7 +37,7 @@ Calls out to:
 
 ### `agen_raob_sites.pl`
 
-This scripts matches the various models with the PrepBUFR RAOB observations.
+NOT NEEDED for ingest of pbRAOBs. This scripts matches the various models with the PrepBUFR RAOB observations.
 
 Calls out to:
 
