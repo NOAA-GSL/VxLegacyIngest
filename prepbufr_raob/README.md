@@ -19,10 +19,13 @@ This script handles parsing the PrepBUFR RAOB files and loading them into the My
 Calls out to:
 
 * `get_prepbufr_raobs2.py`
-  * `prepbufr2txt.ian.exe` (fortran - in the `compile2/` subdir, with links to the BUFR lib (libbufr) -- see below) -- to pull RAOBs from prepBUFR files into a text file, which get_prepbufr_raobs2.py puts into the soundings_pb database.
+  * `prepbufr2txt.ian.exe` (fortran - in the `compile2/` subdir (see the makefile therein), with links to the BUFR lib (libbufr) -- see below) -- to pull RAOBs from prepBUFR files into a text file, which get_prepbufr_raobs2.py puts into the soundings_pb database.  You can ignore the 'compile/' subdirectory; it's no longer used.
 * `get_cal_secs.py`
-* `Verify3.java` -- Takes the pbRAOBs in the soundings_pb database, generates interpolated RAOB soundings and stores them in the ruc_ua_pb database. This is NOT the same as Verify3.java in the verification done using Mark Govett's RAOBs.
+* `Verify3.java` -- Takes the pbRAOBs in the soundings_pb database, generates interpolated RAOB soundings and stores them in the ruc_ua_pb database. This is NOT the same as Verify3.java in the verification done using Mark Govett's RAOBs. This code is shared by the jobs that load the models. Verify3.java uses other java code, including code possibly in the subdirectories 'lib' and 'sdg'.
 * `update_metadata2.py`-- compares the pbRAOBs to Mark Govett's RAOBs. Useful for comparing the two kinds of RAOBs, but probably not useful once we lay down Mark's RAOBs.
+
+Requires:
+* namelist.{prepbufr_type}.template, where {prepbufr_type} is one of 'gfs' or 'gdas'. We use the latter in our production processing.
 
 ### `gen_persis.pl`
 
@@ -33,7 +36,10 @@ Calls out to:
 * `get_RR_file.pl`
 * `jy2mdy.pl`
 * `get_grid.pl`
-* `VerifyPersis.java`
+* `VerifyPersis.java` 
+* 'SumUpdaterPersis.java'
+* 'SoundingLoader3.java'
+* (and possibly other java code in lib/ and sdg/ subdirectories.)
 
 ### `agen_raob_sites.pl`
 
@@ -55,15 +61,15 @@ Calls out to:
 
 These appear to call out to various other shell, perl, python, Java, C, and fortran executables in the repo. They all also use `mysql-connector-java-5.1.6-bin.jar`.
 
-Main makefile for prepBUFR RAOB fortran code is in `prepbufr_raob/compile/makefile`. `prepbufr_raob/makefile` targets the C/C++ in the `prepbufr_raob/` directory.
+Main makefile for prepBUFR RAOB fortran code is in `prepbufr_raob/compile2/makefile`. `prepbufr_raob/makefile` targets the C/C++ in the `prepbufr_raob/` directory.
 
 ## Getting started
 
-The java code here is compiled with `javac *.java`. The fortran in `.../compile` should be compilable with the included `makefile`. You may need to update it based on the location you put the libbufr dependency. More on libbufr in [the dependencies section below](#dependencies). Otherwise, for the C dependencies, you should be able to reference the makefile in this directory.
+The java code here is compiled with `javac *.java`. The fortran in `.../compile2` should be compilable with the included `makefile`. You may need to update it based on the location you put the libbufr dependency. More on libbufr in [the dependencies section below](#dependencies). Otherwise, for the C dependencies, you should be able to reference the makefile in this directory.
 
 ## Dependencies
 
-To recompile libbufr for prepbufr_raob you can do the following on Jet. Note you will want to be logged in as your personal user and not as `amb_verif`.
+To recompile libbufr for prepbufr_raob you can do the following on Jet. Note you will want to be logged in as your personal user and not as `amb-verif`.
 
 Load the HPC modules according to the [HPC-Stack docs](https://github.com/NOAA-EMC/hpc-stack/wiki/Official-Installations) for the system you're on. The below instructions are for Jet.
 
