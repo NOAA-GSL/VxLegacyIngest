@@ -88,11 +88,12 @@ module load cmake/3.20.1
 git clone --branch bufr_v11.7.0 https://github.com/NOAA-EMC/NCEPLIBS-bufr.git
 mkdir bufr-{build,install}
 cd bufr-build
-# Configure the build
-cmake -DCMAKE_INSTALL_PREFIX=`pwd`/../bufr-install ../NCEPLIBS-bufr/
+# Configure the build and make sure the compiler is picked up
+# You may need to use the full path in -DCMAKE_INSTALL_PREFIX instead of pwd to get the correct path
+CC=`which icc` FC=`which ifort` cmake -DCMAKE_INSTALL_PREFIX=`pwd`/../bufr-install -DENABLE_TESTS=OFF ../NCEPLIBS-bufr/
 make -j4
 ctest # This probably won't work on Jet
-make DESTDIR=`pwd`/../bufr-install install
+make install
 ```
 
 And there should be a libbufr located at `/home/path/to/bufr-install/usr/local/lib64/libbufr_d.a`.
