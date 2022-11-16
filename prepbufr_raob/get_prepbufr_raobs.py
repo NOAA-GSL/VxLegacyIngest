@@ -20,17 +20,18 @@ def write_sounding(output_sdg_list, wmoid,date,cursor):
     with gzip.GzipFile(fileobj=gzipped_output_sdg, mode="w") as f:
         f.write(output_sdg.encode())
  
-    query = "replace into RAOB_raob_soundings (site,time,s) values(%s,%s,%s)"
+    query = "replace into soundings_pb.RAOB_raob_soundings (site,time,s) values(%s,%s,%s)"
     args = (wmoid,date,gzipped_output_sdg.getvalue())
-    #print("writing RAOB {} for time {}".format(name,date))
+    if(wmoid == 85934):
+        print("writing RAOB {} for time {}".format(wmoid,date))
     try:
         cursor.execute(query,args)
     except (MySQLdb.Error, MySQLdb.Warning) as e:
-            print(e)
+            print("Error writing to RAOB_raob_soundings: {}".format(e))
     
 month_num = {
      'JAN':1,'FEB':2,'MAR':3,'APR':4,'MAY':5,'JUN':6,
-     'JUL':7,'AUG':8,'SEP':0,'OCT':10,'NOV':11,'DEC':12}
+     'JUL':7,'AUG':8,'SEP':9,'OCT':10,'NOV':11,'DEC':12}
 
 
 reprocess = False
@@ -69,7 +70,8 @@ with open(template_file) as fp:
             break
         fout.write(line)
 fout.close()
-bad_winds_filename = "tmp/{}.bad_winds.tmp".format(os.getpid())
+os.environ["PB_OUTPUT_DIR"] = "tmp/"
+bad_winds_filename = "{}{}.bad_winds.tmp".format(os.environ["PB_OUTPUT_DIR"] ,os.getpid())
 bw_out = open(bad_winds_filename,'w')
 soundings_filename = None
 mysql_filename = None

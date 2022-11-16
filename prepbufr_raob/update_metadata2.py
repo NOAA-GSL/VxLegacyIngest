@@ -109,9 +109,9 @@ for row in results:
                     if lat_pb[wmoid] != lat or \
                        lon_pb[wmoid] != lon or \
                        elev_pb[wmoid] != elev:
-                        print "TROUBLE. Apparently moving station. Removing from further consideration"
+                        print "TROUBLE. Apparently moving station. Removing from further consideration:"
                         print("{} {} {} {} {} {}".\
-                              format(wmoid,name_pb[wmoid],lat_pb[wmoid],lon_pb[wmoid],elev_pb[wmoid],time_pb[wmoid]))
+                              format(wmoid,lat_pb[wmoid],lon_pb[wmoid],elev_pb[wmoid],time_pb[wmoid],name_pb[wmoid]))
                         print("{} {} {} {} {}".format(wmoid,lat,lon,elev,time))
                         lat_pb.pop(wmoid)
                         moving_pb[wmoid]=time
@@ -124,7 +124,7 @@ for row in results:
                 name = sounding_line[1]
                 #print("name for {} is {}".format(wmoid,name))
                 name_pb[wmoid]=name
-                
+    #print(wmoid,time)               
 # now check the existing metadata (from Mark's RAOBs)
 query ="""
 select wmoid,name,lat,lon,elev,descript
@@ -238,7 +238,7 @@ fields terminated by '!'
 (wmoid,name,lat,lon,elev,reg,descript,latest)""".format(mysql_load_file)
 #print("query is {}".format(query))
 cursor.execute(query)
-os.remove(mysql_load_file)
+#os.remove(mysql_load_file)
 
 # update the 'moving' table
 moving_load_file = "tmp/moving_input.{}.tmp".format(os.getpid())

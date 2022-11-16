@@ -101,7 +101,7 @@ if (@ARGV < 1) {
 
 my $data_source = "persis";
 my $i_arg=0;
-if($qsubbed == 1) {
+if(0 && $qsubbed == 1) {
     my $output_file = "tmp/$data_source.$output_id.out";
 # send standard out and stderr to $output_File
     use IO::Handle;

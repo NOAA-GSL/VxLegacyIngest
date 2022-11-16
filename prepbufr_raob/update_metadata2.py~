@@ -53,7 +53,6 @@ first_time=""
 last_time=""
 max_dist=10
 for row in results:
-    site = row[0]
     gzipped_sounding = row[1]
     time = row[2]
     last_time = time
@@ -65,10 +64,10 @@ for row in results:
     with gzip.GzipFile(fileobj=sio, mode="r") as f:
         for line in f.read().splitlines():
             #print(line)
-            stuff = line.split()
-            if stuff[0] == '1':
+            sounding_line = line.split()
+            if sounding_line[0] == '1':
                 #print(line)
-                wmoid = line[14:21].lstrip().lstrip("0")
+                wmoid = line[14:21].lstrip().lstrip("0") # IS A STRING
                 if not first_time_pb.has_key(wmoid):
                     first_time_pb[wmoid]=time
                 try:
@@ -113,15 +112,19 @@ for row in results:
                         print "TROUBLE. Apparently moving station. Removing from further consideration"
                         print("{} {} {} {} {} {}".\
                               format(wmoid,name_pb[wmoid],lat_pb[wmoid],lon_pb[wmoid],elev_pb[wmoid],time_pb[wmoid]))
-                        print("{} {} {} {} {} {}".format(wmoid,site,lat,lon,elev,time))
+                        print("{} {} {} {} {}".format(wmoid,lat,lon,elev,time))
                         lat_pb.pop(wmoid)
                         moving_pb[wmoid]=time
                 if not moving_pb.has_key(wmoid):
-                     name_pb[wmoid]=site
                      lat_pb[wmoid]=lat
                      lon_pb[wmoid]=lon
                      elev_pb[wmoid]=elev
                      time_pb[wmoid]=time
+            elif sounding_line[0] == '3':
+                name = sounding_line[1]
+                #print("name for {} is {}".format(wmoid,name))
+                name_pb[wmoid]=name
+                
 # now check the existing metadata (from Mark's RAOBs)
 query ="""
 select wmoid,name,lat,lon,elev,descript

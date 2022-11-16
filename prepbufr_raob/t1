@@ -1,53 +1,205 @@
-press	h_diff
-10180	-1
-10140	0
-10000	4
-9250	4
-9157	0
-9100	4
-8600	3
-8519	0
-8500	3
-8450	4
-8400	3
-8240	3
-8216	0
-7950	3
-7924	0
-7070	2
-7000	2
-6880	1
-6850	1
-6680	1
-6595	0
-6500	1
-6353	0
-6130	1
-5360	0
-5251	0
-5070	-1
-5000	-1
-4930	-2
-4380	1
-4000	2
-3990	2
-3420	3
-3150	5
-3000	4
-2810	0
-2750	2
-2610	1
-2568	0
-2500	0
-2490	0
-2420	0
-2320	0
-2000	0
-1690	86623
-1610	-1
-1500	-2
-1447	0
-1330	1
-1020	5
-1010	6
-1000	6
+cmd is ./get_prepbufr_raobs3.py gdas -7 1
+hours ago: 7
+prepbufr type is gdas
+NAMELIST_FILE is tmp/221852.namelist.input
+command is prepbufr2txt.try8.exe
+0:  namelist_file is |tmp/221852.namelist.input                                                                                                                                                           |
+1:  &SETUP
+2:  OBSDATE =  2022102600,
+3:  OBSMIN  =           0,
+4:  OBSPATH = /public/data/grids/gdas/prepbufr/restricted                                                                                                                                         ,
+5:  OBSFILENAME     = 20222990000.gdas.t00z.prepbufr.20221026                                                                                                                                             ,
+6:  SAVEPATH        = tmp/                                                                                                                                                                                ,
+7:  PREFIXOBSSAVENAME       = conv                                                                                                                                                                                ,
+8:  PREFIXFCSTOBSSAVENAME   = unknown                                                                                                                                                                             ,
+9:  FCSTPATH        = unknown                                                                                                                                                                             ,
+10:  FCSTFILENAME    = unknown                                                                                                                                                                             
+11:  /
+12:  &OBSSET
+13:  NUMOBSTYPE      =           1,
+14:  OBSTYPE = 100*120,
+15:  TIMEWINDOW      =   6.000000    , 99*1.000000       
+16:  /
+17:  read obs from file=/public/data/grids/gdas/prepbufr/restricted/20222990000.gdas.t00z.prepbufr.20221026
+18:  
+19:  =================================
+20:  process obstype=         120  with time window=   6.000000    
+21:  >>>decodeprepbufr_all: read in         604  stations for data type         120
+22:  soundings filename is |tmp/conv_type0120_202210260000.txt|
+23:  mysql filename is |tmp/mysql_202210260000.tmp|
+24:  
+25:  ====list this observation====         120
+26:  maximum level is=         249  2022102600
+27:  variable index: P, T, Q, H, U, V
+28:                  1  2  3  4  5  6
+29:  BAD WIND. name, pressure, error, dir, speed: 04339   600.0000               2   170.0000       307.0000    
+30:  BAD WIND. name, pressure, error, dir, speed: 04320   600.0000               2   250.0000       249.0000    
+31:  n_p,n_good_p       67721       67432
+32:  n_t,n_bad_t       32639          89
+33:  n_td,n_bad_td       28667         519
+34:  n_wd,n_bad_wd       44738         376
+35:  n_h,n_bad_h       39685           0
+36:  tot fillable heights, unfilled ones:       28192       38973
+files: tmp/conv_type0120_202210260000.txt tmp/mysql_202210260000.tmp
+query is load data concurrent local infile 'tmp/mysql_202210260000.tmp'
+replace into table hypsometric_summary
+columns terminated by ','
+lines terminated by ',\n'
+(wmoid,time,
+mean_h_diff_500,  max_h_diff_500,  n_h_diff_500,  n_added_500,
+mean_h_diff,  max_h_diff,  n_h_diff,  n_added)
+1118 wmoid records written to table soundings_pb.hypsometric_summary
+
+query is load data concurrent local infile 'tmp/221852.bad_winds.tmp'
+replace into table bad_winds
+columns terminated by ','
+lines terminated by ',\n'
+(valid_time,wmoid,press,dir,spd)
+4 bad winds  written to table soundings_pb.bad_winds
+
+592 soundings written to database soundings_pb, including...
+wmoid's for which we have no site names (though we do have locations):
+08190
+47155
+57541
+57687
+76743
+76903
+98753
+JGQH
+1 duplicate entry for 51463. Last one stored in RAOB_raob_soundings
+1 duplicate entry for 53772. Last one stored in RAOB_raob_soundings
+1 duplicate entry for 57494. Last one stored in RAOB_raob_soundings
+1 duplicate entry for 57972. Last one stored in RAOB_raob_soundings
+1 duplicate entry for 58238. Last one stored in RAOB_raob_soundings
+1 duplicate entry for 58606. Last one stored in RAOB_raob_soundings
+
+~/java8/java -Xmx256m Verify3 dummy RAOB 1666742400 1666742400 0
+connected to MySQLserver
+max region for RAOB is 7
+regions for RAOB are  7
+calculator for RH from dewpoint is Wobus
+0h fcst valid 2022-10-26 0
+n_max is 759
+2365 2527 2836 2963 3005 3354 3808 3882 3918 3953 4018 4220 4270 4320 4339 4417 6011 6260 6458 7110 7145 7510 7645 7761 8001 8023 8190 8221 8302 8430 10035 10113 10184 10238 10393 10410 10548 10618 10739 10771 10868 11520 11747 11952 12120 12374 12425 12843 12982 13275 13388 14240 14430 15420 16045 16113 16144 16245 16429 16546 16622 16754 17030 17064 17095 17196 17220 17240 17281 17351 20046 20292 20674 20744 21432 21824 21946 22217 22271 22522 22543 22820 22845 23078 23205 23330 23415 23472 23802 23884 23921 23933 23955 24266 24343 24507 24641 24688 24726 24908 24959 25123 25703 25913 26038 26298 26477 26629 26781 26850 27038 27199 27459 27707 27730 27962 27995 28225 28275 28445 28661 28722 28951 returning (1) with 0 levels
+29263 29282 29572 29612 29634 29698 29839 29862 30054 30309 30372 30635 30673 30715 30758 30935 30965 31004 31088 31300 31369 31510 31538 31736 31770 31873 31977 32061 32098 32150 32215 32389 32477 32540 32618 34009 34122 34172 34247 34467 34731 34858 34882  (1 levs zeroed) 35121 35229 35394 35671 35700  (1 levs zeroed) 36003 36096 36872 37011 37055 37259 38064 38341 returning (1) with 0 levels
+40179 40373 40375 40394 40417 40430 40437 40745 40754 40766 40800 40848 40856 41024 41112 41217 41883 41891 41923 41977 42182 42410 42809 42867 42971 43150 43279 43285 43371 44231 44292 44373 45004 47102 47104 47122 47138 47155 47158 47169 47186 47401 47412 47582 47600 47646 47678 47741 47778 47807 47827 47909 47918 47945 47971 47991 48407 48453 48601 48615 48650 48657 48811 48820 48839 48845 48855 48900 50527 50557 50774 50953 51076 Warning: location for 51431 differs: sdg/metadata: lats 43.95/43.95 lons:  lons: 81.33/81.33 lons:  elevs: 663.0/664.0
+51431 Warning: location for 51463 differs: sdg/metadata: lats 43.8/43.78 lons:  lons: 87.65/87.62 lons:  elevs: 947.0/919.0
+51463 51644 51709 51777 51828 51839 52203 52267 52323 52418 52533 52818 52836 52983 53068 53463 53513 53614 53772 53845 54102 54135 54161 54218 54292 54511 54662 54727 55299 55591 56029 56080 56137 56146 56187 56571 56691 56739 56778 56964 56985 57083 57127 57131 57461 57494 57516 57541 57687 57749 57816 57957 Warning: location for 57972 differs: sdg/metadata: lats 25.82/25.74 lons:  lons: 113.02/112.97 lons:  elevs: 184.0/369.0
+57972 57993 58027 58150 58203 Warning: location for 58238 differs: sdg/metadata: lats 31.93/31.93 lons:  lons: 118.9/118.9 lons:  elevs: 36.0/32.0
+58238 58362 58424 58457 58606 58633 58665 58725 58847 59134 59211 59265 59280 59316 59431 59758 59981 60018 60155 60390 60630 60656 61052 61291 62378 62414 returning (1) with 0 levels
+62423 63741 67083 67197 68424 68592 68816 68906 70026 70200 70219 70231 70261 70273 70308 70316 70326 70350 70361 70398 71043 71082 71109 71119 71603 71722 71802 71811 71815 71816 71823 71836 71845 71867 71906 71907 71908 71909 71913 71917 71924 71925 71926 71945 71957 71964 72201 72202 72206 72208 72210 72214 72215 72230 72233 72235 72240 72248 72249 72250 72251 72261 72265 72274 72293 72305 72317 72318 72327 72340 72357 72363 72364 72365 72376 72388 72393 72402 72403 72426 72440 72451 72456 72476 72489 72493 72501 72520 72528 72558 72562 72572 72582 72597 72632 72634 72645 72649 72659 72662 72672 72681 72694 72712 72747 72764 72768 72776 72786 72797 74389 74455 74560 74794 76225 76256 76394 76405 76458 76526 76595 76612 76644 76654 76679 76692 76743 76805 76903 78016 78384 78397 78486 78526 78583 78866 78988 80001 82022 82026 82193 82244 82332 82400 82411 82532 82599 82705 82824 82917 83208 83362 83378 83525 83554 83566 83612 83649 83746 83779 83827 83840 83899 83928 83937 83971 85586 88889 89009 89512 89532 89571 89611 89642 89662 89664 91165 91212 91285 91334 91348 91366 91376 91408 91413 91610 91643 91680 91765 94120 94170 94203 94299 94302 94326 94332 94374 94403 94430 94461 94510 94578 94610 94637 94638 94659 94672 94776 94866 94910 94975 94995 94996 96035 96147 96163 96237 96253 96315 96413 96441 96471 96481 96509 96581 96633 96645 96685 96749 96805 96935 96996 97014 97072 97180 97372 97502 97560 97724 97980 98223 98233 98328 98433 98444 98558 98618 98646 98753 
+LOAD DATA concurrent LOCAL INFILE 'tmp/load_db7018772821177939377.txt' REPLACE INTO table ruc_ua_pb.RAOB columns terminated by ',' lines terminated by '
+' (wmoid,date,hour,fcst_len,press,z,t,dp,rh,wd,ws,version)
+db rows updated: 108648 in 2 seconds
+
+585 good sites, (2 below zero) for RAOB fcst_len 0 valid at 26-Oct-2022 00:00:00
+deleting load_db7018772821177939377.txt
+
+comparing prepBUFR RAOB locaations for the past month with the old RAOB locations in the ruc_ua db...
+./update_metadata2.py
+select site,s,time from soundings_pb.RAOB_raob_soundings
+where 1=1
+and fcst_len =0
+and time > date_sub(now(), interval 30 day)
+order by time
+
+TROUBLE. Apparently moving station. Removing from further consideration:
+51431 43.95 81.33 664 2022-09-27 00:00:00 ZWYN
+51431 43.95 81.33 663 2022-09-27 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+ATGU3FT 61.1 -37.9 0 2022-09-27 00:00:00 ATGU3FT
+ATGU3FT 62.5 -31.9 0 2022-09-27 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+XKQLWQB 44.6 -4.7 0 2022-09-27 12:00:00 XKQLWQB
+XKQLWQB 44.2 -7.5 0 2022-09-28 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+FPUW5GN 68.2 -60.2 0 2022-09-27 12:00:00 FPUW5GN
+FPUW5GN 67.6 -59.6 0 2022-09-28 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+57494 30.6 114.05 24 2022-09-29 12:00:00 ZHHH
+57494 30.62 114.13 23 2022-09-30 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+58238 31.93 118.9 32 2022-09-29 12:00:00 ZSNJ
+58238 31.93 118.9 36 2022-09-30 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+53772 37.62 106.2 776 2022-09-29 12:00:00 ZBYN
+53772 37.78 112.55 779 2022-09-30 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+51463 43.78 87.62 919 2022-09-30 12:00:00 51463
+51463 43.8 87.65 947 2022-10-01 00:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+XQFJRGX 53.6 -47.7 0 2022-10-01 00:00:00 XQFJRGX
+XQFJRGX 54.0 -42.1 0 2022-10-01 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+57972 25.74 112.97 369 2022-10-03 00:00:00 57972
+57972 25.82 113.02 184 2022-10-03 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+WDK38HS 72.6 21.1 0 2022-09-30 12:00:00 WDK38HS
+WDK38HS 80.7 14.9 0 2022-10-03 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+DBLK -35.3 15.6 0 2022-10-03 12:00:00 DBLK
+DBLK -39.5 8.0 0 2022-10-05 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+58606 28.6 115.92 50 2022-10-06 00:00:00 ZSCN
+58606 28.67 115.92 50 2022-10-06 12:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+JGQH 31.5 134.9 0 2022-10-01 00:00:00 JGQH
+JGQH 30.0 137.0 0 2022-10-09 00:00:00
+TROUBLE. Apparently moving station. Removing from further consideration:
+9ZT9MRK 63.2 -19.5 0 2022-10-06 12:00:00 9ZT9MRK
+9ZT9MRK 58.4 1.0 0 2022-10-09 12:00:00
+
+select wmoid,name,lat,lon,elev,descript
+from ruc_ua.metadata
+order by wmoid
+
+781 stations read in from ruc_ua.metadata
+List of stations with loc differences between prepBUFR and old ruc_ua.metadata of more than 10 km:
+2199.6 <- distance from old loc. 82917 82917 New/old loc: -9.87/-10.0 -67.9/-47.8 195/143 None
+794.2 <- distance from old loc. 70414 SYA New/old loc: 52.72/52.72 174.1/-174.1 29/37 SHEMYA
+522.3 <- distance from old loc. 82026 SBTS New/old loc: 2.48/-2.22 -55.98/-55.95 326/326 None
+222.2 <- distance from old loc. 97014 WAMM New/old loc: 1.53/1.53 122.92/124.92 80/80 None
+220.7 <- distance from old loc. 47102 47102 New/old loc: 37.97/38.03 124.63/127.15 162/70 CHONGONG-NI
+130.7 <- distance from old loc. 58665 58665 New/old loc: 28.62/28.65 121.42/120.08 5/9 LUQIAO
+115.0 <- distance from old loc. 63985 FSSS New/old loc: -4.92/-4.68 54.52/55.53 4/4 SEYCHELLES INTL
+111.1 <- distance from old loc. 89564 89564 New/old loc: -67.6/-68.6 62.88/62.87 15/16 None
+110.0 <- distance from old loc. 30635 30635 New/old loc: 53.43/54.42 108.98/109.02 459/457 UST-BARGUZIN
+89.9 <- distance from old loc. 41923 41923 New/old loc: 23.77/23.43 90.38/91.18 9/9 None
+46.1 <- distance from old loc. 72634 APX New/old loc: 44.91/44.55 -84.72/-84.43 448/448 GAYLORD / ALPENA
+41.5 <- distance from old loc. 48650 48650 New/old loc: 2.73/3.1 101.7/101.65 16/17 None
+39.7 <- distance from old loc. 38341 38341 New/old loc: 42.51/42.85 71.23/71.38 651/653 DZAMBUL
+35.7 <- distance from old loc. 35394 35394 New/old loc: 49.48/49.8 73.09/73.13 553/553 KARAGANDA
+26.8 <- distance from old loc. 30309 30309 New/old loc: 56.3/56.07 101.7/101.83 417/489 BRATSK
+25.3 <- distance from old loc. 50953 50953 New/old loc: 45.93/45.75 126.57/126.77 118/143 HARBIN
+24.3 <- distance from old loc. 3918 03918 New/old loc: 54.5/54.3 -6.34/-6.19 18/15 CASTOR BAY
+22.3 <- distance from old loc. 3238 03238 New/old loc: 55.02/55.01 -1.87/-1.52 141/141 ALBEMARLE
+21.0 <- distance from old loc. 59431 ZGNN New/old loc: 22.78/22.82 108.55/108.35 152/73 NANNING/WUXU
+19.8 <- distance from old loc. 51709 ZWSH New/old loc: 39.48/39.47 75.75/75.98 1387/1291 KASHI
+18.9 <- distance from old loc. 15614 LBSF New/old loc: 42.82/42.65 23.38/23.38 587/595 SOFIA (OBSERVATORY)
+18.7 <- distance from old loc. 48855 VVDN New/old loc: 16.07/16.03 108.35/108.18 7/7 None
+16.7 <- distance from old loc. 29839 29839 New/old loc: 53.5/53.35 83.83/83.82 145/159 None
+13.4 <- distance from old loc. 83827 SBFI New/old loc: -25.6/-25.52 -54.48/-54.58 241/243 None
+13.4 <- distance from old loc. 34009 34009 New/old loc: 51.65/51.77 36.18/36.17 246/247 KURSK
+13.1 <- distance from old loc. 57816 ZUGY New/old loc: 26.48/26.58 106.65/106.72 1223/1074 GUIYANG
+12.9 <- distance from old loc. 35229 UATT New/old loc: 50.17/50.28 57.09/57.15 219/224 AKTJUBINSK
+12.8 <- distance from old loc. 60018 60018 New/old loc: 28.32/28.31 -16.38/-16.25 105/120 VALLE DE GUIMAR TENERIFE
+12.5 <- distance from old loc. 58424 58424 New/old loc: 30.62/30.52 116.97/117.03 62/20 ANQING
+12.4 <- distance from old loc. 28722 28722 New/old loc: 54.82/54.75 56.15/56.0 104/105 None
+12.3 <- distance from old loc. 35700 35700 New/old loc: 47.12/47.02 51.92/51.85 -22/-15 GUR'EV
+12.0 <- distance from old loc. 54218 54218 New/old loc: 42.3/42.27 118.83/118.97 669/572 CHIFENG/ULANHAD
+11.9 <- distance from old loc. 2527 ESGG New/old loc: 57.67/57.67 12.5/12.3 164/155 GOTEBORG/LANDVETTER
+11.8 <- distance from old loc. 57516 ZUCK New/old loc: 29.6/29.52 106.4/106.48 541/351 CHONGQING/CHUNGKING
+11.6 <- distance from old loc. 72230 BMX New/old loc: 33.18/33.1 -86.78/-86.7 174/178 BIRMINGHAM (SHELBY APT)
+11.5 <- distance from old loc. 76405 LAP New/old loc: 24.17/24.07 -110.3/-110.33 19/14 LA PAZ/DE LEON
+11.5 <- distance from old loc. 72305 MHX New/old loc: 34.78/34.7 -76.88/-76.8 11/11 MOREHEAD CITY/NEWPORT
+11.5 <- distance from old loc. 58203 58203 New/old loc: 32.87/32.93 115.73/115.83 33/39 FUYANG
+11.1 <- distance from old loc. 40394 OEHL New/old loc: 27.43/27.52 41.68/41.73 1015/1013 None
+11.0 <- distance from old loc. 59758 ZGHK New/old loc: 20.0/20.03 110.25/110.35 64/15 HAIKOU
+10.5 <- distance from old loc. 48698 WSSS New/old loc: 1.34/1.37 103.89/103.98 21/16 None
+10.0 <- distance from old loc. 57178 57178 New/old loc: 33.1/33.02 112.48/112.53 182/131 NANYANG
+267 new reporting stations from prepBUFR
+319 reporting stations from prepBUFR with different locations than in metadata, of which
+42 reporting stations from prepBUFR were more than 10 km from their metadata locations
+701 total reporting stations from prepBUFR (not including 15 moving stations)
+between 2022-09-27 00:00:00 and 2022-10-26 00:00:00

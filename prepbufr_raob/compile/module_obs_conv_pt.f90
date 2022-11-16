@@ -313,13 +313,20 @@ module module_obs_conv_pt
          character(len=180) :: filename_mysql
          character(len=12) :: timetag
 
+         character(len=20) :: output_dir_env_name
+         character(len=20) :: output_dir
+         integer :: len,status
+
          MISSING = 99999
+
+         write(output_dir_env_name,'(a)') 'PB_OUTPUT_DIR'
+         call get_environment_variable(output_dir_env_name,output_dir,len,status,.true.)
  
          write(timetag,'(I10,I2.2)') this%idate,this%mm
          write(filenameall,'(a,a,a,I4.4,3a)') &
-               'tmp/',trim(filename),'_type',this%datatype,'_',timetag,'.txt'
+               trim(output_dir),trim(filename),'_type',this%datatype,'_',timetag,'.txt'
          print *,'soundings filename is |',trim(filenameall),'|'
-         write(filename_mysql,'(3a)') 'tmp/mysql_',timetag,'.tmp'
+         write(filename_mysql,'(4a)') trim(output_dir),'mysql_',timetag,'.tmp'
          print *,'mysql filename is |',trim(filename_mysql),'|'
 
          iunitout=13

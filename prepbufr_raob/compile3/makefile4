@@ -1,0 +1,31 @@
+#! /bin/sh -v
+
+# Define the fortran compiler and options
+FC  =  ifort 
+ CC  =  icc
+ FLAGS=  -g -traceback -ftz -O3 -no-wrap-margin
+ #
+ INCLD=  
+ BASELIB = 
+
+# Ian's library compiled with ifort
+ LIBS = /lfs4/BMC/amb-verif/mcginnis/intel-2022.1.2/bufr/11.7.0/bufr-install/lib64/libbufr_d.a
+ #
+OBJS = kinds.o module_time.o module_obs_base.o module_fix_raob_heights.o module_obs_conv_pt.o \
+       module_prepbufr.o prepbufr2txt.o
+
+all: prepbufr2txt
+
+.SUFFIXES : .F90 .f90 .o
+
+.F90.o :
+	${FC} ${FLAGS} ${INCLD} -c $<
+
+%.o:	%.f90
+	${FC} ${FLAGS} ${INCLD} -c $<
+
+prepbufr2txt:	${OBJS} 
+	      ${FC} -o prepbufr2txt.try9.exe ${FLAGS} ${OBJS} ${LIBS} ${BASELIB}
+
+ clean:
+	rm -f *.o *.mod 

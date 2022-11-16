@@ -511,7 +511,8 @@ module module_obs_conv_pt
                                       thisobs%obs((k-1)*numvar+this%iu), thisobs%obs((k-1)*numvar+this%iv)
                               endif
                            endif
-                           if(thisobs%obs((k-1)*numvar+this%iv) > 200) then
+                           if(thisobs%obs((k-1)*numvar+this%iv) > 200 .and. & ! more than 200 kts
+                                thisobs%obs((k-1)*numvar+this%ip) > 100) then  ! below 100 mb
                               ! if wind more than 200 kts, check things out
                               write(*,*) 'BAD WIND. name, pressure, error, dir, speed: ', &
                                    trim(thisobs%name),thisobs%obs((k-1)*numvar+this%ip), &
@@ -519,10 +520,7 @@ module module_obs_conv_pt
                                    thisobs%obs((k-1)*numvar+this%iu), thisobs%obs((k-1)*numvar+this%iv)
                               ! if wind > 200 kts (per John Brown), eliminate it (after leaving a record above)
                               ! also check below 100 mb!!
-                              if(thisobs%obs((k-1)*numvar+this%iv) > 150 .and. &
-                                    thisobs%obs((k-1)*numvar+this%ip) > 100) then
-                                 thisobs%obs((k-1)*numvar+this%iv) = 99999  ! SET WIND SPEED TO MISSING!!!
-                              endif
+                              WS = 99999  ! SET WIND SPEED TO MISSING!!!
                            endif
                         endif
                          write(iunitout,'(1x,10(I6,1x))') ntype,PP, HH,TT,TD,WD,WS,HHMM,ibearing,irange

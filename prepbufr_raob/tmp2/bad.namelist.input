@@ -1,0 +1,13 @@
+&setup
+obsdate=2022092900
+obsmin=0,
+obsPath='//mnt/lfs4/BMC/rtwbl/mhu/temp/',
+obsfilename='gdas.t00z.prepbufr',
+savePath='tmp2/',
+prefixobssavename='conv',
+/
+&obsset
+numobstype=1,
+obstype=120
+timewindow=6.0,
+/

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-#SBATCH -J pb_RAOB_verif
+####SBATCH -J pb_RAOB_verif  # jobnamr is set by ~/sb2.tcsh
 #SBATCH --mail-user=verif-amb.gsl@noaa.gov
 #SBATCH --mail-type=FAIL
 #SBATCH -A amb-verif
@@ -9,7 +9,7 @@
 #SBATCH -t 01:50:00
 #SBATCH -D .
 #SBATCH --mem=16G
-#SBATCH -o tmp/%x.oe.%j.job
+#SBATCH -o tmp/%x.%j.job
 #
 
 use strict;
@@ -640,7 +640,7 @@ foreach my $file (@allfiles) {
     # untaint
     $file =~ /(.*)/;
     $file = $1;
-    if(-M $file > 1.0) {	# age in days
+    if(-M $file > 2.0) {	# age in days
 	print "unlinking $file\n";
         unlink "$file" || print "Can't unlink $file $!\n";
     }

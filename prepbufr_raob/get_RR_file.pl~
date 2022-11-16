@@ -38,7 +38,7 @@ sub get_model_file2 {
 
     my $anal_dir;
     my $template="";
-    print "data source: $data_source";
+    print "data source: $data_source\n";
     if($data_source eq "RAP20") {
 	$anal_dir = "/public/data/grids/rap/hyb_A252/grib2";
 	#$anal_dir = "/pan2/projects/public/data/grids/rap/hyb_A252/grib2";

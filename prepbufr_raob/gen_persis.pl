@@ -225,7 +225,7 @@ foreach my $file (@allfiles) {
     # untaint
     $file =~ /(.*)/;
     $file = $1;
-    if(-M $file > .7) {
+    if(-M $file > 2.0) {
 	print "unlinking $file\n";
         unlink "$file" || print "Can't unlink $file $!\n";
     }

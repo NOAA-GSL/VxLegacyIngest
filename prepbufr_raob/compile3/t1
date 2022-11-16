@@ -1,0 +1,1 @@
+gfortran -o prepbufr2txt.try6.exe -g -fbacktrace kinds.o module_time.o module_obs_base.o module_fix_raob_heights.o module_obs_conv_pt.o module_prepbufr.o prepbufr2txt.o /lfs4/HFIP/hfv3gfs/nwprod/hpc-stack/libs/intel-18.0.5.274/bufr/11.7.0/lib64/libbufr_d.a 

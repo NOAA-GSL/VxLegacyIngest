@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-####SBATCH -J pb_RAOB_verif  # jobnamr is set by ~/sb2.tcsh
+#SBATCH -J pb_RAOB_verif  # jobnamr is set by ~/sb2.tcsh
 #SBATCH --mail-user=verif-amb.gsl@noaa.gov
 #SBATCH --mail-type=FAIL
 #SBATCH -A amb-verif
@@ -125,7 +125,9 @@ if(defined $ARGV[$i_arg]  && $ARGV[$i_arg] > 0) {
 my $time = time() + 12*3600 - $hrs_to_subtract*3600;
 # put on 12 hour boundary
 $time -= $time%(12*3600);
-my @valid_times = ($time,$time-12*3600, $time-24*3600);
+# oldest time to try changed from -24 to -48 to re-look at things after 36 h
+# to account for jet outages. (Will only process forecasts that *haven't* already processed.)
+my @valid_times = ($time,$time-12*3600, $time-48*3600);
 
 my $soundings_table = "${data_source}_raob_soundings";
 # see if the needed tables exist
@@ -640,7 +642,7 @@ foreach my $file (@allfiles) {
     # untaint
     $file =~ /(.*)/;
     $file = $1;
-    if(-M $file > 1.0) {	# age in days
+    if(-M $file > 2.0) {	# age in days
 	print "unlinking $file\n";
         unlink "$file" || print "Can't unlink $file $!\n";
     }

@@ -120,6 +120,26 @@ sub get_model_file2 {
         $anal_dir = sprintf("/mnt/lfs4/BMC/rtwbl/mhu/wcoss/emc/cycles/ncorap/%04d%02d%02d%02d/postprd/",
                         $year+1900,$month+1,$mday,$hour);
         $template = sprintf("rap.t%02dz.awp130pgrbf%02d.grib2",$hour,$desired_fcst_len);
+    } elsif($data_source eq "RRFS_A") {
+        $anal_dir =
+            sprintf("/lfs4/BMC/rtwbl/mhu/wcoss/emc/rrfs/rrfs_a.%04d%02d%02d/%02d",
+                    $year+1900,$month+1,$mday,$hour);
+        $template = sprintf("RRFS_CONUS.t%02dz.bgrd3df%03d.tm00.grib2",$hour,$desired_fcst_len);
+    } elsif($data_source eq "RRFS_A_iso") {
+        $anal_dir =
+            sprintf("/lfs4/BMC/rtwbl/mhu/wcoss/emc/rrfs/rrfs_a.%04d%02d%02d/%02d",
+                    $year+1900,$month+1,$mday,$hour);
+        $template = sprintf("RRFS_CONUS.t%02dz.bgdawpf%03d.tm00.grib2",$hour,$desired_fcst_len);
+    } elsif($data_source eq "RRFS_B") {
+        $anal_dir =
+            sprintf("/lfs4/BMC/nrtrr/NCO_dirs/ptmp/com/RRFS_CONUS/para/RRFS_conus_3km.%04d%02d%02d/%02d",
+                    $year+1900,$month+1,$mday,$hour);
+        $template = sprintf("RRFS_CONUS.t%02dz.bgrd3df%03d.tm00.grib2",$hour,$desired_fcst_len);
+    } elsif($data_source eq "RRFS_B_iso") {
+        $anal_dir =
+            sprintf("/lfs4/BMC/nrtrr/NCO_dirs/ptmp/com/RRFS_CONUS/para/RRFS_conus_3km.%04d%02d%02d/%02d",
+                    $year+1900,$month+1,$mday,$hour);
+        $template = sprintf("RRFS_CONUS.t%02dz.bgdawpf%03d.tm00.grib2",$hour,$desired_fcst_len);
     } elsif($data_source eq "RRFS_AK") {
         $anal_dir = sprintf("/home/rtrr/rrfs/ptmp/com/RRFS_AK/para/RRFS_AK.%04d%02d%02d/%02d",
                         $year+1900,$month+1,$mday,$hour);

@@ -69,7 +69,8 @@ with open(template_file) as fp:
             break
         fout.write(line)
 fout.close()
-bad_winds_filename = "tmp/{}.bad_winds.tmp".format(os.getpid())
+os.environ["PB_OUTPUT_DIR"] = "tmp/"
+bad_winds_filename = "{}{}.bad_winds.tmp".format(os.environ["PB_OUTPUT_DIR"] ,os.getpid())
 bw_out = open(bad_winds_filename,'w')
 soundings_filename = None
 mysql_filename = None
@@ -122,19 +123,19 @@ columns terminated by ','
 lines terminated by ',\\n'
 (wmoid,time,
 mean_h_diff_500,  max_h_diff_500,  n_h_diff_500,  n_added_500,
-mean_h_diff,  max_h_diff,  n_h_diff,  n_added)
-""".format(mysql_filename)
+mean_h_diff,  max_h_diff,  n_h_diff,  n_added)""".format(mysql_filename)
 print("query is {}".format(query))
 cursor.execute(query)
+print("{} wmoid records written to table soundings_pb.hypsometric_summary\n".format(cursor.rowcount))
 
 query = """load data concurrent local infile '{}'
 replace into table bad_winds
 columns terminated by ','
 lines terminated by ',\\n'
-(valid_time,wmoid,press,dir,spd)
-""".format(bad_winds_filename)
+(valid_time,wmoid,press,dir,spd)""".format(bad_winds_filename)
 print("query is {}".format(query))
 cursor.execute(query)
+print("{} bad winds written to table soundings_pb.bad_winds\n".format(cursor.rowcount))
 
 missing_site_names={}
 #now load the RAOBS
