@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/VERIF/xml/precip_1hr_rt.xml -d /whome/amb-verif/VERIF/xml/precip_1hr_rt.db

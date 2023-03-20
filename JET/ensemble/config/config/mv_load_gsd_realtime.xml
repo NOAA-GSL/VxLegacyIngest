@@ -1,0 +1,34 @@
+<load_spec>
+  <email>jeffrey.a.hamilton@noaa.gov</email>
+  <initialize_db>false</initialize_db>
+  <organization>gsd</organization>
+  <connection>
+    <management_system>mysql</management_system>
+    <host>MVHOST</host>
+    <database>mv_gsd_ensemble_realtime</database>
+    <user>MVUSER</user>
+    <password>MVUSERPWD</password>
+  </connection>
+
+  <verbose>true</verbose>
+  <insert_size>1</insert_size>
+  <stat_header_db_check>true</stat_header_db_check>
+  <mode_header_db_check>false</mode_header_db_check>
+  <drop_indexes>false</drop_indexes>
+  <apply_indexes>true</apply_indexes>
+  <load_stat>true</load_stat>
+  <load_mode>false</load_mode>
+  <load_mpr>false</load_mpr>
+  <load_orank>false</load_orank>
+  <force_dup_file>true</force_dup_file>
+
+  <folder_tmpl>{DATA_DIR}/{cycle}/{DATA_TYPE}</folder_tmpl>
+  <load_val>
+    <field name="cycle">
+      <val>{CYCLE_DIR}</val>
+    </field>
+  </load_val>
+
+  <load_xml>true</load_xml>
+  <load_note>Ensemble MET for GSD realtime</load_note>
+</load_spec>

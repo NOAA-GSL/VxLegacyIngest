@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/ensemble/xml/href_precip_init_rt.xml -d /whome/amb-verif/ensemble/xml/db/href_precip_init_rt.db

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/ensemble/bin">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/ensemble/verif/precip/log">
+    <!ENTITY MSS_DIR "/BMC/rtrr/5year/amb-verif/ensemble">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/StageIV/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/amb-verif/ensemble/verif/precip/StageIV/log">
+    
+    <!ENTITY HRRRE_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/HRRRE/realtime">
+    <!ENTITY HRRRE_LOG_DIR "/home/amb-verif/ensemble/verif/precip/HRRRE/log">
+    <!ENTITY HRRRE_VERIF_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/HRRREvStageIV/realtime">
+    
+    <!ENTITY HRRRE_S_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/HRRRE_S/realtime">
+    <!ENTITY HRRRE_S_LOG_DIR "/home/amb-verif/ensemble/verif/precip/HRRRE_S/log">
+    <!ENTITY HRRRE_S_VERIF_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/HRRRE_SvStageIV/realtime">
+    
+    <!ENTITY HREF_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/HREF/realtime">
+    <!ENTITY HREF_LOG_DIR "/home/amb-verif/ensemble/verif/precip/HREF/log">
+    <!ENTITY HREF_VERIF_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/HREFvStageIV/realtime">
+    
+    <!ENTITY CYCDEFS "6hr">
+    <!ENTITY TDIFF "3600">
+
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY WALL_LIMIT "04:00:00">
+    
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&WALL_LIMIT;</walltime>'>
+
+    <!ENTITY YMDH
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-432000">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-432000">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-432000">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-432000">@H</cyclestr></value>
+	</envar>'>
+
+     <!ENTITY YMDH15
+        '<envar>
+           <name>YEAR</name>
+           <value><cyclestr offset="-1296000">@Y</cyclestr></value>
+         </envar>
+         <envar>
+            <name>MONTH</name>
+            <value><cyclestr offset="-1296000">@m</cyclestr></value>
+         </envar>
+         <envar>
+            <name>DAY</name>
+            <value><cyclestr offset="-1296000">@d</cyclestr></value>
+         </envar>
+         <envar>
+            <name>HOUR</name>
+            <value><cyclestr offset="-1296000">@H</cyclestr></value>
+         </envar>'>
+]>
+
+<workflow realtime="T" scheduler="slurm" cyclethrottle="6" cyclelifespan="0:03:00:00">
+
+  <cycledef group="1dy">0 0 * * 2023-2029 *</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/precip_arch_workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="StageIV_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>StageIV_precip_arch</jobname>
+    <join><cyclestr offset="-1296000">&OBS_LOG_DIR;/StageIV_precip_arch_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH15;
+    
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_arch.py</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/precip/StageIV</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>StageIV</value>
+    </envar>
+
+  </task>
+  
+  <task name="HRRRE_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRRE_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&HRRRE_LOG_DIR;/HRRRE_precip_arch_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH;
+    
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_arch.py</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/precip/HRRRE</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&HRRRE_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&HRRRE_VERIF_REALTIME_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="HRRRE_S_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRRE_S_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&HRRRE_S_LOG_DIR;/HRRRE_S_precip_arch_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_arch.py</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/precip/HRRRE_S</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&HRRRE_S_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&HRRRE_S_VERIF_REALTIME_DIR;</value>
+    </envar>
+  </task>
+   
+  <task name="HREF_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HREF_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&HREF_LOG_DIR;/HREF_precip_arch_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_arch.py</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/precip/HREF</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&HREF_VERIF_REALTIME_DIR;</value>
+    </envar>
+  </task>
+ 
+</workflow>

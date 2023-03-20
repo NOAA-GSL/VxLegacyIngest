@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto/1.3.3
+
+rocotorun -w /whome/amb-verif/GSL_verif-global/xml/gfs_g2g_init_rt.xml -d /whome/amb-verif/GSL_verif-global/xml/db/gfs_g2g_init_rt.db

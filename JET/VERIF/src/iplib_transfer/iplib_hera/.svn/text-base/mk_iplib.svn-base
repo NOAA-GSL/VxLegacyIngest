@@ -1,0 +1,97 @@
+ifort -c gausslat.f
+ifort -c gcdist.f
+ifort -c gdsawt.f
+ifort -c gdswiz.f
+ifort -c gdswiz00.f
+ifort -c gdswiz01.f
+ifort -c gdswiz03.f
+ifort -c gdswiz04.f
+ifort -c gdswiz05.f
+ifort -c gdswizc9.f
+ifort -c gdswizca.f
+ifort -c gdswizcb.f
+ifort -c gdswzd.f
+ifort -c gdswzd00.f
+ifort -c gdswzd01.f
+ifort -c gdswzd03.f
+ifort -c gdswzd04.f
+ifort -c gdswzd05.f
+ifort -c gdswzdc9.f
+ifort -c gdswzdca.f
+ifort -c gdswzdcb.f
+ifort -c ijkgds.f
+ifort -c ipolates.f
+ifort -c ipolatev.f
+ifort -c ipxetas.f
+ifort -c ipxwafs.f
+ifort -c ipxwafs2.f
+ifort -c makgds.f
+ifort -c movect.f 
+ifort -c polateg0.f
+ifort -c polateg1.f
+ifort -c polateg4.f
+ifort -c polates0.f
+ifort -c polates1.f
+ifort -c polates2.f
+ifort -c polates3.f
+ifort -c polates4.f
+ifort -c polates5.f
+ifort -c polates6.f
+ifort -c polatev0.f
+ifort -c polatev1.f
+ifort -c polatev2.f
+ifort -c polatev3.f
+ifort -c polatev4.f
+ifort -c polatev6.f
+ifort -c polfixs.f
+ifort -c polfixv.f
+
+
+ar -crv libip.a \
+gausslat.o \
+gcdist.o \
+gdsawt.o \
+gdswiz.o \
+gdswiz00.o \
+gdswiz01.o \
+gdswiz03.o \
+gdswiz04.o \
+gdswiz05.o \
+gdswizc9.o \
+gdswizca.o \
+gdswizcb.o \
+gdswzd.o \
+gdswzd00.o \
+gdswzd01.o \
+gdswzd03.o \
+gdswzd04.o \
+gdswzd05.o \
+gdswzdc9.o \
+gdswzdca.o \
+gdswzdcb.o \
+ijkgds.o \
+ipolates.o \
+ipolatev.o \
+ipxetas.o \
+ipxwafs.o \
+ipxwafs2.o \
+makgds.o \
+movect.o \
+polateg0.o \
+polateg1.o \
+polateg4.o \
+polates0.o \
+polates1.o \
+polates2.o \
+polates3.o \
+polates4.o \
+polates5.o \
+polates6.o \
+polatev0.o \
+polatev1.o \
+polatev2.o \
+polatev3.o \
+polatev4.o \
+polatev6.o \
+polfixs.o \
+polfixv.o 

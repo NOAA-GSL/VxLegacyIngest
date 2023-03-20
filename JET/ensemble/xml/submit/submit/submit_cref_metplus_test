@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/ensemble/xml/metplus_cref_test.xml -d /whome/amb-verif/ensemble/xml/db/metplus_cref_test.db

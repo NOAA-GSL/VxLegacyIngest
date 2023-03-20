@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/drivers
+END
+iplst4_eta12.f
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/drivers/iplst4_eta12.f
+END
+iplst4_com10.f
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/drivers/iplst4_com10.f
+END
+iplst4_lap12.f
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/drivers/iplst4_lap12.f
+END
+iplcom10_com20.f
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/drivers/iplcom10_com20.f
+END
+iplst4_ruc10.f
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/drivers/iplst4_ruc10.f
+END
+iplst4_ruc20.f
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/drivers/iplst4_ruc20.f
+END

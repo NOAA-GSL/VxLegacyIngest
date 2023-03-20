@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/ensemble/bin">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/ensemble/verif/cref/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/ensemble/verif/cref">
+    <!ENTITY WEB_DIR "/home/amb-verif/ensemble/verif/web">
+    <!ENTITY CONFIG_DIR "/home/amb-verif/ensemble/config">
+    <!ENTITY MET_DIR "/contrib/met/9.1/">
+    <!ENTITY MET_BASE "/contrib/met/9.1/share/met/">
+    <!ENTITY METPLUS_DIR "/lfs1/BMC/amb-verif/METplus_ensemble/METplus-3.0-beta1">
+    <!ENTITY METVIEWER_DIR "/home/amb-verif/metviewer/v2.11_int/metviewer">
+    <!ENTITY MVLOADER_DIR "/home/amb-verif/metviewer/mvloader">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/ensemble/verif/cref/MRMS/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/amb-verif/ensemble/verif/cref/MRMS/log">
+    <!ENTITY OBS_DIR "/public/data/radar/mrms">   
+ 
+    <!ENTITY PCP_MASK "/home/amb-verif/ensemble/static/CONUS_mask.nc">
+
+    <!ENTITY CYCDEFS "1hr">
+    <!ENTITY TDIFF "3600">
+
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "01:30:00">
+    <!ENTITY SERVICE_WALL_LIMIT "01:30:00">
+    <!ENTITY DEADLINE "21600">
+    <!ENTITY WAIT "3600">
+    
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+        <deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>6G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+        <deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY YMDH
+       '<envar>
+          <name>YEAR</name>
+          <value><cyclestr>@Y</cyclestr></value>
+        </envar>
+        <envar>
+          <name>MONTH</name>
+          <value><cyclestr>@m</cyclestr></value>
+        </envar>
+        <envar>
+          <name>DAY</name>
+          <value><cyclestr>@d</cyclestr></value>
+        </envar>
+        <envar>
+          <name>HOUR</name>
+          <value><cyclestr>@H</cyclestr></value>
+        </envar>
+        <envar>
+          <name>YYYYMMDDHH</name>
+          <value><cyclestr>@Y@m@d@H</cyclestr></value>
+        </envar>'>
+	
+    <!ENTITY YMDH3600
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-3600">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-3600">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-3600">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-3600">@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr offset="-3600">@Y@m@d@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH86400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-86400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-86400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-86400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-86400">@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr offset="-86400">@Y@m@d@H</cyclestr></value>
+	</envar>'>
+
+]>
+
+<workflow realtime="T" scheduler="slurm" cyclethrottle="6" cyclelifespan="0:06:00:00">
+
+  <cycledef group="1hr">0 * * * 2021-2025 *</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="MRMS_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>MRMS_init</jobname>
+    <join><cyclestr offset="-3600">&OBS_LOG_DIR;/MRMS_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH3600;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/MRMS_init.py</value>
+    </envar>
+    <envar>
+      <name>SCRIPTDIR</name>
+      <value>&SCRIPT_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>OBSDIR</name>
+      <value>&OBS_DIR;</value>
+    </envar>
+    <envar>
+      <name>NSSLVAR</name>
+      <value>MergedReflectivityQCComposite</value>
+    </envar>
+    <envar>
+      <name>GRIB2VAR</name>
+      <value>:var discipline=209 master_table=255 parmcat=10 parm=0:</value>
+    </envar>
+
+  </task>
+
+  <task name="MRMS_regrid_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/metplus_wrapper.sh</command>
+    <jobname>MRMS_regrid_init</jobname>
+    <join><cyclestr offset="-3600">&OBS_LOG_DIR;/MRMS_regrid_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH3600;
+
+    <envar>
+      <name>MET_DIR</name>
+      <value>&MET_DIR;</value>
+    </envar>
+    <envar>
+      <name>MET_BASE</name>
+      <value>&MET_BASE;</value>
+    </envar>
+    <envar>
+      <name>METPLUS_PATH</name>
+      <value>&METPLUS_DIR;</value>
+    </envar>
+    <envar>
+      <name>METPLUS_CFG</name>
+      <value>&CONFIG_DIR;/metplus/mrms_regrid.conf</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>OBSDIR</name>
+      <value>&OBS_DIR;</value>
+    </envar>
+    <envar>
+      <name>CFGDIR</name>
+      <value>&CONFIG_DIR;</value>
+    </envar>
+        
+    <dependency>
+      <taskdep task="MRMS_init"/>
+    </dependency>
+
+  </task> 
+ 
+    <metatask>
+      <var name="taskname">MRMS_cref_gaussian_25</var>
+      <var name="cdefs">&CYCDEFS;</var>
+      <var name="gaussian_dx">3</var>
+      <var name="gaussian_radius">25</var>
+      <var name="neighborhood">729</var> <!-- neighborhood radius squared-->
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/wrapper.ksh</command>
+        <jobname>#taskname#</jobname>
+        <join><cyclestr offset="-3600">&OBS_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+        &PE_OPTS;
+        &YMDH3600;
+
+        <envar>
+          <name>SCRIPT</name>
+          <value>&SCRIPT_DIR;/gaussian_regrid.py</value>
+        </envar>
+        <envar>
+          <name>MET_DIR</name>
+          <value>&MET_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&OBS_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>VAR</name>
+          <value>var209_10_0_500mabovemeansealevel</value>
+        </envar>
+        <envar>
+          <name>LEVEL</name>
+          <value>Z500</value>
+        </envar>
+        <envar>
+          <name>DX</name>
+          <value>#gaussian_dx#</value>
+        </envar>
+        <envar>
+          <name>RADIUS</name>
+          <value>#gaussian_radius#</value>
+        </envar>
+        <envar>
+          <name>NEIGHBORHOOD</name>
+          <value>#neighborhood#</value>
+        </envar>
+
+        <dependency>
+           <taskdep task="MRMS_regrid_init"/>
+        </dependency>
+
+      </task>
+    </metatask>
+
+</workflow>

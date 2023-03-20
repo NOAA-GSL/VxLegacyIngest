@@ -1,0 +1,266 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+// MODE configuration file.
+//
+// For additional information, see the MET_BASE/config/README file.
+//
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Output model name to be written
+//
+model = "${MODEL_NAME}";
+
+//
+// Output description to be written
+//
+desc = "E_CONUS";
+
+//
+// Output observation type to be written
+//
+obtype = "MRMS";
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Verification grid
+// May be set separately in each "field" entry
+//
+regrid = {
+   to_grid    = FCST;
+   method     = NEAREST;
+   width      = 1;
+   vld_thresh = 0.5;
+   shape      = SQUARE;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Approximate grid resolution (km)
+//
+grid_res = 3;
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Run all permutations of radius and threshold
+//
+quilt = TRUE;
+
+//
+// Forecast and observation fields to be verified
+//
+fcst = {
+   field = {
+      name  = "REFC";
+      level = "L0";
+   }
+
+   censor_thresh      = [];
+   censor_val         = [];
+   conv_radius        = [1]; 
+   conv_thresh        = [>=25,>=30,>=35,>=40]; // composite reflectivity
+   vld_thresh         = 0.5;
+   filter_attr_name   = ["AREA"];
+   filter_attr_thresh = [>=16];
+   merge_thresh       = >=1.25;
+   merge_flag         = NONE;
+}
+obs = {
+   field = {
+      name = "REFC";
+      level = "R1";
+   }
+
+   censor_thresh      = [];
+   censor_val         = [];
+   conv_radius        = [1];
+   conv_thresh        = [>=25,>=30,>=35,>=40]; // composite reflectivity
+   vld_thresh         = 0.5;
+   filter_attr_name   = ["AREA"];
+   filter_attr_thresh = [>=16];
+   merge_thresh       = >=1.25;
+   merge_flag         = NONE;
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Handle missing data
+//
+mask_missing_flag = NONE;
+
+//
+// Match objects between the forecast and observation fields
+//
+match_flag = NO_MERGE;
+
+//
+// Maximum centroid distance for objects to be compared
+//
+max_centroid_dist = 500.0/grid_res; // everything is in grid squares unless normalized by grid_res
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Verification masking regions
+//
+mask = {
+   grid      = "";
+   grid_flag = NONE; // Apply to NONE, FCST, OBS, or BOTH
+   poly      = "${STATIC_DIR}/CONUS_east_of_rockies_mask.nc";
+   poly_flag = BOTH; // Apply to NONE, FCST, OBS, or BOTH
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Fuzzy engine weights
+//
+weight = {
+   centroid_dist    = 5.0;
+   boundary_dist    = 4.0;
+   convex_hull_dist = 0.0;
+   angle_diff       = 0.0;
+   aspect_diff      = 0.0;
+   area_ratio       = 4.0;
+   int_area_ratio   = 2.0;
+   curvature_ratio  = 0.0;
+   complexity_ratio = 0.5;
+   inten_perc_ratio = 3.5;
+   inten_perc_value = 95;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Fuzzy engine interest functions
+//
+interest_function = {
+
+   centroid_dist = (
+      (            0.0, 1.0 )
+      (  30.0/grid_res, 1.0 )
+      ( 500.0/grid_res, 0.0 )
+   );
+
+   boundary_dist = (
+      (            0.0, 1.0 )
+      ( 400.0/grid_res, 0.0 )
+   );
+
+   convex_hull_dist = (
+      (            0.0, 1.0 )
+      ( 500.0/grid_res, 0.0 )
+   );
+
+   angle_diff = (
+      (  0.0, 1.0 )
+      ( 30.0, 1.0 )
+      ( 90.0, 0.0 )
+   );
+
+   aspect_diff = (
+      (  0.00, 1.0 )
+      (  0.10, 1.0 )
+      (  0.75, 0.0 )
+   );
+
+   corner   = 0.95;
+   ratio_if = (
+      (    0.0, 0.0 )
+      ( corner, 1.0 )
+      (    1.0, 1.0 )
+   );
+
+   area_ratio = ratio_if;
+
+   int_area_ratio = (
+      ( 0.00, 0.00 )
+      ( 0.10, 0.50 )
+      ( 0.25, 1.00 )
+      ( 1.00, 1.00 )
+   );
+
+   curvature_ratio = ratio_if;
+
+   complexity_ratio = ratio_if;
+
+   inten_perc_ratio = ratio_if;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Total interest threshold for determining matches
+//
+total_interest_thresh = 0.7;
+
+//
+// Interest threshold for printing output pair information
+//
+print_interest_thresh = 0.0;
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Plotting information
+//
+
+fcst_raw_plot = {
+   color_table      = "${STATIC_DIR}/radar_refl.ctable"; // composite_reflectivity
+   plot_min         = 0.0;
+   plot_max         = 75.0;
+   colorbar_spacing = 1;
+}
+
+obs_raw_plot = {
+   color_table      = "${STATIC_DIR}/radar_refl.ctable"; // composite reflectivity
+   plot_min         = 0.0;
+   plot_max         = 75.0;
+   colorbar_spacing = 1;
+}
+
+object_plot = {
+   color_table = "MET_BASE/colortables/mode_obj.ctable";
+}
+
+//
+// Boolean for plotting on the region of valid data within the domain
+//
+plot_valid_flag = TRUE;
+
+//
+// Plot polyline edges using great circle arcs instead of straight lines
+//
+plot_gcarc_flag = TRUE;
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// NetCDF matched pairs, PostScript, and contingency table output files
+//
+ps_plot_flag    = FALSE;
+nc_pairs_flag   = FALSE; //{
+//   latlon       = TRUE;
+//   raw          = TRUE;
+//   object_raw   = TRUE;
+//   object_id    = TRUE;
+//   cluster_id   = TRUE;
+//   polylines    = TRUE;
+//}
+ct_stats_flag   = TRUE;
+
+////////////////////////////////////////////////////////////////////////////////
+
+shift_right = 0;   //  grid squares
+
+////////////////////////////////////////////////////////////////////////////////
+
+output_prefix  = "compref_mem${MEMBER}";
+version        = "V10.0.0";
+
+////////////////////////////////////////////////////////////////////////////////

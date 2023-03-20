@@ -1,0 +1,1046 @@
+### CHRON WARNING:  
+### CHRON WARNING:  Dear user, 
+### CHRON WARNING:  
+### CHRON WARNING:  If you are seeing this message something is wrong.
+### CHRON WARNING:  Please report this problem to rdhpcs.jet.help@noaa.gov.
+### CHRON WARNING:  
+### CHRON WARNING:  The command 'crontab' must be replaced by a system
+### CHRON WARNING:  wrapper script!  The purpose of the wapper script is to
+### CHRON WARNING:  enable a fault-tolerant and scalable cron system that
+### CHRON WARNING:  provides a single interface to all users.
+### CHRON WARNING:  
+SHELL=/home/admin/chron/bin/chron_sh
+MAILTO="verif-amb.gsl@noaa.gov"
+ROCOTO_SACCT_CACHE=/home/amb-verif/sacct-cache/sacct.txt
+#
+# RAOBs from prepBUFR
+20 * * * * $HOME/sb2.tcsh pb_RAOBS $HOME/prepbufr_raob/do_prepbufr_raobs3.pl gdas 0   > /dev/null
+# second chance to load late-arriving RAOBs, or prepufr files not processed due to jet downtume
+30 * * * * $HOME/sb2.tcsh pb_24_RAOBS $HOME/prepbufr_raob/do_prepbufr_raobs3.pl gdas -24   > /dev/null
+10 8,20 * * * $HOME/sb2.tcsh  persis_pb $HOME/prepbufr_raob/gen_persis.pl -1 0 > /dev/null
+28 0-9,11-23 * * * $HOME/sb2.tcsh  RRFS_A_pb $HOME/prepbufr_raob/agen_raob_sites.pl RRFS_A -12 0  > /dev/null
+28 0-9,11-23 * * * $HOME/sb2.tcsh  RRFS_B_pb $HOME/prepbufr_raob/agen_raob_sites.pl RRFS_B -12 0  > /dev/null
+#28 0-9,11-23 * * * $HOME/sb2.tcsh  RTMA_B_pb $HOME/prepbufr_raob/agen_raob_sites.pl RTMA_B -12 0  > /dev/null
+30 0-9,11-23 * * * $HOME/sb2.tcsh  RAP_OPS_iso_pb $HOME/prepbufr_raob/agen_raob_sites.pl RAP_OPS_iso -5 0  > /dev/null
+30 0-9,11-23 * * * $HOME/sb2.tcsh  RAP_OPS_130_pb $HOME/prepbufr_raob/agen_raob_sites.pl RAP_OPS_130 -5 0  > /dev/null
+32 0-9,11-23 * * * $HOME/sb2.tcsh  RAP_OPS_iso_130_pb $HOME/prepbufr_raob/agen_raob_sites.pl isoRRrapx -5 0  > /dev/null
+33 0-9,11-23 * * * $HOME/sb2.tcsh  RAP_OPS_iso_242_pb $HOME/prepbufr_raob/agen_raob_sites.pl RAP_OPS_iso_242 -5 0  > /dev/null
+54 0-9,11-23 * * * $HOME/sb2.tcsh  RTMA_3D_GSD_pb $HOME/prepbufr_raob/agen_raob_sites.pl RTMA_3D_GSD -5 0  > /dev/null
+33 0-9,11-23 * * * $HOME/sb2.tcsh  HRRR_OPS_pb $HOME/prepbufr_raob/agen_raob_sites.pl HRRR_OPS -5 0  > /dev/null
+33 0-9,11-23 * * * $HOME/sb2.tcsh  HRRR_AK_OPS_pb $HOME/prepbufr_raob/agen_raob_sites.pl HRRR_AK_OPS -5 0  > /dev/null
+33 0-9,11-23 * * * $HOME/sb2.tcsh  HRRR_OPS_iso_pb $HOME/prepbufr_raob/agen_raob_sites.pl HRRR_OPS_iso -5 0  > /dev/null
+33 0-9,11-23 * * * $HOME/sb2.tcsh  HRRR_AK_OPS_iso_pb $HOME/prepbufr_raob/agen_raob_sites.pl HRRR_AK_OPS_iso -5 0  > /dev/null
+34 0-9,11-23 * * * $HOME/sb2.tcsh  GFS_pb $HOME/prepbufr_raob/agen_raob_sites.pl GFS -12 0  > /dev/null
+40 0-9,11-23 * * * $HOME/sb2.tcsh L128_pb $HOME/prepbufr_raob/agen_raob_sites.pl rt_ccpp_gsd_L128 -28 0  > /dev/null
+44 0-9,11-23 * * * $HOME/sb2.tcsh  RRFS_NA_3km_dev1_HRRR_iso_pb $HOME/prepbufr_raob/agen_raob_sites.pl RRFS_NA_3km_dev1_HRRR_iso -12 0  > /dev/null
+48 0-9,11-23 * * * $HOME/sb2.tcsh  RRFS_NA_3km_dev1_AK_iso_pb $HOME/prepbufr_raob/agen_raob_sites.pl RRFS_NA_3km_dev1_AK_iso -12 0  > /dev/null
+#
+#
+# MySQL backups to hpss (really only happens once a month.
+# other times, this job will find no tar files to delete and return in about 3 seconds
+*/20 12-13 25 * * $HOME/utilities/sb2.tcsh ld_mysql_hpss $HOME/mysql_backup/load_hpss_mysql.tcsh  > /dev/null 2>&1
+0 15 25 * * $HOME/mysql_backup/check_hpss_backup.tcsh  > /dev/null 2>&1
+#
+# SYNOP verification (regional sums are generated on ratchet)
+#
+#10 */12 * * * $HOME/qs.sh $HOME/precip_synops/process_synops.tcsh -5 > /dev/null
+#50 */12 * * * $HOME/qs.sh $HOME/precip_synops/load_mysql.tcsh > /dev/null
+#
+# pm2.5 air quality verification
+#
+45   * * * * ~/sb.sh $HOME/airnow/multiprocess_models.tcsh -5  > /dev/null
+*/10 0-9,11-23 * * * ~/sb.sh $HOME/airnow/load_pm2p5.tcsh > /dev/null
+#
+# precip based on 1min asos data
+#
+10   * * * * $HOME/sb.sh $HOME/precip_1min/make_precip.pl -5 > /dev/null 2>&1
+30   * * * * $HOME/sb.sh $HOME/precip_1min/process_precip_1min.tcsh 12 -5 > /dev/null 2>&1
+*/10 0-9,11-23 * * * $HOME/sb.sh $HOME/precip_1min/load_mysql.tcsh > /dev/null 2>&1
+#
+# precip based on hourly mesonet data (HADS, RAWS, MesoWest)
+# (houly precip is made on emb-prodverif
+10    * * * * $HOME/sb.sh $HOME/precip_mesonets/process_precip_mesonets.tcsh 12 -5 > /dev/null 2>&1
+*/10 0-9,11-23 * * * $HOME/sb.sh $HOME/precip_mesonets/load_mysql.tcsh > /dev/null 2>&1
+# the newer database: precip_mesonets2
+# the two jobs below...
+# need to run AFTER make_mesonet_hourly_precip2.pl -5 cron job on emb-prod-verif (which runs at 35 past the hour)
+#38  * * * * $HOME/utilities/sb2.tcsh nets2_stations $HOME/precip_mesonets2/get_stations_at_hour.tcsh  > /dev/null 2>&1
+#40  * * * * $HOME/utilities/sb2.tcsh pcp_nets2 $HOME/precip_mesonets2/process_precip_mesonets3.tcsh -7  > /dev/null 2>&1
+#44 * * * * $HOME/utilities/sb2.tcsh pcp_nets2_NBM $HOME/precip_mesonets2/load_mysql3.tcsh > /dev/null 2>&1
+#49 * * * * $HOME/utilities/sb2.tcsh pcp_nets2_NBM $HOME/precip_mesonets2/subregion_sums_driver3.tcsh -7 > /dev/null 2>&1
+27 * * * * $HOME/precip_mesonets2/gen_persis.py -8 > $HOME/precip_mesonets2/gen_persis.log 2>&1
+# load aqpi data (using rocoto)
+#real-time stage4 data available 4x/day (6h accumulations)
+*/10 * * * * $HOME/precip_mesonets2/git_version/precip_mesonets2/runner.ksh stage4_6h_rt > /dev/null 2>&1
+*/5  * * * * $HOME/precip_mesonets2/git_version/precip_mesonets2/runner.ksh meta_rt > /dev/null 2>&1
+#
+# process STAGE4 run
+#6   * * * * $HOME/sb.sh $HOME/precip_mesonets2/retro/stage4/process_precip_mesonets2.tcsh 12 0
+# load RETRO run
+#5 0-9,11-23 * * * $HOME/sb.sh $HOME/precip_mesonets2/retro/stage4/load_mysql2.tcsh > /dev/null 2>&1
+#
+MAILTO="amb-verif.gsd@noaa.gov"
+#
+# load 3h sums from 1h models AFTER the models have been loaded -- only need do this every 3 h
+# (maybe only every 6 hours)
+#48 */3 * * * $HOME/sb.sh $HOME/precip_mesonets2/make_old_3h_sums.tcsh -12 HRRR_OPS,HRRR_GSD > /dev/null 2>&1
+#
+# update files for web site for all projects
+# 5-59/10  * * * * /whome/amb-verif/utilities/update_files_avail_new.pl > /whome/amb-verif/logs/update_files_avail_new.log 2>&1
+# 5-59/10  * * * * /whome/amb-verif/utilities/update_files_avail_fim.pl > /whome/amb-verif/logs/update_files_avail_fim.log 2>&1
+#0-59/15  * * * * /whome/amb-verif/utilities/update_files_avail_fim_fim9.pl > /whome/amb-verif/logs/update_files_avail_fim_fim9.log 2>&1
+#0-59/15  * * * * /whome/amb-verif/utilities/update_files_avail_fim_rest.pl > /whome/amb-verif/logs/update_files_avail_fim_rest.log 2>&1
+#0-59/20  * * * * /whome/amb-verif/utilities/update_files_avail_hrrr.pl > /whome/amb-verif/logs/update_files_avail_hrrr.log 2>&1
+#0-59/20  * * * * /whome/amb-verif/utilities/update_files_avail_rr.pl > /whome/amb-verif/logs/update_files_avail_rr.log 2>&1
+#5-59/20  * * * * /whome/amb-verif/utilities/update_files_avail_leftovers.pl > /whome/amb-verif/logs/update_files_avail_leftovers.log 2>&1
+#15 * * * * /whome/amb-verif/utilities/update_nssl_avail.pl > /whome/amb-verif/logs/update_nssl_avail.log 2>&1
+# check for files available on jet to be read by the grid viewer
+42 * * * * $HOME/utilities/get_available_files.pl  > /dev/null
+# fills table madis3.Bak13 and madis3.HRRR etc, which is used for surface mesonet qc statistics
+# these data are available on the web at http://ruc.noaa.gov/surface/stats/beta/que
+10 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_all_nets.pl RAP_NCEP_full -5 > /dev/null
+30 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_all_nets.pl HRRR_AK_OPS -5 > /dev/null
+30 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_all_nets.pl HRRR_OPS -5 > /dev/null
+04 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl GFS_4 -5 0 METAR > /dev/null
+06 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl FV3_GFS_EMC -5 0 METAR > /dev/null
+04 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RAP_OPS_iso_242 -5 0 METAR > /dev/null
+06 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl NAM -5 0 METAR > /dev/null
+16 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl NAMnest_OPS_227 -5 0 METAR > /dev/null
+20 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl HRRR_OPS -5 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl HRRR_AK_OPS -5 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_AK -12 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_AK_dev2 -12 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_A -12 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_B -12 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFSE_mem1 -24 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFSE_mem2 -24 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFSE_mem3 -24 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFSE_mem4 -24 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFSE_mem5 -24 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFSE_mem6 -24 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFSE_mem7 -24 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFSE_mem8 -24 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFSE_mem9 -24 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_dev1 -7 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_dev2 -7 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_dev3 -7 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_dev4 -7 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_NA_13km_dev1 -7 0 METAR  > /dev/null
+#25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_NA_3km_dev1 -7 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_NA_3km_dev1_HRRR -7 0 METAR  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RRFS_NA_3km_dev1_AK -7 0 METAR  > /dev/null
+28 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_B -12 0 METAR  > /dev/null
+20 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_dev1 -5 0 METAR  > /dev/null
+30 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_GSD_dev1 -5 0 METAR  > /dev/null
+30 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_GSD_3D_dev1_bl -5 0 METAR  > /dev/null
+30 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_GSD_3D_bl -5 0 METAR  > /dev/null
+30 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_GSD_3D_dev1_nb -5 0 METAR  > /dev/null
+30 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_GSD_3D_nb -5 0 METAR  > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_OPS -5 0 METAR  > /dev/null
+11 0-9,11-23 * * * $HOME/sb2.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_OPS_smartinit_hrrr -5 0 METAR  > /dev/null
+11 0-9,11-23 * * * $HOME/sb2.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_OPS_smartinit_rap -5 0 METAR  > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_3D_AK -5 0 METAR  > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_OPS_hourly -5 0 METAR  > /dev/null
+34 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_3D_RU_EMC -5 0 METAR  > /dev/null
+34 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_3D_RU_GSD -5 0 METAR  > /dev/null
+34 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl RTMA_3D_BEC -5 0 METAR  > /dev/null
+30 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl  RAP_NCEP  -5 0 METAR > /dev/null
+30 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl  RAP_NCEP_full  -5 0 METAR > /dev/null
+40 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl  RUA -5 0 METAR > /dev/null
+40 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl  RUA_dev1 -5 0 METAR > /dev/null
+49 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl GFSv17p8_gf -17 0 METAR  > /dev/null
+49 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl GFSv17p8_mynn -17 0 METAR  > /dev/null
+49 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl rt_gfsv16_gf -17 0 METAR  > /dev/null
+49 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl rt_gfsv16_mynn -17 0 METAR  > /dev/null
+49 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl rt_gfsv16_thmp_subcyc -17 0 METAR  > /dev/null
+49 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/surface_driver_q1.pl rt_ccpp_gsd_L128 -17 0 METAR  > /dev/null
+15 0-9,11-23 * * * $HOME/sb.sh $HOME/ruc_madis_surface/persis_driver.pl -5 > /dev/null
+#
+# the calls below (make_stats51*) call make_mesonet_uselist_HRRR.3.pl and make_mesonet_uselist_RTMA.pl
+20 9 * * * $HOME/sb.sh $HOME/ruc_madis_surface/make_stats51.pl 7 > /dev/null
+25 9 * * * $HOME/sb.sh $HOME/ruc_madis_surface/make_stats51_AK.pl 7 > /dev/null
+30 9 * * * $HOME/ruc_madis_surface/purge_hr_obs.pl 1 > /dev/null
+# this tcsh script generates 7-day stats files for RR1h and RAP_NCEP_full
+# and generates uselists based on these.
+20 11 * * * $HOME/sb.sh $HOME/ruc_madis_surface/make_stats_rr_wrapper.tcsh  > /dev/null
+#
+# Ceiling database
+# these jobs fill the tables in database wolphin:ceiling2 and ceiling_sums2.
+# statistics from these tables are avalable at
+# http://ruc.noaa.gov/stats/ceiling/
+#
+5 7 * * * $HOME/ceiling/update_metars.pl > /dev/null # get latest from /misc/public/pub/station_tables/file/WMO/MetarTable.cfg
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/get_ceil_obs.pl -4 wolphin  > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/get_ceil_obs.pl -5 wolphin  > /dev/null # backup of above
+42 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/update_persis.pl -5 > /dev/null
+# New Ceiling 2 Model processing
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl NAM -5 > /dev/null
+43 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RUA -5 > /dev/null
+43 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RUA_dev1 -5 > /dev/null
+43 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RTMA_3D_AK -5 > /dev/null
+43 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RTMA_3D_BEC -5 > /dev/null
+43 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RTMA_dev1 -5 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl GLMP -5 > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl NAMceil -5 > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RR1h_prs -5 > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RAP_OPS -5 > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RAP_dev1 -10 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl HRRR_OPS -5 > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver_station_test.pl HRRR_OPS -5 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_AK -12 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_AK_dev2 -12 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_A -12 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_B -12 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_dev1 -7 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_dev2 -7 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_dev3 -7 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_dev4 -7 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_NA_13km_dev1 -7 > /dev/null
+#45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_NA_3km_dev1 -7 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_NA_3km_dev1_HRRR -7 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RRFS_NA_3km_dev1_AK -7 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl HRRR_AK_OPS -5 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl NAM_NEST_AK -5 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl NAM_NEST_HI -5 > /dev/null
+47 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RTMA_B -12 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RTMA_OPS -5 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl URMA_OPS -5 > /dev/null
+47 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RTMA_OPS_hourly -5 > /dev/null
+47 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RTMA_3D_RU_EMC -5 > /dev/null
+47 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl RTMA_3D_RU_GSD -5 > /dev/null
+47 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver.pl GFS -5 > /dev/null
+#
+# Testing of the new fractional ceiling diagnostics
+45 0-9,11-23 * * *  $HOME/sb.sh $HOME/ceiling/ceil_driver_test_ops.pl HRRR_OPS_exp_diag2 -5 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver_test.pl RRFS_A_exp_diag -12 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver_test2.pl RRFS_A_exp_diag2 -12 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver_test.pl RRFS_B_exp_diag -12 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver_test2.pl RRFS_B_exp_diag2 -12 > /dev/null
+47 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver_test.pl RTMA_B_exp_diag -12 > /dev/null
+47 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/ceil_driver_test2.pl RTMA_B_exp_diag2 -12 > /dev/null
+#
+#
+# Ceiling vx based on 5-minute METAR data
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/5min/get_ceil_obs.pl -6 wolphin  > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/5min/get_ceil_obs.pl -5 wolphin  > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/5min/update_persis.pl -5   > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/5min/ceil_driver.pl HRRR_OPS -5   > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/5min/ceil_driver.pl RTMAv2_6_EMC -5   > /dev/null
+47 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/5min/ceil_driver.pl RTMA_OPS -5   > /dev/null
+47 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/5min/ceil_driver.pl RTMA_3D_RU_EMC -5   > /dev/null
+47 0-9,11-23 * * * $HOME/sb.sh $HOME/ceiling/5min/ceil_driver.pl RTMA_3D_RU_GSD -5   > /dev/null
+#
+# model-visibility database
+# these jobs fill the tables in databases wolphin:visibility and visibility_sums2
+# stats from these tables are available at
+# http://ruc.noaa.gov/stats/visibility/
+#
+15 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_obs $HOME/visibility/get_vis_obs.pl -4  > /dev/null
+20 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_obs $HOME/visibility/get_vis_obs.pl -6  > /dev/null
+05 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_persis $HOME/visibility/update_persis.pl -5  > /dev/null
+30 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh HRRR_OPS -5  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_AK -12  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_AK_dev2 -12  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_A -12  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_B -12  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_dev1 -7  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_dev2 -7  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_dev3 -7  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_dev4 -7  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_NA_13km_dev1 -7  > /dev/null
+#45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_NA_3km_dev1 -7  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_NA_3km_dev1_HRRR -7  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RRFS_NA_3km_dev1_AK -7  > /dev/null
+45 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh HRRR_AK_OPS -5  > /dev/null
+50 0-8,10-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RAP_OPS_242 -5  > /dev/null
+52 0-8,10-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh NAM_NEST_AK -5  > /dev/null
+55 0-8,10-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh NAM_NEST_HI -5  > /dev/null
+32 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RAP_OPS_130 -5  > /dev/null
+37 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RTMA_B -12  > /dev/null
+36 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RTMA_dev1 -7  > /dev/null
+36 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RUA -7  > /dev/null
+36 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RUA_dev1 -7  > /dev/null
+36 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RTMA_3D_AK -7  > /dev/null
+36 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RTMA_3D_BEC -7  > /dev/null
+38 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RTMA_OPS -7  > /dev/null
+38 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh URMA_OPS -7  > /dev/null
+38 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RTMA_OPS_hourly -7  > /dev/null
+38 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RTMA_3D_RU_EMC -7  > /dev/null
+38 0-9,11-23 * * * $HOME/utilities/sb2.tcsh vis_verif $HOME/visibility/rt.tcsh RTMA_3D_RU_GSD -7  > /dev/null
+MAILTO="verif-amb.gsd@noaa.gov"
+#
+# model - vis_5min database
+#
+15 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_5min/get_vis_obs.pl -8  > /dev/null
+20 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_5min/get_vis_obs.pl -5  > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_5min/update_persis.pl -6  > /dev/null
+#25 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_5min/vis_driver.pl HRRR -6 > /dev/null
+26 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_5min/vis_driver.pl HRRR_OPS -6 > /dev/null
+#27 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_5min/vis_driver.pl RTMA_GSD -6 > /dev/null
+#28 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_5min/vis_driver.pl RTMA_GSD_dev1 -6 > /dev/null
+29 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_5min/vis_driver.pl RTMAv2_6_EMC -6 > /dev/null
+#
+# vis_1min database
+15 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/get_vis_1min_obs.pl -8  > /dev/null
+20 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/get_vis_1min_obs.pl -5  > /dev/null
+25 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/update_persis.pl -5  > /dev/null
+#30 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/vis_driver.pl HRRR -6 > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/vis_driver.pl HRRR_OPS -6 > /dev/null
+#40 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/vis_driver.pl RTMA_GSD -6 > /dev/null
+#45 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/vis_driver.pl RTMA_GSD_dev1 -6 > /dev/null
+#45 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/vis_driver.pl RTMA_v2_7_RU_EMC -6 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/vis_driver.pl RTMA_3D_RU_EMC -6 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/vis_driver.pl RTMA_3D_RU_GSD -6 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/vis_1min/vis_driver.pl RTMA_RU_OPS -6 > /dev/null
+
+#
+#
+# generate and load AMDAR-Bak13 differences
+# these jobs fill the tables in database wolphin:acars_RUC
+# stats from these tables are available at
+# http://amdar.noaa.gov/RUC_amdar/
+# TURNED OFF 4/18/13 DUE TO CORRUPTED DB, AND DUE TO OUT-OF-DATENESS - wrm
+# TURNED BACK ON 4/25/13 AT REQUEST OF BRYCE FORD - wrm
+#
+#49 * * * * $HOME/qs.sh $HOME/acars_RUC/gen_Bak13_acars_stats.pl -2 > /dev/null
+#55 12 * * * $HOME/acars_RUC/make_7day_stats.pl > /dev/null
+#56 12 * * * $HOME/acars_RUC/make_7day_sfc_700.pl > /dev/null
+#57 12 * * * $HOME/acars_RUC/make_7day_700_300.pl > /dev/null
+#58 12 * * * $HOME/acars_RUC/make_7day_300_up.pl > /dev/null
+#
+# generate and load AMDAR-RR differences
+# these jobs fill the tables in database wolphin:acars_RR
+# stats from these tables are available at
+# http://amdar.noaa.gov/RR_amdar/
+#
+# MUST PROCESS HRRR FIRST, SO OTHER MODELS CAN BE CALCULATED FOR HRRR REGION
+#17    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl HRRR_iso -5  > /dev/null
+#22    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl HRRRv3_EMC_iso -5  > /dev/null
+#37    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl HRRR_OPS_iso -5  > /dev/null
+#37    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl HRRR_dev3_iso -17  > /dev/null
+#07    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl RAP_iso -5  > /dev/null
+#12    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl RAP_iso_130 -5  > /dev/null
+#17    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl RAP_OPS_iso_130 -5  > /dev/null
+#22    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl NAM_OPS_iso_221 -5  > /dev/null
+#27    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl GFS_OPS_iso -5  > /dev/null
+#27    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl FIM_iso_4 -5  > /dev/null
+#38    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl RTMA_3D_GSD_iso -5  > /dev/null
+#38    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl RTMA_3D_GSD_dev1_iso -5  > /dev/null
+#38    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl RTMA_3D_RU_EMC_iso -5  > /dev/null
+#38    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats2.pl RTMA_3D_RU_GSD_iso -5  > /dev/null
+#*/10 0-9,11-23 * * * $HOME/sb.sh $HOME/acars_RR/load_acars_model_data3.pl > /dev/null
+#05 7 * * *  $HOME/acars_RR/make_7day_stats.pl >> $HOME/acars_RR/7day.log 2>&1
+#45 7 * * *  $HOME/acars_RR/make_7day_sfc_700.pl >> $HOME/acars_RR/7day_sfc_700.log 2>&1
+#25 8 * * *  $HOME/acars_RR/make_7day_700_300.pl >> $HOME/acars_RR/7day_700_300.log 2>&1
+#05 9 * * *  $HOME/acars_RR/make_7day_300_up.pl >> $HOME/acars_RR/7day_300_up.log 2>&1
+#08 6 * * * $HOME/acars_RR/make_30day_300_up_1_13.pl  >> $HOME/acars_RR/30day_300_up.log 2>&1
+#54 6 * * * $HOME/acars_RR/make_30day_300_down_1_13.pl >> $HOME/acars_RR/30day_300_down.log 2>&1
+#15 7 * * *  $HOME/acars_RR/make_reject_list_RR.pl >> $HOME/acars_RR/make_reject_list_RR.log 2>&1
+#
+# LOAD ACARS RETRO RUNS
+#*/10 0-9,11-23 * * * $HOME/acars_RR/load_acars_model_data_retro.pl > /dev/null
+#
+#
+##############
+# generate and load AMDAR-RR differences
+# these jobs fill the tables in new aircraft database wolphin:acars_RR2
+# currently running alongside the old acars_RR ingest until historical data can be transfered - Hamilton 20200806
+#
+#17    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl HRRR_iso -5  > /dev/null
+37    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl HRRR_OPS_iso -5  > /dev/null
+#37    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl HRRR_dev3_iso -17  > /dev/null
+#07    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl RAP_iso -5  > /dev/null
+07    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl RAP_OPS_iso -5  > /dev/null
+#12    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl RAP_iso_130 -5  > /dev/null
+17    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl RAP_OPS_iso_130 -5  > /dev/null
+22    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl NAM_OPS_iso_221 -5  > /dev/null
+#27    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl GFS_OPS_iso -5  > /dev/null
+#27    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl FIM_iso_4 -5  > /dev/null
+38    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl RTMA_3D_GSD_iso -5  > /dev/null
+38    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl RTMA_3D_GSD_dev1_iso -5  > /dev/null
+38    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl RTMA_3D_RU_EMC_iso -5  > /dev/null
+38    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl RTMA_3D_RU_GSD_iso -5  > /dev/null
+50    * * * * $HOME/sb.sh $HOME/acars_RR/gen_RR_acars_stats3.pl RRFS_NA_3km_dev1_HRRR_iso -5  > /dev/null
+*/10 0-9,11-23 * * * $HOME/sb.sh $HOME/acars_RR/load_acars_model_data4.pl > /dev/null
+05 7 * * *  $HOME/acars_RR/make_7day_stats2.pl >> $HOME/acars_RR/7day_2.log 2>&1
+45 7 * * *  $HOME/acars_RR/make_7day_sfc_700_2.pl >> $HOME/acars_RR/7day_sfc_700_2.log 2>&1
+25 8 * * *  $HOME/acars_RR/make_7day_700_300_2.pl >> $HOME/acars_RR/7day_700_300_2.log 2>&1
+05 9 * * *  $HOME/acars_RR/make_7day_300_up_2.pl >> $HOME/acars_RR/7day_300_up_2.log 2>&1
+08 6 * * * $HOME/acars_RR/make_30day_300_up_1_13_2.pl  >> $HOME/acars_RR/30day_300_up_2.log 2>&1
+54 6 * * * $HOME/acars_RR/make_30day_300_down_1_13_2.pl >> $HOME/acars_RR/30day_300_down_2.log 2>&1
+15 7 * * *  $HOME/acars_RR/make_reject_list_RR2.pl >> $HOME/acars_RR/make_reject_list_RR_2.log 2>&1
+#
+# LOAD ACARS RETRO RUNS
+*/11 0-9,11-23 * * * $HOME/acars_RR/load_acars_model_data_retro2.pl > /dev/null
+#
+###############
+#
+# generate reject lists with TAMDAR
+#07    * * * * $HOME/sb.sh $HOME/acars_TAM/gen_RR_acars_stats2.pl RAP_iso -3  > /dev/null
+#25   0-9,11-23 * * * $HOME/sb.sh $HOME/acars_TAM/load_acars_model_data3.pl > /dev/null
+#05 7 * * *  $HOME/acars_TAM/make_7day_stats.pl > /dev/null
+#15 7 * * *  $HOME/acars_TAM/make_reject_list_TAM.pl > /dev/null
+# new acars_TAM2 database
+07    * * * * $HOME/sb.sh $HOME/acars_TAM/gen_RR_acars_stats3.pl RAP_iso -3  > /dev/null
+25   0-9,11-23 * * * $HOME/sb.sh $HOME/acars_TAM/load_acars_model_data4.pl > /dev/null
+05 7 * * *  $HOME/acars_TAM/make_7day_stats2.pl > /dev/null
+15 7 * * *  $HOME/acars_TAM/make_reject_list_TAM2.pl > /dev/null
+#
+# RAP and RR1h_dev valid at 0 UTC & 12 UTC-- used for sdg display and verification:
+# this fills tables in database wolphin: soundings, ruc_ua and ruc_ua_sums2
+# stats from these tables are available at
+# http://ruc.noaa.gov/stats/ (the time series and profile RAOB verification)
+#
+5 01,13 * * * $HOME/sb.sh $HOME/RR_uaverif/gen_persis.pl -1 0  > /dev/null
+10 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RAP_OPS_iso_242 -5 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl HRRR_OPS -5 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl HRRR_OPS_iso -5 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl HRRR_AK_OPS -5 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl HRRR_AK_OPS_iso -5 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFS_A -12 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFS_A_iso -12 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFS_B -12 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFS_B_iso -12 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RTMA_B -12 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RTMA_B_iso -12 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem1 -24 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem1_iso -24 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem2 -24 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem2_iso -24 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem3 -24 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem3_iso -24 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem4 -24 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem4_iso -24 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem5 -24 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem5_iso -24 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem6 -24 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem6_iso -24 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem7 -24 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem7_iso -24 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem8 -24 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem8_iso -24 0 > /dev/null
+21 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem9 -24 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFSE_mem9_iso -24 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFS_NA_3km_dev1_HRRR_iso -12 0 > /dev/null
+22 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFS_NA_3km_dev1_AK_iso -12 0 > /dev/null
+#52 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFS_NA_3km_dev1 -12 0 > /dev/null
+#52 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RRFS_NA_3km_dev1_iso -12 0 > /dev/null
+40 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RAP_OPS_130 -5 0 > /dev/null
+40 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RAP_OPS_iso -5 0 > /dev/null
+44 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl isoRRrapx -5 0 > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl NAM_NEST_HI -5 0 > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl NAM_NEST_AK -5 0 > /dev/null
+35 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl RTMA_3D_GSD -5 0 > /dev/null
+40 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl GFSv17p8_gf -17 0 > /dev/null
+40 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl GFSv17p8_mynn -17 0 > /dev/null
+40 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites.pl rt_ccpp_gsd_L128 -17 0 > /dev/null
+#
+#
+#
+# Parallel RAOB verification (using Mark Govett's database) with a normalized sums table template (ruc_ua_sums3)
+# This will become the main RAOB verification once consistency has been established. Hamilton - 20220907
+15 01,13 * * * $HOME/sb.sh $HOME/RR_uaverif/gen_persis.pl -1 0  > /dev/null
+20 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RAP_OPS_iso_242 -5 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl HRRR_OPS -5 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl HRRR_OPS_iso -5 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl HRRR_AK_OPS -5 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl HRRR_AK_OPS_iso -5 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFS_A -12 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFS_A_iso -12 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFS_B -12 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFS_B_iso -12 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RTMA_B -12 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RTMA_B_iso -12 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem1 -24 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem1_iso -24 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem2 -24 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem2_iso -24 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem3 -24 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem3_iso -24 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem4 -24 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem4_iso -24 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem5 -24 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem5_iso -24 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem6 -24 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem6_iso -24 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem7 -24 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem7_iso -24 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem8 -24 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem8_iso -24 0 > /dev/null
+31 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem9 -24 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFSE_mem9_iso -24 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFS_NA_3km_dev1_HRRR_iso -12 0 > /dev/null
+32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFS_NA_3km_dev1_AK_iso -12 0 > /dev/null
+#32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFS_NA_3km_dev1 -12 0 > /dev/null
+#32 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RRFS_NA_3km_dev1_iso -12 0 > /dev/null
+50 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RAP_OPS_130 -5 0 > /dev/null
+50 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RAP_OPS_iso -5 0 > /dev/null
+54 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl isoRRrapx -5 0 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl NAM_NEST_HI -5 0 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl NAM_NEST_AK -5 0 > /dev/null
+45 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl RTMA_3D_GSD -5 0 > /dev/null
+50 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl GFSv17p8_gf -17 0 > /dev/null
+50 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl GFSv17p8_mynn -17 0 > /dev/null
+50 0-9,11-23 * * * $HOME/sb.sh $HOME/RR_uaverif/agen_raob_sites_beta.pl rt_ccpp_gsd_L128 -17 0 > /dev/null
+#
+# generate Bak13 soundings at AIRPORTS, for display on the rucsoundings page
+10 *  * * * $HOME/ruc_uaverif/agen_airport_sites_db.pl Bak13 -5
+15 7 * * * $HOME/ruc_uaverif/purge_airport_sites_db.pl 14 > /dev/null
+#
+# generate FIM soundings from isobaric fields
+# Zeus process fimzeus , this process fim on jet apparently
+#0 7 * * * $HOME/FIM_prs_soundings/fim_grib2_soundings.pl 1 >  /whome/amb-verif/logs/fim_prs_12.log 2>&1
+#0 19 * * * $HOME/FIM_prs_soundings/fim_grib2_soundings.pl 1 > /whome/amb-verif/logs/fim_prs_0.log 2>&1 
+# OLD RUC CVIS (ceiling and visibility) stats (from Barry's stats)
+#
+#50 0,3,6,9,12,15,18,21 * * * $HOME/ruc_stats/cvis/load_cvis2.pl > /dev/null
+#58 0,3,6,9,12,15,18,21 * * * $HOME/ruc_stats/cvis/update_persis.pl > /dev/null
+#50 22 * * * $HOME/ruc_stats/cvis/load_cvis2.pl -1 > /dev/null
+# SOLAR insolation processing
+#
+#15 * * * * $HOME/qs.sh $HOME/solar/DSWRF.tcsh -4 > /dev/null
+#
+# processing for SURFRAD stations
+#
+15 * * * * $HOME/sb.sh $HOME/surfrad/gen_surfrad_HRRR.tcsh -5 > /dev/null
+20 * * * * $HOME/sb.sh $HOME/surfrad/gen_surfrad.tcsh -5 > /dev/null
+*/10 0-9,11-23 * * * $HOME/sb.sh $HOME/surfrad/load_surfrad.tcsh > /dev/null
+# new database (surfrad2) with direct and diffuse (at least for HRRR), and different scales:
+# REPLACED BY surfrad3 processing (below)
+#25 * * * * $HOME/qs.sh $HOME/surfrad2/gen_surfrad_HRRR.tcsh -5 > /dev/null
+#34 * * * * $HOME/qs.sh $HOME/surfrad2/gen_surfrad.tcsh -5 > /dev/null
+#40 * * * * $HOME/surfrad2/gen_surfrad_OPS.tcsh -5 > /dev/null
+#*/10 * * * * $HOME/qs.sh $HOME/surfrad2/load_surfrad.tcsh > /dev/null
+# newer database (surfrad3) with 15-min averages for HRRR:
+# gen_surfrad.tcsh now processes both RAP and HRRR models
+34 * * * * $HOME/sb.sh $HOME/surfrad3/gen_surfrad.tcsh -5 > /dev/null
+54 * * * * $HOME/sb.sh $HOME/surfrad3/clean_surfrad.tcsh -5 > /dev/null
+*/30 0-9,11-23 * * * $HOME/sb.sh $HOME/surfrad3/load_surfrad.tcsh > /dev/null
+#
+# allow late processing of HRRR-WFIP2 -- model no longer running as of 10-April-2017
+#35 * * * * $HOME/qs.sh $HOME/surfrad2/gen_surfrad_HRRR.tcsh -27 > /dev/null
+#
+# processing wrf_solar to surface database
+#
+#15 * * * * $HOME/sb.sh $HOME/surfrad_surface/gen_wrf_solar_surface.tcsh -5 > /dev/null
+#10 0-9,11-23 * * * $HOME/sb.sh $HOME/surfrad_surface/load_wrf_solar_surface.tcsh > /dev/null
+#
+# processing for ptype for METAR stations
+#
+#15 * * * * $HOME/sb.sh $HOME/ptype/gen_ptype_HRRR2.tcsh -5 > /dev/null
+#30 * * * * $HOME/sb.sh $HOME/ptype/load_ptype2.tcsh > /dev/null
+0  7 * * * $HOME/utilities/update_daily_partitions.pl ptype.HRRR 7 > /dev/null
+0  7 * * * $HOME/utilities/update_daily_partitions.pl ptype.RAP130 7 > /dev/null
+0  7 * * * $HOME/utilities/update_daily_partitions.pl ptype.NAMnest_OPS_227 7 > /dev/null
+# ptype2 db has different (better) scales, and frequencies
+20 * * * * $HOME/sb.sh $HOME/ptype2/gen_ptype2_HRRR2.tcsh -5 > /dev/null
+25 * * * * $HOME/sb.sh $HOME/ptype2/gen_ptype2_RRFS.tcsh -12 > /dev/null
+35 * * * * $HOME/sb.sh $HOME/ptype2/load_ptype2.tcsh > /dev/null
+0  7 * * * $HOME/utilities/update_daily_partitions.pl ptype2.HRRR 7 > /dev/null
+0  7 * * * $HOME/utilities/update_daily_partitions.pl ptype2.RAP_130 7 > /dev/null
+0  7 * * * $HOME/utilities/update_daily_partitions.pl ptype2.NAMnest_OPS_227 7 > /dev/null
+#
+# GSIP processing
+#15 * * * * $HOME/qs.sh $HOME/GSIP/gsip.tcsh -5 > /dev/null
+#45 * * * * $HOME/qs.sh $HOME/GSIP/load_mysql_gsip.tcsh > /dev/null
+#01 * * * * $HOME/qs.sh $HOME/GSIP/clavr.tcsh -5 > /dev/null
+#30 * * * * $HOME/qs.sh $HOME/GSIP/load_mysql_clavr.tcsh > /dev/null
+#14 1 * * * $HOME/utilities/update_daily_partitions.pl  gsip.RAP130 7  > /dev/null
+#14 1 * * * $HOME/utilities/update_daily_partitions.pl  gsip.RAP_OPS_130 7  > /dev/null
+#16 1 * * * $HOME/utilities/update_daily_partitions.pl  gsip.HRRR 7  > /dev/null
+#18 1 * * * $HOME/utilities/update_daily_partitions.pl  clavr.RAP130 7  > /dev/null
+#19 1 * * * $HOME/utilities/update_daily_partitions.pl  clavr.RAP_OPS_130 7  > /dev/null
+#20 1 * * * $HOME/utilities/update_daily_partitions.pl  clavr.HRRR 7  > /dev/null
+
+# Debugging help ticket, Craig.Tierney
+#15 * * * * $HOME/qs.sh $HOME/GSIP/gsip.test.tcsh -5 > /dev/null
+
+#
+# fim blocking index
+#
+#0 16 * * * $HOME/qs.sh $HOME/plot_fim/wrapper_fim_hgt500.tcsh    > /dev/null
+#0 14 * * * $HOME/sb.sh $HOME/plot_fim/wrapper_fim.tcsh    > /dev/null
+#0 02  * * * $HOME/sb.sh $HOME/plot_fim/wrapper_fim.tcsh    > /dev/null
+#0 14 * * * $HOME/sb.sh $HOME/plot_fim/wrapper_fim7.tcsh    > /dev/null
+#0 02  * * * $HOME/sb.sh $HOME/plot_fim/wrapper_fim7.tcsh    > /dev/null
+0 11 * * * $HOME/sb.sh $HOME/plot_fim/wrapper_gfs.tcsh    > /dev/null
+0 23 * * * $HOME/sb.sh $HOME/plot_fim/wrapper_gfs.tcsh    > /dev/null
+# wind profiler
+# WRM turned off profiler scripts on 18Apr18
+#
+#05 * * * * $HOME/qs.sh $HOME/wind_profiler/npn_obs_wrapper.tcsh    > /dev/null
+#10 * * * * $HOME/qs.sh $HOME/wind_profiler/cap_obs_wrapper.tcsh    > /dev/null
+#20 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_hrrr.tcsh    > /dev/null
+#40 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_rr.tcsh  > /dev/null
+#25 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_rrrapx.tcsh  > /dev/null
+#45 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_op13.tcsh  > /dev/null
+#55 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh npn hrrr > /dev/null 
+#55 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh cap hrrr > /dev/null 
+#55 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh swfip hrrr > /dev/null 
+#55 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh nwfip hrrr > /dev/null 
+#55 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh cap rr > /dev/null 
+#55 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh npn rr > /dev/null 
+#55 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh swfip rr > /dev/null 
+#55 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh nwfip rr > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh cap bak13 > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh npn bak13 > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh swfip bak13 > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh nwfip bak13 > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh cap op13 > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh npn op13 > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh nwfip op13 > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh swfip op13 > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh npn RRrapx > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh cap RRrapx > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh nwfip RRrapx > /dev/null 
+#50 * * * * $HOME/qs.sh $HOME/wind_profiler/wrapper_sum_speed.sh swfip RRrapx > /dev/null 
+#
+#1 0 1 * * $HOME/qs.sh $HOME/wind_profiler/wrapper_clean_tmp_dir.tcsh  > /dev/null
+# wind tower processing
+#05 * * * * $HOME/qs.sh $HOME/wind_tower/wrapper_obs.tcsh    > /dev/null
+#10 * * * * $HOME/qs.sh $HOME/wind_tower/wrapper_obs_avg.tcsh    > /dev/null
+#15 * * * * $HOME/qs.sh $HOME/wind_tower/wrapper_hrrr.tcsh    > /dev/null
+#20 * * * * $HOME/qs.sh $HOME/wind_tower/wrapper_rr.tcsh    > /dev/null
+#30 * * * * $HOME/qs.sh $HOME/wind_tower/wrapper_rrrapx.tcsh    > /dev/null
+#10 1 */3 * * $HOME/qs.sh $HOME/wind_tower/wrapper_clean.tcsh    > /dev/null
+#i
+
+# Eric's RAP/HRRR retro run verification
+##*/5 * * * * ~/precip_mesonets2/aqpi/extract_aqpi/run_extract_aqpi.ksh eric_retro
+##*/5 * * * * ~/acars_RR/gen_retro_acars_stats2.pl RAPv5_jul2018_DAretro0_modDFI 1531645200 1532646000 37
+#*/5 * * * * ~/ruc_madis_surface/retro2.pl HRRRret_sep2019_control 1567339200 1571313600
+#*/5 * * * * ~/ceiling/beta/ceil_driver_retro.pl HRRRret_sep2019_control 1567339200 1571313600
+#*/5 * * * * ~/ceiling/beta/ceil_driver_retro.pl HRRRret_sep2019_newbath 1567339200 1571313600
+##*/5 * * * * ~/ceiling/beta/ceil_driver_retro.pl HRRRret_sep2019_control 1567339200 1571313600
+##*/5 * * * * ~/visibility/retro.sh HRRRret_sep2020_control2 1598518800 1601074800
+#*/5 * * * * ~/visibility/retro.sh HRRRret_sep2019_control 1567296000 1571353200
+#*/5 * * * * ~/visibility/retro.sh HRRRret_sep2019_newbath 1567296000 1571353200
+#*/5 * * * * ~/RR_uaverif/process_retro4.pl HRRRret_sep2019_control 1567339200 1571313600 FW-to-Wobus
+#*/5 * * * * ~/VERIF/xml/retro/submit_eric_precip_retro_hrrr
+#*/5 * * * * ~/VERIF/xml/retro/submit_eric_cref_retro_hrrr
+##*/5 * * * * ~/surfrad3/gen_surfrad.tcsh 1531645200 1532732400 0 39 RAPv5_jul2018_90aircraft
+#*/5 * * * * ~/surfrad3/gen_surfrad.tcsh 1567339200 1569844800 0 12 HRRRv4_sep2019_control
+#
+# Jaymes's retros
+# WFIP2
+#22 * * * * ~/RR_uaverif/process_retro4.pl HRRRret_WFIP2_aug2016_retro3 1471132800 1472083200  FW-to-Wobus > /dev/null 2>&1 
+#11 * * * * ~/ruc_madis_surface/retro2.pl HRRRret_WFIP2_aug2016_retro3 1471132800 1472083200 > /dev/null 2>&1 
+#22 * * * * ~/RR_uaverif/process_retro4.pl HRRRret_WFIP2_feb2016_retro3 1455062400 1456099200  FW-to-Wobus > /dev/null 2>&1 
+#11 * * * * ~/ruc_madis_surface/retro2.pl HRRRret_WFIP2_feb2016_retro3 1455062400 1456099200 > /dev/null 2>&1 
+#32 * * * * ~/RR_uaverif/process_retro4.pl RRret_RAPv5_jul2016 1467331200 1533124800  FW-to-Wobus > /dev/null 2>&1 
+#41 * * * * ~/ruc_madis_surface/retro2.pl RRret_RAPv5_jul2016 1467331200 1533124800 > /dev/null 2>&1 
+# Other
+#22 * * * * ~/RR_uaverif/process_retro4.pl HRRRret_jul2018_MYNNtest_bugfix2 1533427200 1534291200 FW-to-Wobus > /dev/null 2>&1
+#11 * * * * ~/ruc_madis_surface/retro2.pl HRRRret_jul2018_MYNNtest_bugfix2 1533427200 1534291200 > /dev/null 2>&1
+#41 * * * * ~/surfrad3/gen_surfrad.tcsh HRRRv4_jul2018_MYNNtest14 1533427200 1534291200 0 39 > /dev/null 2>&1
+
+# Jason English's retros
+#01 * * * * ~/RR_uaverif/process_retro4.pl HRRRret_protoHRRRv4_feb2019_rc1 1548331200 1552262400 FW-to-Wobus > /dev/null 2>&1
+#11 * * * * ~/ruc_madis_surface/retro2.pl HRRRret_protoHRRRv4_feb2019_rc1 1548331200 1552262400 > /dev/null
+#22 0,6,12,18 * * * $HOME/utilities/sb.sh $HOME/surfrad3/gen_surfrad.tcsh 1548331200 1552262400 0 39 HRRRret_protoHRRRv4_feb2019_rc1 > /dev/null
+#12 21 15 * * ~/ceiling/beta/get_ceil_obs_retro.pl 1548331200 1552262400 > $HOME/hamilton/jason_obs.log 2>&1
+#31 * * * * ~/ceiling/beta/ceil_driver_retro.pl HRRRret_protoHRRRv4_feb2019_rc1 1548331200 1552262400 > /dev/null
+#36 0,6,12,18 * * * ~/visibility/retro.sh HRRRret_protoHRRRv4_feb2019_rc1 1548331200 1552262400
+#5 * * * * ~/ruc_madis_surface/retro2.pl RRFSret_nwm_june19_v2 1560556800 1561248000 > /dev/null
+#5 * * * * ~/ruc_madis_surface/retro2.pl RRFSret_nwm_june19_v2_coupled 1560556800 1561248000 > /dev/null
+
+# Amanda retro verification
+#5 20 * * * ~/RR_uaverif/process_retro4.pl RRret_Jul2019_amvG16 1562716800 1563796800 FW-to-Wobus > $HOME/VERIF/amanda_test1.log 2>&1
+#50 20 * * * ~/RR_uaverif/process_retro4.pl RRret_Jul2019_amvCTL 1562716800 1563796800 FW-to-Wobus > $HOME/VERIF/amanda_test2.log 2>&1
+#53 7,20 * * * ~/RR_uaverif/process_retro4.pl RRret_Mar2020_amvOPS 1584230400 1586174400 FW-to-Wobus 1 > $HOME/VERIF/amanda_test4.log 2>&1
+#33 5,21 * * * ~/RR_uaverif/process_retro4.pl RRret_Mar2020_amvEXP 1584230400 1586174400 FW-to-Wobus 1 > $HOME/VERIF/amanda_test3.log 2>&1
+#7 * * * * ~/RR_uaverif/process_retro4.pl HRRRret_jul2018_ab_smoke1 1532649600 1532908800 FW-to-Wobus > /dev/null 2>&1
+#7 * * * * ~/visibility/retro.sh HRRRret_jul2018_ab_smoke1 1532649600 1532908800 
+#21 14 24 10 * /home/amb-verif/acars_RR/gen_retro_acars_stats3.pl RRret_Jul2020_ab_glm 1595030400 1596240000 37 > /dev/null 2>&1
+#21 21 24 10 * /home/amb-verif/acars_RR/gen_retro_acars_stats3.pl RRret_Jul2020_ab_glm 1596240000 1596758400 37 > /dev/null 2>&1
+#20 22 5 8 * ~/RR_uaverif/process_retro4.pl HRRRret_dd_hrrr_control 1531785600 1532282400 FW-to-Wobus > $HOME/VERIF/amanda_raob_control.log 2>&1
+#20 23 5 8 * ~/RR_uaverif/process_retro4.pl HRRRret_dd_hrrr_no_LH 1531785600 1532282400 FW-to-Wobus > $HOME/VERIF/amanda_raob_nolh.log 2>&1
+#20 1 6 8 * ~/RR_uaverif/process_retro4.pl HRRRret_dd_hrrr_MAP_1h 1531785600 1532282400 FW-to-Wobus > $HOME/VERIF/amanda_raob_map.log 2>&1
+#11 5 7 8 * /home/amb-verif/acars_RR/gen_retro_acars_stats2.pl HRRR_dd_hrrr_no_LH 1531764000 1532282400 37 > $HOME/VERIF/amanda_acars_test4.log 2>&1
+#43 4 24 10 * /home/amb-verif/acars_RR/gen_retro_acars_stats3.pl HRRRret_jul2018_ak_cycled_aod 1532304000 1533168000 37 > $HOME/VERIF/amanda_acars.log 2>&1
+#13 20 25 10 * ~/RR_uaverif/process_retro4.pl HRRRret_jul2018_ak_cycled 1532304000 1533168000 FW-to-Wobus 1 > $HOME/VERIF/amanda_ua.log 2>&1
+#43 10 24 10 * ~/ruc_madis_surface/retro2.pl HRRRret_jul2018_ak_cycled 1532304000 1533168000 > $HOME/VERIF/amanda_sfc.log 2>&1
+#3 * * * * ~/visibility/retro.sh HRRRret_jul2018_ak_cycled 1532304000 1533168000
+#11 * * * * ~/visibility/retro.sh HRRRret_jul2018_ak_cycled_aod 1532304000 1533168000 > /home/amb-verif/visibility/retro_data/amanda_vis.log 2>&1 
+#*/5 * * * * /home/amb-verif/VERIF/xml/retro/submit_ab_precip_rrfs_retro 
+#*/4 * * * * /home/amb-verif/VERIF/xml/retro/submit_ab_cref_retro_rrfs 
+#*/5 * * * * /home/amb-verif/VERIF/xml/retro/submit_ab_cref_retro_hrrr
+#*/5 * * * * /home/amb-verif/VERIF/xml/retro/submit_ab_cref_retro_rrfs2
+
+# David retro
+# */2 * * * * /home/amb-verif/VERIF/xml/retro/submit_david_cref_retro_hrrr
+
+##Haidao retro 
+#00 0,6,12,18 * * * /home/amb-verif/acars_RR/gen_retro_acars_stats2.pl RRret_May2020_v1 1588291200 1591056000 37 > /dev/null 2>&1
+#00 0,6,12,18 * * * /home/amb-verif/acars_RR/gen_retro_acars_stats2.pl RRret_May2020_v2 1588291200 1591056000 37 > /dev/null 2>&1
+
+# Chunhua retro
+*/5 * * * * cd /misc/whome/amb-verif/Chunhua.Zhou && ./submit_cref_rrfs_retro
+
+# Realtime UA ensemble mean verification
+#0 20 * * * $HOME/ensemble_prs_soundings/ensemble_grib2_soundings.pl 1 > $HOME/ensemble_prs_soundings/combined.log 2>&1
+#0 20 * * * $HOME/ensemble_prs_soundings/gefs_grib2_soundings.pl 1 > $HOME/ensemble_prs_soundings/gefs.log 2>&1
+
+# HIWPP VSDB verification
+#55 11,23 * * * python ~/VRFY/HIWPP/rename_grib_FIM9.py > ~/VRFY/HIWPP/FIM9_files.log 2>&1
+#00 11,23 * * * python ~/VRFY/HIWPP/rename_grib_FIM8.py > ~/VRFY/HIWPP/FIM8_files.log 2>&1
+#45 12 * * * ~/VRFY/HIWPP/job_fim9hiwpp_00.sh > ~/VRFY/HIWPP/FIM9_hiwpp_vsdb_00.log 2>&1
+#45 00 * * * ~/VRFY/HIWPP/job_fim9hiwpp_12.sh > ~/VRFY/HIWPP/FIM9_hiwpp_vsdb_12.log 2>&1
+#45 11 * * * ~/VRFY/HIWPP/job_fim8hiwpp_00.sh > ~/VRFY/HIWPP/FIM8_hiwpp_vsdb_00.log 2>&1
+#30 00 * * * ~/VRFY/HIWPP/job_fim8hiwpp_12.sh > ~/VRFY/HIWPP/FIM8_hiwpp_vsdb_12.log 2>&1
+#15 23 * * * python ~/VRFY/HIWPP/purge_grib_VSDB.py > ~/VRFY/HIWPP/HIWPP_grib_purger.log 2>&1
+#30 13 * * * python ~/VRFY/HIWPP/rsync_vsdb_to_zeus_00.py > ~/VRFY/HIWPP/zeus_transfer_00.log 2>&1
+#30 01 * * * python ~/VRFY/HIWPP/rsync_vsdb_to_zeus_12.py > ~/VRFY/HIWPP/zeus_transfer_12.log 2>&1
+#30 13 * * * python ~/VRFY/HIWPP/rsync_vsdb_to_theia_00.py > ~/VRFY/HIWPP/theia_transfer_00.log 2>&1
+#30 01 * * * python ~/VRFY/HIWPP/rsync_vsdb_to_theia_12.py > ~/VRFY/HIWPP/theia_transfer_12.log 2>&1
+#00 01 * * * python ~/VRFY/HIWPP/rsync_vsdb_to_zeus_test.py > ~/VRFY/HIWPP/zeus_transfer_test.log 2>&1
+# HIWPP testing
+#02 19 * * * ~/VRFY/HIWPP/job_fim9hiwpp_00_test.sh > ~/VRFY/HIWPP/FIM9_hiwpp_vsdb_00.log 2>&1
+#55 16 * * * /apps/torque/default/bin/qsub ~/VRFY/HIWPP/job_fim8hiwpp_test.sh > ~/VRFY/HIWPP/FIM8_hiwpp_vsdb_test.log 2>&1
+#00 23 * * * /apps/torque/default/bin/qsub ~/VRFY/HIWPP/job_fim9hiwpp_test1.sh > ~/VRFY/HIWPP/FIM9_hiwpp_vsdb_test1.log 2>&1
+#00 01 * * * /apps/torque/default/bin/qsub ~/VRFY/HIWPP/job_fim9hiwpp_test2.sh > ~/VRFY/HIWPP/FIM9_hiwpp_vsdb_test2.log 2>&1
+#
+# HIWPP Surface Verification
+#04 * * * * $HOME/qs.sh $HOME/ruc_madis_surface/HIWPP/surface_driver_q1.pl GFS_4 -5 0 METAR > $HOME/ruc_madis_surface/HIWPP/GFS_4.log 2>&1
+#04 * * * * $HOME/qs.sh $HOME/ruc_madis_surface/HIWPP/surface_driver_q1.pl FIM_4 -5 0 METAR > $HOME/ruc_madis_surface/HIWPP/FIM_4.log 2>&1
+#04 * * * * $HOME/qs.sh $HOME/ruc_madis_surface/HIWPP/surface_driver_q1.pl FIM9_4 -5 0 METAR > $HOME/ruc_madis_surface/HIWPP/FIM9_4.log 2>&1
+#
+# Copy this crontab file every hour
+00 * * * * crontab -l > cron.save
+#
+# Check FIM verification done inside the workflow
+#30 23 * * * python ~/utilities/check_workflow_jobs.py > /dev/null
+#
+#
+##### Gridded Verification (managed by Jeff H.)
+# Realtime
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_retro
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_rt
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_rt_hera_test
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_backfill
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_rrfs_dev
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_rrfs_dev_backfill
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_rt_slurm
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_rt_test
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_nssl_reprocess
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_reload
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_dev_backfill
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_hrrre_rt
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_rrfse_rt
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_hrrre_backfill
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_hrrre_retro2
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_hrrre_retro
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_hrrre_rt
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_hrrr_match_retro
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_hrrre_retro_new
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_ncep_rt
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_ncep_backfill
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_ncep_db_reload
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_rt
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_rrfs_dev
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_rrfs_dev_db
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_rrfs_dev_backfill
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_1hr_rt
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_db_backfill
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_long_rt
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_ncep_rt
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_ncep_backfill
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_ncep_db_reload
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_ncep_refillDB
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_ncep_refill
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_prob_rt
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_vil_rt
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_etp_rt
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_etp_backfill
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_nssl_interp_new
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_nssl_cref_backfill
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_dev_rt 
+*/5 * * * * /apps/rocoto/1.3.1/bin/rocotorun -w /whome/amb-verif/VERIF/xml/cref_dev_rt.xml -d /whome/amb-verif/VERIF/xml/cref_dev_rt.db > $HOME/VERIF/jeff_rocoto_test.log 2>&1
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_nco_refill
+# Retro
+#*/5 * * * * /whome/amb-verif/VERIF/xml/retro/submit_cref_hrrre_retro
+#*/5 * * * * /whome/amb-verif/VERIF/xml/retro/submit_cref_retro_main
+*/5 * * * * /whome/amb-verif/VERIF/xml/retro/submit_cref_rrfs_retro
+*/5 * * * * /whome/amb-verif/VERIF/xml/retro/submit_precip_rrfs_retro
+#*/3 * * * * /misc/whome/amb-verif/Ruifang.Li/submit_cref_rrfs_retro
+#*/3 * * * * /misc/whome/amb-verif/terra/submit_cref_rrfs_retro 
+#*/5 * * * * /misc/whome/amb-verif/Craig.Hartsough/submit_cref_rrfs_retro 
+*/5 * * * * /misc/whome/amb-verif/jdduda/submit_cref_rrfs_retro
+*/5 * * * * /misc/whome/amb-verif/jdduda/submit_precip_rrfs_retro
+#*/5 * * * * /misc/whome/amb-verif/akliewer/submit_cref_rrfs_retro
+# scripts used to archive the realtime verification input/output
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_arch
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_cref_hrrre_arch
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_arch
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_1hr_arch
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_precip_hrrre_arch
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_prob_arch
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_vil_arch
+*/5 * * * * /whome/amb-verif/VERIF/xml/submit_etp_arch
+#
+# TESTING VERSION 2.0
+#*/2 * * * * /whome/amb-verif/VERIF_2.0/xml/submit_cref_test
+#*/5 * * * * /whome/amb-verif/VERIF_2.0/xml/submit_cref_rt
+#*/5 * * * * /whome/amb-verif/VERIF_2.0/xml/submit_cref_arch
+#####
+#
+# Move data over from Theia
+#15 * * * * $HOME/hamilton/rsync_RAP_dev1.py 9 > /dev/null 2>&1
+#45 11,23 * * * $HOME/hamilton/rsync_SAR_FV3.py 11 > /dev/null 2>&1
+#35 3 8 * * $HOME/hamilton/rsync_SAR_FV3_backfill.py > $HOME/hamilton/fv3_backfill.log 2>&1
+#55 4,10,16,22 * * * $HOME/hamilton/rsync_RAP_smoke.py 4 > /dev/null 2>&1
+#55 4,10,16,22 * * * $HOME/hamilton/rsync_HRRR_smoke.py 4 > /dev/null 2>&1
+#50 4 11 * * $HOME/hamilton/rsync_HRRRE_cases.py > $HOME/hamilton/HRRRE_cases.log 2>&1
+#
+# Backfill HRRR Verification and Workflow testing
+#0-59/3 * * * * /apps/rocoto/default/bin/rocotorun -w /lfs3/BMC/amb-verif/hrrr_verif_retro/HRRRwfm/rocoto_xml/HRRR_surface_vx_backfill.xml -d /lfs3/BMC/amb-verif/hrrr_verif_retro/HRRRwfm/rocoto_xml/Verification.db
+#00 23 13 * * python /whome/amb-verif/hamilton/hrrr_ak_download_hpss.py > /whome/amb-verif/hamilton/hrrr_ak_download.log 2>&1
+#05 22 * * * python /whome/amb-verif/hamilton/rap_download_hpss.py > /whome/amb-verif/hamilton/rap_download.log 2>&1
+#45 22 15 * * python /whome/amb-verif/hamilton/rapv3_download_hpss.py > /whome/amb-verif/hamilton/rapv3_download.log 2>&1
+#15 17 24 * * python /whome/amb-verif/hamilton/hrrrv2_download_hpss.py > /whome/amb-verif/hamilton/hrrrv2_download.log 2>&1
+#04 * * * * $HOME/qs.sh $HOME/ruc_madis_surface/surface_driver_q1.pl HRRRv2_EMC 1457852400 1457964000 1 METAR > /dev/null
+
+# Backfill all verification from shutdown
+#*/5 * * * * /lfs1/BMC/amb-verif/backfill/xml/submit/submit_hrrrx_backfill
+#*/5 * * * * /lfs1/BMC/amb-verif/backfill/xml/submit/submit_hrrrx_archive_backfill
+#*/5 * * * * /lfs1/BMC/amb-verif/backfill/xml/submit/submit_hrrr_ak_backfill
+#*/5 * * * * /lfs1/BMC/amb-verif/backfill/xml/submit/submit_hrrr_ak_ops_backfill
+#*/5 * * * * /lfs1/BMC/amb-verif/backfill/xml/submit/submit_hrrr_ops_backfill
+#*/5 * * * * /lfs1/BMC/amb-verif/backfill/xml/submit/submit_hrrr_dev3_backfill
+#*/5 * * * * /lfs1/BMC/amb-verif/backfill/xml/submit/submit_rap_ops_backfill
+#*/5 * * * * /lfs1/BMC/amb-verif/backfill/xml/submit/submit_rapx_backfill
+#*/5 * * * * /lfs1/BMC/amb-verif/backfill/xml/submit/submit_hrrrx_backfill_test
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_backfill
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_backfill_precip
+#*/5 * * * * /whome/amb-verif/VERIF/xml/submit_backfill_precip_ops
+
+MAILTO="jeffrey.a.hamilton@noaa.gov"
+
+# Backfilling GSL global UA verification (wrong max region)
+#*/5 * * * * /lfs4/BMC/amb-verif/backfill/xml/submit/submit_gsl_fv3_backfill
+
+# Backfill model-obs pairs for Stan and Eric
+#*/2 * * * * /lfs4/BMC/amb-verif/backfill/xml/submit/submit_hrrrx_backfill
+*/2 * * * * /lfs4/BMC/amb-verif/backfill/xml/submit/submit_hrrr_ops_backfill
+
+### /lfs3 to /lfs4 transition
+#5 0,6,12,18 * * * $HOME/sb.sh $HOME/hamilton/lfs_transition.tcsh > /dev/null
+
+#### RTMA background backfill
+#*/5 * * * * /lfs1/BMC/amb-verif/backfill/xml/submit/submit_rtma_hrrr_background_backfill
+
+# Check model runs
+#30 01 * * * python ~/utilities/check_model_runs.py > /dev/null
+#30 03 * * * python ~/utilities/check_vsdb_runs.py > /dev/null
+
+# Reprocess surface verification - JAH 20180427
+#32 19 27 * * $HOME/qs.sh $HOME/ruc_madis_surface/surface_driver_q1_sum_only_reproc.pl HRRR 1523368800 1524751200 1 > ~/ruc_madis_surface/HRRR_backfill.log 2>&1 
+#02 12 28 * * $HOME/qs.sh $HOME/ruc_madis_surface/surface_driver_q1_sum_only_reproc.pl HRRR_OPS 1523368800 1524751200 1 > ~/ruc_madis_surface/HRRR_OPS_backfill.log 2>&1 
+#02 12 29 * * $HOME/qs.sh $HOME/ruc_madis_surface/surface_driver_q1_sum_only_reproc.pl RR1h 1523368800 1524751200 1 > ~/ruc_madis_surface/RR1h_backfill.log 2>&1 
+#02 12 30 * * $HOME/qs.sh $HOME/ruc_madis_surface/surface_driver_q1_sum_only_reproc.pl RAP_NCEP 1523368800 1524751200 1 > ~/ruc_madis_surface/RAP_NCEP_backfill.log 2>&1 
+#02 12 1 * * $HOME/qs.sh $HOME/ruc_madis_surface/surface_driver_q1_sum_only_reproc.pl RTMA_GSD 1523368800 1524751200 1 > ~/ruc_madis_surface/RTMA_GSD_backfill.log 2>&1 
+#02 12 2 * * $HOME/qs.sh $HOME/ruc_madis_surface/surface_driver_q1_sum_only_reproc.pl RTMA_OPS 1523368800 1524751200 1 > ~/ruc_madis_surface/RTMA_OPS_backfill.log 2>&1 
+
+#
+# Line to get rid of core files every hour - Hamilton 20190715
+55 * * * * /bin/rm -f $HOME/core.* > /dev/null
+55 * * * * /bin/rm -f $HOME/*/core.* > /dev/null
+55 * * * * /bin/rm -f $HOME/*/*/core.* > /dev/null
+#
+# Log the usage in the /lfs1/project/amb-verif directory
+05 0 * * * cd /lfs1/BMC/amb-verif; du -h > $HOME/hamilton/lfs1_amb_verif.log 2>&1
+#
+#55 08 24 * * $HOME/qs.sh $HOME/utilities/lfs1_transition.tcsh > $HOME/utilities/jeff.log 2>&1
+#00 17 24 * * $HOME/qs.sh $HOME/utilities/lfs1_transition.tcsh > $HOME/utilities/jeff.log 2>&1
+#
+
+# Backfilling
+#29 0-9,11-23 * * * $HOME/RR_uaverif/agen_raob_sites_backfill.pl HRRR_AK_OPS 1549584000 1551052800 0 > $HOME/hamilton/hrrr_ak_ops_nat.log 2>&1
+#27 0-9,11-23 * * * $HOME/RR_uaverif/agen_raob_sites_backfill.pl HRRR_AK_OPS_iso 1549584000 1551052800 0 > $HOME/hamilton/hrrr_ak_ops_prs.log 2>&1
+#25 0-9,11-23 * * * $HOME/visibility/vis_driver_backfill.pl HRRR_AK_OPS 1549584000 1551052800 0 > $HOME/hamilton/hrrr_ak_ops_vis.log 2>&1
+
+#
+# Aircraft DB upgrade - JAH 20190912
+#0 0,6,12,18 * * * $HOME/sb.sh $HOME/acars_RR/transfer_acars.pl obs 1569888000 1572566400 > $HOME/acars_RR/tmp/obs_transfer.log 2>&1
+#45 21 * * * $HOME/sb.sh $HOME/acars_RR/transfer_acars.pl HRRR_iso 1598918400 1599868800 > $HOME/acars_RR/tmp/HRRR_iso_transfer.log 2>&1
+#45 22 * * * $HOME/sb.sh $HOME/acars_RR/transfer_acars.pl HRRR_OPS_iso 1598918400 1599868800 > $HOME/acars_RR/tmp/HRRR_OPS_iso_transfer.log 2>&1
+#45 23 * * * $HOME/sb.sh $HOME/acars_RR/transfer_acars.pl RAP_iso 1598918400 1599868800 > $HOME/acars_RR/tmp/RAP_iso_transfer.log 2>&1
+#45 21 * * * $HOME/sb.sh $HOME/acars_RR/transfer_acars.pl RAP_OPS_iso_130 1598918400 1599868800 > $HOME/acars_RR/tmp/RAP_OPS_iso_transfer.log 2>&1
+#45 22 * * * $HOME/sb.sh $HOME/acars_RR/transfer_acars.pl NAM_OPS_iso_221 1598918400 1599868800 > $HOME/acars_RR/tmp/NAM_OPS_iso_221_transfer.log 2>&1
+#45 23 * * * $HOME/sb.sh $HOME/acars_RR/transfer_acars.pl RAP_iso_130 1598918400 1599868800 > $HOME/acars_RR/tmp/RAP_iso_130_transfer.log 2>&1
+#45 00 * * * $HOME/sb.sh $HOME/acars_RR/transfer_acars.pl RTMA_3D_GSD_dev1_iso 1598918400 1599868800 > $HOME/acars_RR/tmp/RTMA_3D_GSD_dev1_iso_transfer.log 2>&1
+#45 00 * * * $HOME/sb.sh $HOME/acars_RR/transfer_acars.pl RTMA_3D_GSD_iso 1598918400 1599868800 > $HOME/acars_RR/tmp/RTMA_3D_GSD_iso_transfer.log 2>&1
+#
+#
+# Ensemble Verification
+#
+# Init
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_metar_surface_init
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_href_surface_init
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_hrrre_surface_init
+
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_href_cref_init
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_hrrre_cref_init
+
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_href_precip_init
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_hrrre_precip_init
+*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_stageiv_init_rt
+*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_mrms_init_rt
+
+# Verif
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_cref_metplus
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_precip_metplus
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_surface_metplus
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_precip_rt
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_precip_db_refill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_precip_metplus_new
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_cref_metplus_new
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_cref_metplus_new_test
+*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_cref_metplus_v2
+*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_precip_metplus_v2
+
+# Backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_metar_surface_init_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_href_precip_init_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_href_surface_init_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_href_cref_init_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_hrrre_precip_init_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_hrrre_surface_init_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_hrrre_cref_init_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_surface_metplus_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_cref_metplus_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_precip_metplus_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_surface_metplus_db_backfill
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_cref_metplus_db_backfill
+*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_precip_backfill
+
+# Test
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_cref_metplus_test
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_precip_metplus_test
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_stageiv_init_test
+*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_stageiv_init_test_rt
+
+# DB reset
+#*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_metplus_db_rebuild
+
+# Archive
+*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_cref_arch_backfill
+*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_precip_arch_backfill
+*/5 * * * * /whome/amb-verif/ensemble/xml/submit/submit_surface_arch_backfill
+#
+
+# Retro
+#*/5 * * * * /whome/amb-verif/ensemble/xml/retro/submit/submit_stageiv_init_retro
+*/5 * * * * /whome/amb-verif/ensemble/xml/retro/submit/submit_precip_metplus_retro
+*/5 * * * * /whome/amb-verif/ensemble/xml/retro/submit/submit_precip_metplus_retro_english
+
+#############################
+#
+MAILTO="molly.b.smith@noaa.gov"
+#
+# Global grid-to-grid
+#
+# Init
+#*/1 * * * * /lfs4/BMC/amb-verif/backfill/xml/submit/submit_gfs_backfill
+#*/1 * * * * /lfs4/BMC/amb-verif/backfill/xml/submit/submit_gfs_anl_backfill
+#*/5 * * * * /whome/amb-verif/GSL_verif-global/xml/submit/submit_gfs_g2g_init > /dev/null 2>&1
+#*/1 * * * * /whome/amb-verif/GSL_verif-global/xml/submit/submit_gfs_g2g_init_reprocess
+#
+# Verif
+#*/5 * * * * /whome/amb-verif/GSL_verif-global/xml/submit/submit_gfs_g2g_metplus > /dev/null 2>&1
+#*/1 * * * * /whome/amb-verif/GSL_verif-global/xml/submit/submit_gfs_g2g_metplus_reprocess > /dev/null 2>&1
+#*/6 * * * * /whome/amb-verif/GSL_verif-global/xml/submit/submit_gfs_g2g_anom_metplus > /dev/null 2>&1
+#*/1 * * * * /whome/amb-verif/GSL_verif-global/xml/submit/submit_gfs_g2g_anom_metplus_reprocess > /dev/null 2>&1
+#
+# TCs
+#
+*/5 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_nhc_metplus_rt > /dev/null 2>&1
+#*/5 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_gsl_metplus_rt > /dev/null 2>&1
+*/9 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_nhc_metplus_rt_post > /dev/null 2>&1
+#*/9 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_gsl_metplus_rt_post > /dev/null 2>&1
+*/9 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_nhc_metplus_rt_TCStat > /dev/null 2>&1
+#*/9 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_gsl_metplus_rt_TCStat > /dev/null 2>&1
+#*/1 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_nhc_metplus_rt_backfill > /dev/null 2>&1
+#*/1 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_gsl_metplus_rt_backfill > /dev/null 2>&1
+#*/1 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_nhc_metplus_rt_post_backfill > /dev/null 2>&1
+#*/1 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_gsl_metplus_rt_post_backfill > /dev/null 2>&1
+#*/1 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_nhc_metplus_rt_TCStat_backfill > /dev/null 2>&1
+#*/1 * * * * /whome/amb-verif/tcmet/xml/submit/submit_tcmet_gsl_metplus_rt_TCStat_backfill > /dev/null 2>&1
+#
+# MODE
+#
+*/5 * * * * /whome/amb-verif/MODE_realtime_verif/xml/submit/submit_rt_mode_init > /dev/null 2>&1
+*/6 * * * * /whome/amb-verif/MODE_realtime_verif/xml/submit/submit_rt_mode_metplus > /dev/null 2>&1
+*/5 * * * * /whome/amb-verif/MODE_realtime_verif/xml/submit/submit_rt_mode_init_ens > /dev/null 2>&1
+*/8 * * * * /whome/amb-verif/MODE_realtime_verif/xml/submit/submit_rt_mode_metplus_ens > /dev/null 2>&1
+#
+#############################
+#
+#
+MAILTO="jeffrey.a.hamilton@noaa.gov"
+#
+#######
+#
+#40 20 03 * * $HOME/qs.sh $HOME/ceiling/move_retro_driver.pl RRret_jul2014_OSEcontrol 1405418400 1406332800 > /dev/null
+#30 23 03 * * $HOME/qs.sh $HOME/ceiling/move_retro_driver.pl RRret_jul2014_aircraft 1405418400 1406332800 > /dev/null
+#30 04 04 * * $HOME/qs.sh $HOME/ceiling/move_retro_driver.pl RRret_jul2014_cld_bld_hgt 1405418400 1406332800 > /dev/null
+#30 07 04 * * $HOME/qs.sh $HOME/ceiling/move_retro_driver.pl RRret_jul2014_goes 1405418400 1406332800 > /dev/null
+#30 10 04 * * $HOME/qs.sh $HOME/ceiling/move_retro_driver.pl RRret_jul2014_metarcloud 1405418400 1406332800 > /dev/null
+#30 13 04 * * $HOME/qs.sh $HOME/ceiling/move_retro_driver.pl RRret_jul2014_pseudo 1405418400 1406332800 > /dev/null
+#
+# MESONET uselist archive & theia transfer
+01 12 * * * python /whome/amb-verif/ruc_madis_surface/HPSS_mesonet_archive.py > /dev/null
+01 16 * * * python /whome/amb-verif/ruc_madis_surface/mesonet_uselist_transfer.py > /dev/null
+#
+# Download files from HPPS
+#17 20 10 * * python /whome/amb-verif/hamilton/rap_ops_download_hpss.py > /dev/null
+#22 19 24 * * python /whome/amb-verif/hamilton/rap_ops_iso_download_hpss.py > /dev/null
+#43 21 1 * * python /whome/amb-verif/hamilton/hrrr_ops_download_hpss.py > /whome/amb-verif/hamilton/hrrr_ops.log 2>&1
+23 17 9 * * python /whome/amb-verif/hamilton/stageIV_download_hpss.py > /whome/amb-verif/hamilton/stageIV.log 2>&1
+#51 14 5 * * python /whome/amb-verif/hamilton/hrrr_smoke_download_hpss.py > /whome/amb-verif/hamilton/smoke.log 2>&1
+#51 17 5 * * python /whome/amb-verif/hamilton/hrrr_smoke_download_hpss2.py > /whome/amb-verif/hamilton/smoke2.log 2>&1
+#46 23 13 * * python /whome/amb-verif/hamilton/hrrr_ops_download_hpss.py > /whome/amb-verif/hamilton/ops.log 2>&1
+#40 23 13 * * python /whome/amb-verif/hamilton/nssl_raw_download_hpss.py > /whome/amb-verif/hamilton/nssl.log 2>&1
+#27 22 21 * * python /whome/amb-verif/hamilton/nssl_download_hpss.py > /whome/amb-verif/hamilton/nssl.log 2>&1
+#07 3 17 * * python /whome/amb-verif/hamilton/metar_download_hpss.py > /whome/amb-verif/hamilton/metar.log 2>&1
+#40 23 13 * * python /whome/amb-verif/hamilton/hrw_arw_download_hpss.py > /whome/amb-verif/hamilton/arw.log 2>&1
+#40 23 13 * * python /whome/amb-verif/hamilton/hrw_nmmb_download_hpss.py > /whome/amb-verif/hamilton/nmmb.log 2>&1
+#40 23 13 * * python /whome/amb-verif/hamilton/nssl_wrf_download_hpss.py > /whome/amb-verif/hamilton/nssl_wrf.log 2>&1
+#40 23 13 * * python /whome/amb-verif/hamilton/nam_nest_download_hpss.py > /whome/amb-verif/hamilton/nam.log 2>&1
+#53 20 7 * * python /whome/amb-verif/hamilton/hrrrx_download_hpss.py > /whome/amb-verif/hamilton/x.log 2>&1
+#56 19 11 * * python /whome/amb-verif/hamilton/hrrr_ak_ops_download_hpss.py > /whome/amb-verif/hamilton/ak_ops.log 2>&1
+#24 19 11 * * python /whome/amb-verif/hamilton/hrrr_ak_ops_nat_download_hpss.py > /whome/amb-verif/hamilton/ak_ops_nat.log 2>&1
+#
+
+# Rename MET files
+#59 22 6 * * python /whome/amb-verif/hamilton/rename_MET_model.py > /whome/amb-verif/hamilton/rename.log 2>&1
+
+# New NSSL preprocessing for Reflectivity Verification
+#0-59/2 * * * * /apps/rocoto/default/bin/rocotorun -w ~/VERIF/xml/nssl_interp_new.xml -d ~/VERIF/xml/nssl_test.db
+#
+## New RAOB Archival/Management - JAH 12/1/16
+#0-59/2 * * * * /apps/rocoto/default/bin/rocotorun -w ~/archive/xml/raob_rt_arch.xml -d ~/archive/xml/raob_rt_arch.db
+#0-59/2 * * * * /apps/rocoto/default/bin/rocotorun -w ~/archive/xml/raob_arch.xml -d ~/archive/xml/raob_arch.db
+#0-59/2 * * * * /apps/rocoto/default/bin/rocotorun -w ~/archive/xml/raob_retrieve.xml -d ~/archive/xml/raob_retrieve.db
+#
+## UA retro testing - JAH 20170104
+#10 18 04 * * ~/RR_uaverif/beta/process_retro4.pl RRret_RAPv4_jul2014_retro34 1405425600 1406635200 FW-to-Wobus 1 > ~/RR_uaverif/beta/jeff_test_20170104.log 2>&1
+## Visibility DB transition - JAH 20170801
+#05 15 02 * * ~/visibility/move_driver.pl persis 1262304000 1501178400 > ~/visibility/test.log 2>&1
+#15 00 * * * ~/ruc_madis_surface/move_vgtyp_driver.pl RAP_dev3 1362096000 1441065600 > ~/ruc_madis_surface/jeff.log 2>&1
+
+# NCO tests - JAH 20210204
+#30 21 11 2 * ~/RR_uaverif/agen_raob_sites_backfill.pl HRRR_NCO_gfsv16_test 1612224000 1612483200 > /dev/null
+#30 21 11 2 * ~/RR_uaverif/agen_raob_sites_backfill.pl HRRR_AK_NCO_gfsv16_test 1612224000 1612483200 > /dev/null
+#30 21 11 2 * ~/RR_uaverif/agen_raob_sites_backfill.pl RAP_AK_NCO_gfsv16_test 1612224000 1612483200 > /dev/null
+#30 21 11 2 * ~/RR_uaverif/agen_raob_sites_backfill.pl HRRR_NCO_gfsv16_test_iso 1612224000 1612483200 > /dev/null
+#30 21 11 2 * ~/RR_uaverif/agen_raob_sites_backfill.pl HRRR_AK_NCO_gfsv16_test_iso 1612224000 1612483200 > /dev/null
+#30 21 11 2 * ~/RR_uaverif/agen_raob_sites_backfill.pl RAP_AK_NCO_gfsv16_test_iso 1612224000 1612483200 > /dev/null
+
+
+
+MAILTO=""
+
+*/9 * * * * /home/amb-verif/bin/cache-rocoto-sacct-command.sh > /dev/null 2>&1
+25,55 * * * * nice  /usr/bin/find /home/amb-verif/sacct-cache -name 'tmp.*'  -and -mmin +90  -exec rm -f {} \;
+20,50 * * * * nice  /usr/bin/find /home/amb-verif -name 'core.*'  -and -mmin +60  -exec rm -f {} \;

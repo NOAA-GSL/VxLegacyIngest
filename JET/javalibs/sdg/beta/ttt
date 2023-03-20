@@ -1,0 +1,12 @@
+      /* from Fleming Appendix B May 9,(See 2/3/2005 rmail from Randy Baker)*/
+      /* step 1, calculate water vapor pressure */
+      /* get vapor pressure given mixing ratio
+       * from Fleagle & Businger "An Intro. to Atmos. Physics", p 64
+       */
+      e_pascals = zmixer*p_pascals/(zmixer + 0.62197);
+      
+      /* step 2, saturation vapor pressure via Fan-Whiting */
+      ess = pow(10,((10.286*t_kelvin-2148.909)/(t_kelvin-35.85)));
+      
+      /* calculate RH in passing, just for interest.*/
+      p->RHfromWVMR = e_pascals/ess;

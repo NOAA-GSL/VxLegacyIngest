@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/VERIF/xml/nssl_reprocess.xml -d /whome/amb-verif/VERIF/xml/nssl_reprocess.db

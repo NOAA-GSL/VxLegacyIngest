@@ -1,0 +1,80 @@
+html-helper-mode documentation
+
+Basic functionality: inserting cookies The main function of
+html-helper-mode is to make it easy to insert HTML cookies.
+html-helper-mode does its best to do this consistently and
+conveniently. For every HTML and HTML+ cookie there should be a
+template which contains the text of the cookie itself and information
+as to where the fields are that the user might want to fill in.  Each
+template can be activated in one of two ways: by typing the key
+sequence for the cookie, or by completing on the beginning of the
+cookie. For example, C-cC-bt will insert the string <title></title>,
+and position point where you want to type the title. Or, you could
+type <kb and hit M-TAB, and the tag <kbd></kbd> will be inserted.  If
+a command is called with a prefix argument (by pressing C-u first),
+then instead of inserting the cookie at the point the cookie is
+inserted around the region. Thus, C-uC-cC-pb will wrap the <b></b>
+token around region, thereby making it bold.  A separate file contains
+a complete list of keybindings. Be warned, there are a lot - you might
+want to get used to completion.
+
+Fields More complicated cookies have several fields that need filling
+in. For example, a hyperlink (<a href=""></a>) has two fields - the
+URL and the link description. When a multiple-field cookie is
+inserted, point will be placed at the first field and then the other
+fields will be entered on a special list. M-C-f and M-C-b will make
+the point skip back and forth on this list.  html-helper-mode can
+prompt you in the minibuffer for all of the fields a cookie need. For
+example, you can have it ask you to type in the URL: and link
+description fields in a hyperlink. This feature is turned off by
+default - for information on how to turn it on, read about configuring
+html-helper-mode.
+
+Indentation HTML documents can have nested lists: these are a bit hard
+to read in source form. html-helper-mode has code to indent lists
+cookies to the appropriate depth depending on how deeply nested the
+list is. List cookies are automatically indented when they are
+inserted. To indent a line by hand, hit TAB.  The indentation code is
+a bit of a hack - it doesn't really parse the HTML document very
+carefully. The main restriction is that cookies that are parts of
+lists (for example, <ul> or <li>) should appear at the beginning of
+their lines for the code to work best.
+
+New document skeletons When a new HTML document is created,
+html-helper-mode can insert a skeleton with all the tags every HTML
+document should have. This feature is turned off by default - see the
+documentation for configuring html-helper-mode to turn it on and to
+customize the skeleton.
+
+Timestamps Good HTML documents should all have timestamps stating the
+last time they were modified. html-helper-mode can make this easy by
+automatically updating your timestamp. This feature is turned off by
+default - see the documentation for configuring html-helper-mode to
+turn it on and to customize the timestamp.
+
+Emacs editing support One of the joys of emacs is that it is pretty
+smart about parsing the contents of the buffer. However, HTML is
+fairly outside of the realm of what emacs thinks is a programming
+language, so the syntax support html-helper-mode provides isn't that
+helpful. It does define > as a match for <, and emacs knows about HTML
+comment syntax, so you can type M-; to get a comment.
+
+Highlighting If you have hilit19 loaded in your emacs, then
+html-helper-mode will automatically set up regular expressions to
+colour links, HTML cookies, included images, and comments. I think
+this is one of the most useful features of html-helper-mode. For these
+patterns to be installed correctly hilit19 must be loaded before
+html-helper-mode.  I do not use font-lock, so currently there are no
+font-lock patterns defined. However, there is user-contributed
+font-lock code on the net.
+
+Customization Once you have html-helper-mode installed, you probably
+will want to customize a few things. For more information, see the
+document on configuring html-helper-mode.
+
+Emacs 18 I don't use emacs18 anymore - 19 is quite stable and much
+nicer. I've tried to make sure html-helper-mode works in emacs18, and
+it seems to right now, but it is not being well supported. If you can,
+upgrade to emacs19.
+ Nelson Minar <nelson@santafe.edu> Last modified: Thu Feb 2 14:15:43
+1995

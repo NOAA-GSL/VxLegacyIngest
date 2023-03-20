@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/ensemble/xml/cref_arch_backfill.xml -d /whome/amb-verif/ensemble/xml/db/cref_arch_backfill.db

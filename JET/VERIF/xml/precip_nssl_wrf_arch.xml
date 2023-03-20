@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+    <!ENTITY SCRIPT_DIR "/home/rtrr/VERIF/bin">
+    <!ENTITY EXEC_DIR "/home/rtrr/VERIF/exec">
+    <!ENTITY WF_LOG_DIR "/home/rtrr/verif/precip/log">
+    <!ENTITY MSS_DIR "/BMC/rtrr/5year/verif/precip">
+    <!ENTITY WEB_DIR "/home/rtrr/verif/web">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/rtrr/verif/precip/StageIV/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/rtrr/verif/precip/StageIV/log">
+    
+    <!ENTITY HRRR_VERIF_DIR "/home/rtrr/verif/precip/HRRRvStageIV/realtime">
+    <!ENTITY HRRR_GRID_DIR "/home/rtrr/verif/precip/HRRR/realtime">
+    <!ENTITY HRRR_LOG_DIR "/home/rtrr/verif/precip/HRRR/log">
+    
+    <!ENTITY HRRR_OPER_VERIF_DIR "/home/rtrr/verif/precip/HRRR_OPERvStageIV/realtime">
+    <!ENTITY HRRR_OPER_GRID_DIR "/home/rtrr/verif/precip/HRRR_OPER/realtime">
+    <!ENTITY HRRR_OPER_LOG_DIR "/home/rtrr/verif/precip/HRRR_OPER/log">
+
+    <!ENTITY RAP_VERIF_DIR "/home/rtrr/verif/precip/RAPvStageIV/realtime">
+    <!ENTITY RAP_GRID_DIR "/home/rtrr/verif/precip/RAP/realtime">
+    <!ENTITY RAP_LOG_DIR "/home/rtrr/verif/precip/RAP/log">
+    
+    <!ENTITY RUC_VERIF_DIR "/home/rtrr/verif/precip/RUCvStageIV/realtime">
+    <!ENTITY RUC_GRID_DIR "/home/rtrr/verif/precip/RUC/realtime">
+    <!ENTITY RUC_LOG_DIR "/home/rtrr/verif/precip/RUC/log">
+    
+    <!ENTITY RAP_OPER_VERIF_DIR "/home/rtrr/verif/precip/RAP_OPERvStageIV/realtime">
+    <!ENTITY RAP_OPER_GRID_DIR "/home/rtrr/verif/precip/RAP_OPER/realtime">
+    <!ENTITY RAP_OPER_LOG_DIR "/home/rtrr/verif/precip/RAP_OPER/log">
+    
+    <!ENTITY NAM_VERIF_DIR "/home/rtrr/verif/precip/NAMvStageIV/realtime">
+    <!ENTITY NAM_GRID_DIR "/home/rtrr/verif/precip/NAM/realtime">
+    <!ENTITY NAM_LOG_DIR "/home/rtrr/verif/precip/NAM/log">
+    
+    <!ENTITY NAM_NEST_VERIF_DIR "/home/rtrr/verif/precip/NAM_NESTvStageIV/realtime">
+    <!ENTITY NAM_NEST_GRID_DIR "/home/rtrr/verif/precip/NAM_NEST/realtime">
+    <!ENTITY NAM_NEST_LOG_DIR "/home/rtrr/verif/precip/NAM_NEST/log">
+
+    <!ENTITY NSSL_WRF_VERIF_DIR "/home/rtrr/verif/precip/NSSL_WRFvStageIV/realtime">
+    <!ENTITY NSSL_WRF_GRID_DIR "/home/rtrr/verif/precip/NSSL_WRF/realtime">
+    <!ENTITY NSSL_WRF_LOG_DIR "/home/rtrr/verif/precip/NSSL_WRF/log">
+    
+    <!ENTITY PROJECT "nrtrr">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY WALL_LIMIT "06:00:00">
+    
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE_SERVICE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&WALL_LIMIT;</walltime>'>
+    
+    <!ENTITY YMDH
+	   '<envar>
+	      <name>YEAR</name>
+	      <value><cyclestr offset="-432000">@Y</cyclestr></value>
+	    </envar>
+	    <envar>
+	      <name>MONTH</name>
+	      <value><cyclestr offset="-432000">@m</cyclestr></value>
+	    </envar>
+	    <envar>
+	      <name>DAY</name>
+	      <value><cyclestr offset="-432000">@d</cyclestr></value>
+	    </envar>
+	    <envar>
+	      <name>HOUR</name>
+	      <value><cyclestr offset="-432000">@H</cyclestr></value>
+	    </envar>'>
+]>
+
+<workflow realtime="T" scheduler="moabtorque" cyclethrottle="2" cyclelifespan="1:00:00:00">
+
+  <log><cyclestr>&WF_LOG_DIR;/precip_arch_workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <cycledef group="1dy">0 0 * * 2013-2016 *</cycledef>
+
+  <task name="StageIV_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>StageIV_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&OBS_LOG_DIR;/StageIV_precip_arch@Y@m@d@H.log</cyclestr></join>
+    
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_arch.py</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;/cpc</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/StageIV</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>StageIV</value>
+    </envar>
+  </task>
+
+  <task name="HRRR_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRR_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&HRRR_LOG_DIR;/HRRR_precip_arch@Y@m@d@H.log</cyclestr></join>
+    
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_arch.py</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;/hrrr</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/HRRR</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&HRRR_GRID_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&HRRR_VERIF_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="HRRR_OPER_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRR_OPER_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&HRRR_OPER_LOG_DIR;/HRRR_OPER_precip_arch@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_arch.py</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;/hrrr_oper</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/HRRR_OPER</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&HRRR_OPER_GRID_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&HRRR_OPER_VERIF_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="RAP_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>RAP_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&RAP_LOG_DIR;/RAP_precip_arch@Y@m@d@H.log</cyclestr></join>
+    
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_arch.py</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;/rap</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/RAP</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&RAP_GRID_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&RAP_VERIF_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="RAP_OPER_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>RAP_OPER_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&RAP_OPER_LOG_DIR;/RAP_OPER_precip_arch@Y@m@d@H.log</cyclestr></join>
+    
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_arch.py</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;/rap_oper</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/RAP_OPER</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&RAP_OPER_GRID_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&RAP_OPER_VERIF_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="RUC_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>RUC_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&RUC_LOG_DIR;/RUC_precip_arch@Y@m@d@H.log</cyclestr></join>
+    
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_arch.py</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;/ruc</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/RUC</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&RUC_GRID_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&RUC_VERIF_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="NAM_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NAM_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&NAM_LOG_DIR;/NAM_precip_arch@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_arch.py</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;/nam</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/NAM</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&NAM_GRID_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&NAM_VERIF_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="NAM_NEST_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NAM_NEST_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&NAM_NEST_LOG_DIR;/NAM_NEST_precip_arch@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_arch.py</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;/nam_nest</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/NAM_NEST</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&NAM_NEST_GRID_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&NAM_NEST_VERIF_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="NSSL_WRF_precip_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NSSL_WRF_precip_arch</jobname>
+    <join><cyclestr offset="-432000">&NSSL_WRF_LOG_DIR;/NSSL_WRF_precip_arch@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_arch.py</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;/nssl_wrf</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/NSSL_WRF</value>
+    </envar>
+    <envar>
+      <name>GRIDDIR</name>
+      <value>&NSSL_WRF_GRID_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFDIR</name>
+      <value>&NSSL_WRF_VERIF_DIR;</value>
+    </envar>
+  </task>
+
+</workflow>

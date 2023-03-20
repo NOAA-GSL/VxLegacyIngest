@@ -1,0 +1,18 @@
+25d24
+< C   09-05-13  GAYNO    ENSURE AREA ALWAYS POSITIVE
+135c134
+<                   AREA(N)=RERTH**2*ABS(DXS)*ABS(DYS)*4/DE2
+---
+>                   AREA(N)=RERTH**2*DXS*DYS*4/DE2
+143c142
+<                   AREA(N)=RERTH**2*CLAT**2*ABS(DXS)*ABS(DYS)/DR2
+---
+>                   AREA(N)=RERTH**2*CLAT**2*DXS*DYS/DR2
+179c178
+<                     AREA(N)=RERTH**2*ABS(DXS)*ABS(DYS)*4/DE2
+---
+>                     AREA(N)=RERTH**2*DXS*DYS*4/DE2
+186c185
+<                     AREA(N)=RERTH**2*CLAT**2*ABS(DXS)*ABS(DYS)/DR2
+---
+>                     AREA(N)=RERTH**2*CLAT**2*DXS*DYS/DR2

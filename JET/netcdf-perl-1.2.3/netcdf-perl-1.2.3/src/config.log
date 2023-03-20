@@ -1,0 +1,15 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:635: checking for manual-page index command
+configure:686: checking for perl utility
+configure:694: checking for perl manual page directory
+configure:712: checking for value of perl POLLUTE variable
+configure:759: checking for neqn
+configure:791: checking for tbl
+configure:1132: checking for C compiler
+configure:1186: checking type of operating system
+configure:1263: checking for tar flags
+configure:1279: checking for netCDF header-file
+configure:1306: checking for netCDF library
+configure:1335: checking for package version

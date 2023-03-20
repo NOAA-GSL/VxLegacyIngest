@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/ensemble/xml/metplus_surface_backfill.xml -d /whome/amb-verif/ensemble/xml/db/metplus_surface_backfill.db

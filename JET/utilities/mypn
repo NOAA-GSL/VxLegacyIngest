@@ -1,0 +1,7 @@
+#!/bin/tcsh -f
+# looks at my local phone list before it calls pn.
+echo "          Bill's pn, searching my utilities/phone.names first."
+# use ian's slick way of getting the string in bold!
+~/utilities/ian_pn $1
+echo "          now calling FSL's pn..."
+/usr/local/share/bin/pn $1

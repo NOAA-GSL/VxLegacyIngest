@@ -1,0 +1,13 @@
+&setup
+obsdate=YMDH
+obsmin=0,
+obsPath='/public/data/grids/gfs/prepbufr/',
+obsfilename='Y2JDH00.gfs.tHHz.prepbufr.nr',
+savePath='SAVEPATH',
+prefixobssavename='conv',
+/
+&obsset
+numobstype=1,
+obstype=120
+timewindow=6.0,
+/

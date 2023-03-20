@@ -1,0 +1,312 @@
+11,13c11
+< C           IT MAY BE RUN FOR A WHOLE (KGDSO(1)>=0) OR A SUBSECTION
+< C           OF AN OUTPUT GRID (SUBTRACT KGDSO(1) FROM 255 AND
+< C           PASS IN THE LAT/LONS OF EACH POINT).
+---
+> C           IT REQUIRES A GRID FOR THE OUTPUT FIELDS (KGDSO(1)>=0).
+23,31c21
+< C           WHICH DEFAULTS TO ALL 1 (IF IPOPT(1)=-1 OR IPOPT(2)=-1).
+< C           A SPECIAL INTERPOLATION IS DONE IF IPOPT(2)=-2.
+< C           IN THIS CASE, THE BOXES STRETCH NEARLY ALL THE WAY TO
+< C           EACH OF THE NEIGHBORING GRID POINTS AND THE WEIGHTS
+< C           ARE THE ADJOINT OF THE BILINEAR INTERPOLATION WEIGHTS.
+< C           THIS CASE GIVES QUASI-SECOND-ORDER BUDGET INTERPOLATION.
+< C           ANOTHER OPTION IS THE MINIMUM PERCENTAGE FOR MASK,
+< C           I.E. PERCENT VALID INPUT DATA REQUIRED TO MAKE OUTPUT DATA,
+< C           (IPOPT(3+IPOPT(1)) WHICH DEFAULTS TO 50 (IF -1).
+---
+> C           WHICH DEFAULTS TO ALL 1 (IF IPOPT(2)=-1.).
+48,49c38,39
+< C           AS AN ADDED BONUS (IF KGDSO(1)>=0) THE NUMBER OF OUTPUT GRID
+< C           POINTS AND THEIR LATITUDES AND LONGITUDES ARE ALSO RETURNED
+---
+> C           AS AN ADDED BONUS THE NUMBER OF OUTPUT GRID POINTS
+> C           AND THEIR LATITUDES AND LONGITUDES ARE ALSO RETURNED
+58,62d47
+< C 1999-04-08  IREDELL  SPLIT IJKGDS INTO TWO PIECES
+< C 1999-04-08  IREDELL  ADDED BILINEAR OPTION IPOPT(2)=-2
+< C 2001-06-18  IREDELL  INCLUDE MINIMUM MASK PERCENTAGE OPTION
+< C 2002-01-17  IREDELL  SAVE DATA FROM LAST CALL FOR OPTIMIZATION
+< C 2006-01-05  GAYNO    ADDED OPTION TO TO DO SUBSECTION OF OUTPUT GRID.
+72,74c57
+< C                (DEFAULTS TO ALL 1 IF IPOPT(1)=-1 OR IPOPT(2)=-1).
+< C                IPOPT(3+IPOPT(1)) IS MINIMUM PERCENTAGE FOR MASK
+< C                (DEFAULTS TO 50 IF IPOPT(3+IPOPT(1)=-1)
+---
+> C                (DEFAULTS TO ALL 1 IF IPOPT(2)=-1).
+102a86
+> C                31   INVALID UNDEFINED OUTPUT GRID
+107,108c91
+< C   IJKGDS0      SET UP PARAMETERS FOR IJKGDS1
+< C   (IJKGDS1)    RETURN FIELD POSITION FOR A GIVEN GRID POINT
+---
+> C   (IJKGDS)     RETURN FIELD POSITION FOR A GIVEN GRID POINT
+116c99
+< CFPP$ EXPAND(IJKGDS1,MOVECT)
+---
+> CFPP$ EXPAND(IJKGDS,MOVECT)
+124a108
+>       REAL XPTI(MI),YPTI(MI),RLOI(MI),RLAI(MI),CROI(MI),SROI(MI)
+131d114
+<       INTEGER IJKGDSA(20)
+133,135d115
+<       INTEGER,SAVE:: MIX=-1,KGDSIX(200)=-1
+<       REAL,ALLOCATABLE,SAVE:: XPTI(:),YPTI(:),RLOI(:),RLAI(:),
+<      &                        CROI(:),SROI(:)
+143,155c123
+<         KGDSO(1)=255+KGDSO(1)
+<         CALL GDSWIZ(KGDSO,-1,MO,FILL,XPTS,YPTS,RLON,RLAT,NO,1,CROT,SROT)
+<         IF(NO.EQ.0) IRET=3
+<       ENDIF
+<       IF(ANY(KGDSI.NE.KGDSIX)) THEN
+<         IF(MIX.NE.MI) THEN
+<           IF(MIX.GE.0) DEALLOCATE(XPTI,YPTI,RLOI,RLAI,CROI,SROI)
+<           ALLOCATE(XPTI(MI),YPTI(MI),RLOI(MI),RLAI(MI),
+<      &             CROI(MI),SROI(MI))
+<           MIX=MI
+<         ENDIF
+<         CALL GDSWIZ(KGDSI, 0,MI,FILL,XPTI,YPTI,RLOI,RLAI,NV,1,CROI,SROI)
+<         KGDSIX=KGDSI
+---
+>         IRET=31
+156a125
+>       CALL GDSWIZ(KGDSI, 0,MI,FILL,XPTI,YPTI,RLOI,RLAI,NV,1,CROI,SROI)
+161,169c130,131
+<       IF(IRET.EQ.0.AND.NB1.LT.0) IRET=32
+<       LSW=1
+<       IF(IPOPT(2).EQ.-2) LSW=2
+<       IF(IPOPT(1).EQ.-1.OR.IPOPT(2).EQ.-1) LSW=0
+<       IF(IRET.EQ.0.AND.LSW.EQ.1.AND.NB1.GT.15) IRET=32
+<       MP=IPOPT(3+IPOPT(1))
+<       IF(MP.EQ.-1.OR.MP.EQ.0) MP=50
+<       IF(MP.LT.0.OR.MP.GT.100) IRET=32
+<       PMP=MP*0.01
+---
+>       IF(IRET.EQ.0.AND.NB1.LT.0.) IRET=32
+>       IF(IRET.EQ.0.AND.NB1.GE.20.AND.IPOPT(2).NE.-1) IRET=32
+172d133
+<         RB2=1./NB2
+175,178c136
+<         IF(LSW.EQ.2) THEN
+<           RB2=1./(NB1+1)
+<           NB4=(NB1+1)**4
+<         ELSEIF(LSW.EQ.1) THEN
+---
+>         IF(IPOPT(2).NE.-1) THEN
+184a143
+>         NB2=0
+186c145
+<         NB4=1
+---
+>         NB4=0
+198d156
+<       CALL IJKGDS0(KGDSI,IJKGDSA)
+205,260c163,207
+<         IF(IPOPT(2).EQ.-2) THEN
+<           WB=(NB1+1-ABS(IB))*(NB1+1-ABS(JB))
+<         ELSEIF(IPOPT(2).NE.-1) THEN
+<           WB=IPOPT(2+LB)
+<         ENDIF
+<         IF(WB.NE.0) THEN
+<           DO N=1,NO
+<             XPTB(N)=XPTS(N)+IB*RB2
+<             YPTB(N)=YPTS(N)+JB*RB2
+<           ENDDO
+<           CALL GDSWIZ(KGDSO, 1,NO,FILL,XPTB,YPTB,RLOB,RLAB,NV,0,DUM,DUM)
+<           CALL GDSWIZ(KGDSI,-1,NO,FILL,XPTB,YPTB,RLOB,RLAB,NV,0,DUM,DUM)
+<           IF(IRET.EQ.0.AND.NV.EQ.0.AND.LB.EQ.0) IRET=2
+<           DO N=1,NO
+<             XI=XPTB(N)
+<             YI=YPTB(N)
+<             IF(XI.NE.FILL.AND.YI.NE.FILL) THEN
+<               I1=XI
+<               I2=I1+1
+<               WI2=XI-I1
+<               WI1=1-WI2
+<               J1=YI
+<               J2=J1+1
+<               WJ2=YI-J1
+<               WJ1=1-WJ2
+<               N11(N)=IJKGDS1(I1,J1,IJKGDSA)
+<               N21(N)=IJKGDS1(I2,J1,IJKGDSA)
+<               N12(N)=IJKGDS1(I1,J2,IJKGDSA)
+<               N22(N)=IJKGDS1(I2,J2,IJKGDSA)
+<               IF(MIN(N11(N),N21(N),N12(N),N22(N)).GT.0) THEN
+<                 W11(N)=WI1*WJ1
+<                 W21(N)=WI2*WJ1
+<                 W12(N)=WI1*WJ2
+<                 W22(N)=WI2*WJ2
+<                 CALL MOVECT(RLAI(N11(N)),RLOI(N11(N)),RLAT(N),RLON(N),
+<      &                      CM11,SM11)
+<                 CALL MOVECT(RLAI(N21(N)),RLOI(N21(N)),RLAT(N),RLON(N),
+<      &                      CM21,SM21)
+<                 CALL MOVECT(RLAI(N12(N)),RLOI(N12(N)),RLAT(N),RLON(N),
+<      &                      CM12,SM12)
+<                 CALL MOVECT(RLAI(N22(N)),RLOI(N22(N)),RLAT(N),RLON(N),
+<      &                      CM22,SM22)
+<                 C11(N)=CM11*CROI(N11(N))+SM11*SROI(N11(N))
+<                 S11(N)=SM11*CROI(N11(N))-CM11*SROI(N11(N))
+<                 C21(N)=CM21*CROI(N21(N))+SM21*SROI(N21(N))
+<                 S21(N)=SM21*CROI(N21(N))-CM21*SROI(N21(N))
+<                 C12(N)=CM12*CROI(N12(N))+SM12*SROI(N12(N))
+<                 S12(N)=SM12*CROI(N12(N))-CM12*SROI(N12(N))
+<                 C22(N)=CM22*CROI(N22(N))+SM22*SROI(N22(N))
+<                 S22(N)=SM22*CROI(N22(N))-CM22*SROI(N22(N))
+<               ELSE
+<                 N11(N)=0
+<                 N21(N)=0
+<                 N12(N)=0
+<                 N22(N)=0
+<               ENDIF
+---
+>         IF(IPOPT(2).NE.-1) WB=IPOPT(2+LB)
+>         DO N=1,NO
+>           XPTB(N)=XPTS(N)+IB/REAL(NB2)
+>           YPTB(N)=YPTS(N)+JB/REAL(NB2)
+>         ENDDO
+>         CALL GDSWIZ(KGDSO, 1,NO,FILL,XPTB,YPTB,RLOB,RLAB,NV,0,DUM,DUM)
+>         CALL GDSWIZ(KGDSI,-1,NO,FILL,XPTB,YPTB,RLOB,RLAB,NV,0,DUM,DUM)
+>         IF(IRET.EQ.0.AND.NV.EQ.0.AND.LB.EQ.0) IRET=2
+>         DO N=1,NO
+>           XI=XPTB(N)
+>           YI=YPTB(N)
+>           IF(XI.NE.FILL.AND.YI.NE.FILL) THEN
+>             I1=XI
+>             I2=I1+1
+>             WI2=XI-I1
+>             WI1=1-WI2
+>             J1=YI
+>             J2=J1+1
+>             WJ2=YI-J1
+>             WJ1=1-WJ2
+>             N11(N)=IJKGDS(I1,J1,KGDSI)
+>             N21(N)=IJKGDS(I2,J1,KGDSI)
+>             N12(N)=IJKGDS(I1,J2,KGDSI)
+>             N22(N)=IJKGDS(I2,J2,KGDSI)
+>             IF(MIN(N11(N),N21(N),N12(N),N22(N)).GT.0) THEN
+>               W11(N)=WI1*WJ1
+>               W21(N)=WI2*WJ1
+>               W12(N)=WI1*WJ2
+>               W22(N)=WI2*WJ2
+>               CALL MOVECT(RLAI(N11(N)),RLOI(N11(N)),RLAT(N),RLON(N),
+>      &                    CM11,SM11)
+>               CALL MOVECT(RLAI(N21(N)),RLOI(N21(N)),RLAT(N),RLON(N),
+>      &                    CM21,SM21)
+>               CALL MOVECT(RLAI(N12(N)),RLOI(N12(N)),RLAT(N),RLON(N),
+>      &                    CM12,SM12)
+>               CALL MOVECT(RLAI(N22(N)),RLOI(N22(N)),RLAT(N),RLON(N),
+>      &                    CM22,SM22)
+>               C11(N)=CM11*CROI(N11(N))+SM11*SROI(N11(N))
+>               S11(N)=SM11*CROI(N11(N))-CM11*SROI(N11(N))
+>               C21(N)=CM21*CROI(N21(N))+SM21*SROI(N21(N))
+>               S21(N)=SM21*CROI(N21(N))-CM21*SROI(N21(N))
+>               C12(N)=CM12*CROI(N12(N))+SM12*SROI(N12(N))
+>               S12(N)=SM12*CROI(N12(N))-CM12*SROI(N12(N))
+>               C22(N)=CM22*CROI(N22(N))+SM22*SROI(N22(N))
+>               S22(N)=SM22*CROI(N22(N))-CM22*SROI(N22(N))
+267c214,220
+<           ENDDO
+---
+>           ELSE
+>             N11(N)=0
+>             N21(N)=0
+>             N12(N)=0
+>             N22(N)=0
+>           ENDIF
+>         ENDDO
+271,274c224,242
+<           DO K=1,KM
+<             DO N=1,NO
+<               IF(N11(N).GT.0) THEN
+<                 IF(IBI(K).EQ.0) THEN
+---
+>         DO K=1,KM
+>           DO N=1,NO
+>             IF(N11(N).GT.0) THEN
+>               IF(IBI(K).EQ.0) THEN
+>                 U11=C11(N)*UI(N11(N),K)-S11(N)*VI(N11(N),K)
+>                 V11=S11(N)*UI(N11(N),K)+C11(N)*VI(N11(N),K)
+>                 U21=C21(N)*UI(N21(N),K)-S21(N)*VI(N21(N),K)
+>                 V21=S21(N)*UI(N21(N),K)+C21(N)*VI(N21(N),K)
+>                 U12=C12(N)*UI(N12(N),K)-S12(N)*VI(N12(N),K)
+>                 V12=S12(N)*UI(N12(N),K)+C12(N)*VI(N12(N),K)
+>                 U22=C22(N)*UI(N22(N),K)-S22(N)*VI(N22(N),K)
+>                 V22=S22(N)*UI(N22(N),K)+C22(N)*VI(N22(N),K)
+>                 UB=W11(N)*U11+W21(N)*U21+W12(N)*U12+W22(N)*U22
+>                 VB=W11(N)*V11+W21(N)*V21+W12(N)*V12+W22(N)*V22
+>                 UO(N,K)=UO(N,K)+WB*UB
+>                 VO(N,K)=VO(N,K)+WB*VB
+>                 WO(N,K)=WO(N,K)+WB
+>               ELSE
+>                 IF(LI(N11(N),K)) THEN
+276a245,249
+>                   UO(N,K)=UO(N,K)+WB*W11(N)*U11
+>                   VO(N,K)=VO(N,K)+WB*W11(N)*V11
+>                   WO(N,K)=WO(N,K)+WB*W11(N)
+>                 ENDIF
+>                 IF(LI(N21(N),K)) THEN
+278a252,256
+>                   UO(N,K)=UO(N,K)+WB*W21(N)*U21
+>                   VO(N,K)=VO(N,K)+WB*W21(N)*V21
+>                   WO(N,K)=WO(N,K)+WB*W21(N)
+>                 ENDIF
+>                 IF(LI(N12(N),K)) THEN
+280a259,263
+>                   UO(N,K)=UO(N,K)+WB*W12(N)*U12
+>                   VO(N,K)=VO(N,K)+WB*W12(N)*V12
+>                   WO(N,K)=WO(N,K)+WB*W12(N)
+>                 ENDIF
+>                 IF(LI(N22(N),K)) THEN
+283,316c266,268
+<                   UB=W11(N)*U11+W21(N)*U21+W12(N)*U12+W22(N)*U22
+<                   VB=W11(N)*V11+W21(N)*V21+W12(N)*V12+W22(N)*V22
+<                   UO(N,K)=UO(N,K)+WB*UB
+<                   VO(N,K)=VO(N,K)+WB*VB
+<                   WO(N,K)=WO(N,K)+WB
+<                 ELSE
+<                   IF(LI(N11(N),K)) THEN
+<                     U11=C11(N)*UI(N11(N),K)-S11(N)*VI(N11(N),K)
+<                     V11=S11(N)*UI(N11(N),K)+C11(N)*VI(N11(N),K)
+<                     UO(N,K)=UO(N,K)+WB*W11(N)*U11
+<                     VO(N,K)=VO(N,K)+WB*W11(N)*V11
+<                     WO(N,K)=WO(N,K)+WB*W11(N)
+<                   ENDIF
+<                   IF(LI(N21(N),K)) THEN
+<                     U21=C21(N)*UI(N21(N),K)-S21(N)*VI(N21(N),K)
+<                     V21=S21(N)*UI(N21(N),K)+C21(N)*VI(N21(N),K)
+<                     UO(N,K)=UO(N,K)+WB*W21(N)*U21
+<                     VO(N,K)=VO(N,K)+WB*W21(N)*V21
+<                     WO(N,K)=WO(N,K)+WB*W21(N)
+<                   ENDIF
+<                   IF(LI(N12(N),K)) THEN
+<                     U12=C12(N)*UI(N12(N),K)-S12(N)*VI(N12(N),K)
+<                     V12=S12(N)*UI(N12(N),K)+C12(N)*VI(N12(N),K)
+<                     UO(N,K)=UO(N,K)+WB*W12(N)*U12
+<                     VO(N,K)=VO(N,K)+WB*W12(N)*V12
+<                     WO(N,K)=WO(N,K)+WB*W12(N)
+<                   ENDIF
+<                   IF(LI(N22(N),K)) THEN
+<                     U22=C22(N)*UI(N22(N),K)-S22(N)*VI(N22(N),K)
+<                     V22=S22(N)*UI(N22(N),K)+C22(N)*VI(N22(N),K)
+<                     UO(N,K)=UO(N,K)+WB*W22(N)*U22
+<                     VO(N,K)=VO(N,K)+WB*W22(N)*V22
+<                     WO(N,K)=WO(N,K)+WB*W22(N)
+<                   ENDIF
+---
+>                   UO(N,K)=UO(N,K)+WB*W22(N)*U22
+>                   VO(N,K)=VO(N,K)+WB*W22(N)*V22
+>                   WO(N,K)=WO(N,K)+WB*W22(N)
+319c271
+<             ENDDO
+---
+>             ENDIF
+321c273
+<         ENDIF
+---
+>         ENDDO
+324d275
+< C  COMPUTE OUTPUT BITMAPS AND FIELDS
+329c280
+<           LO(N,K)=WO(N,K).GE.PMP*NB4
+---
+>           LO(N,K)=WO(N,K).GE.0.5*NB4

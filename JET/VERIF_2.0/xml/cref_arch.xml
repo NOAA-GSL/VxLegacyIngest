@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/VERIF_2.0/bin">
+    <!ENTITY EXEC_DIR "/home/amb-verif/VERIF_2.0/exec">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/VERIF_2.0/verif/cref/log">
+    <!ENTITY MSS_DIR "/BMC/rtrr/5year/amb-verif/verif_2.0/cref">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/VERIF_2.0/verif/cref/NSSL/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/amb-verif/VERIF_2.0/verif/cref/NSSL/log">
+    
+    <!ENTITY HRRR_REALTIME_DIR "/home/amb-verif/VERIF_2.0/verif/cref/HRRR/realtime">
+    <!ENTITY HRRR_LOG_DIR "/home/amb-verif/VERIF_2.0/verif/cref/HRRR/log">
+    
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY WALL_LIMIT "06:00:00">
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE_SERVICE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&WALL_LIMIT;</walltime>
+	<native>-l partition=service -W umask=022</native>'>
+    
+    <!ENTITY YMDH
+	   '<envar>
+	      <name>YEAR</name>
+	      <value><cyclestr offset="-432000">@Y</cyclestr></value>
+	    </envar>
+	    <envar>
+	      <name>MONTH</name>
+	      <value><cyclestr offset="-432000">@m</cyclestr></value>
+	    </envar>
+	    <envar>
+	      <name>DAY</name>
+	      <value><cyclestr offset="-432000">@d</cyclestr></value>
+	    </envar>
+	    <envar>
+	      <name>HOUR</name>
+	      <value><cyclestr offset="-432000">@H</cyclestr></value>
+	    </envar>'>
+]>
+
+<workflow realtime="T" scheduler="moabtorque" cyclethrottle="2" cyclelifespan="1:00:00:00">
+
+  <log><cyclestr>&WF_LOG_DIR;/cref_arch_workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <cycledef group="1dy">0 0 * * 2013-2020 *</cycledef>
+
+  <task name="NSSL_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NSSL_arch</jobname>
+    <join><cyclestr offset="-432000">&OBS_LOG_DIR;/NSSL_arch@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/cref_etp_vil_arch.py</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/NSSL</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="HRRR_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRR_arch</jobname>
+    <join><cyclestr offset="-432000">&HRRR_LOG_DIR;/HRRR_arch@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/cref_etp_vil_arch.py</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/HRRR</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HRRR_REALTIME_DIR;</value>
+    </envar>
+  </task>
+
+</workflow>

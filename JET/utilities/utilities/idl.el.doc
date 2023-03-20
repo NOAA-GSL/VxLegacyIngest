@@ -1,0 +1,357 @@
+idl.el provides an IDL editing mode inside emacs when editing ".pro"
+files.  The mode is called "IDL" and appears in the modeline at the
+bottom of the buffer screen.  Any file that ends in ".pro" is
+automatically put into "IDL" editing mode.
+
+Features:
+
+* Indentation. Lines are automatically indented.  
+
+  Entering "TAB" indents the current line to the appropiate level.
+
+  Entering "C-j" inserts a newline and starts a new line indented to
+  the appropiate level.  In general, to have lines automatically
+  indented as you code, use "C-j" in place of the "Return" key.
+
+* The indentation levels for IDL code (default):
+
+    Begin-end or case-end blocks are indented 4 spaces.
+
+    Continued lines are indented 2 spaces.  Except continued IF
+    statements that use with an ELSE on the next line.
+
+    When a continuation is done inside an open right parentheses
+    (i.e., "{", "(", or "[") then next line is indented one space
+    beyond the last open right parentheses.
+
+    Continued PRO or FUNCTION lines are indented just after the
+    procedure name. 
+
+    Labels are indented like a code statement unless they are on a
+    line by themselves and at the beginning of the line.
+
+    All the code between between the PRO/FUNCTION and associate END
+    can also be indented if you like.  Set `idl-main-block-indent' to
+    whatever value you like
+
+    Note: indentation is calcualted relative to the indentation of the
+    previous statement.  Thus to get the indentation correct for a
+    line may require re-indenting the entire block that contains the
+    line.  Just mark the block (`idl-mark-block') and reindent
+    (`indent-region', "M-C-\").  Or just reindent the entire procedure
+    with `idl-indent-subprogram', "M-q".
+
+* Indentation for comments (default):
+
+    The indentatoin of any line that has a ";" in the first column is
+    left unchanged.
+    
+    A comment beginning with ";;" is indented as if it were a
+    code line.
+
+    A comment line beginning with ";;;" is left unchanged (the
+    indentation is not changed).
+
+    A comment line beginning with ";" is indented to column 40.  Even
+    if code is on the same line as the comment.  This is called a
+    right margin comment.
+
+* Code templates: automatic insertion of code.
+
+  Templates for FOR loops and other constructs can be entered with a
+  single keystroke ("C-c" followed by "C-first charater of the
+  construct"):
+
+  C-c C-w		idl-while
+  C-c C-r		idl-repeat
+  C-c C-f		idl-for
+  C-c C-c		idl-case
+
+  For example, here is the template inserted when "C-c C-f" is used:
+
+  for  do begin
+
+  endfor
+
+* Automatic line wrapping.  
+
+  When auto-fill mode is on (when "Fill" is displayed in the mode line
+  for the buffer) a line is automatically wrapped when typing beyond
+  the fill-column (which might be something like column 70).
+
+  Line wrapping does the right thing for code lines, comments, and
+  when in the middle of a string (it splits the string using a '+').
+
+  To toggle auto-fill mode off/on enter "M-x idl-auto-fill-mode".
+
+* Comment paragraph formatting
+
+  Filling comment paragraphs: Use "M-q" with a comment to rewrap/fill
+  a comment paragraph.  A comment paragraph is a set of contiguous
+  non-empty comments.
+
+  Hanging indents: Comments will use hanging indentation.  The hanging
+  indent is given by the minimum indentation after the first line. 
+
+;    Indentation will automatically follow that of the previous line
+;       when you are in auto-fill mode.  Notice that the third line is
+;       indented like the second line.
+
+  Additionally, the hanging indent in a comment paragraph is taken past
+  a "- " in the first line.  (The "- " can be changed to whatever you
+  prefer.)  For example,
+
+; Variable - this is a hanging indent. Text on following lines will
+;            be indented like this, past the hyphen and the following
+;            single space. (Note that in auto fill mode that an 
+;            automatic return on a line containing a hyphen will cause
+;            a hanging indent. If this happens in the middle of a
+;            paragraph where you don't want it, using "M-q" will
+;            re-fill the paragraph )
+
+* Toggle coments
+
+  `idl-toggle-comment-region' toggles the commenting of the current
+  region based on whether the first line in the region is a comment.
+  It comments every line in a region.  It removes comments if already
+  commented (removes exactly the number of ";" found in the first
+  comment line).  If given a numeric prefix argument it adds exactly
+  that many ";" (removes them if the argument is negative).
+
+* Automatic expansion/actions performed when you type certain
+  characters. 
+
+  Automatic space padding of certain punctuations (by default this is
+  feature is off because it is intrusive).  When entering any of the
+  following characters "><&=" they are surrounded by a minimum of 1
+  space. When "=" is not used for assignment (e.g. keywords) then
+  spaces are removed. "," is followed by a minimum of one space.  To
+  use this feature set `idl-surround-by-blank' in your idl-mode-hook.
+  (Also set `idl-do-actions' if you want this performed when indenting
+  lines too.)
+
+  You can also set up your own personal actions to be performed
+  automatically.  Here are some examples that you can put in your
+  idl-mode-hook:
+ 
+  ;; Capitalize system variables
+   (idl-action-and-binding idl-sysvar '(capitalize-word 1))
+   
+  ;; Capitalize procedure name
+   (idl-action-and-binding "\\<\\(pro\\|function\\)\\>[ \t]*\\<"
+	  		     '(capitalize-word 1))
+
+  ;; Capitalize common block name
+   (idl-action-and-binding "\\<common\\>[ \t]*\\<"
+	 		     '(capitalize-word 1))
+  ;; Capitalize label
+   (idl-action-and-binding (concat "^[ \t]" idl-label)
+ 	                     '(capitalize-word -1))
+
+  There are abbrevs that expand to commonly used text when abbrev mode
+  is turned on (which is the default).  These start with a "."
+  character followed by one or two other characters and then a space.
+  A list of these abbrevs is at the end of this document.
+
+  Can have reserved words automatically capitalized if
+  `idl-reserved-word-upcase' is set non-nil in your `idl-mode-hook'
+  and abbrev mode is on.
+
+* Menus
+
+  IDL mode provides a an "IDL" menu in the menu bar containing
+  formatting and movement commands.  This feature is available if you
+  have GNU emacs vesion 19 and easymenu.el (which is included with
+  versions 19.26 and later).
+
+  A popup menu of procedures within the file if you use imenu.el
+  (which is included with the lastest Emacs 19 versions).  If you do
+  not already use imenu.el and want to use this feature, look in the
+  customization section of idl.el for how to do this.
+
+* Movement/Selection
+
+  There are commands for moving among statements, in/out/across code
+  blocks (begin|case|procedure - end pairs).  Additional commands
+  exist for marking blocks for copying, killing, moving, and
+  reindentation.  Most of these commands have key bindings (see below)
+  that are similar to those provided in other Emacs programming modes.
+  Many are additionally available from the IDL menu.
+
+* Code documentation
+
+  The command `idl-doc-header' inserts a header template at the
+  beginning of a procedure.  You can have it insert your own header if
+  desired. 
+
+  The command `idl-doc-modification' inserts a timestamped entry for
+  in the IDL header for adding change comments for a procedure.
+
+* Installation
+
+   To install put the following in your .emacs file (you may want
+   to specify a complete path for the idl.el file if it is not in
+   a directory contained in `load-path'):
+
+  (setq auto-mode-alist
+      (append
+       '(("\\.pro$" . idl-mode))
+       auto-mode-alist))
+   ;; Use a complete pathname in place of "idl" if necessary.
+  (autoload 'idl-mode "idl" 
+   "Major mode for editing IDL/WAVE CL .pro files" t)
+
+* Customization
+
+You can customize various settings in idl-mode-hook.  Set
+idl-mode-hook in your .emacs file.  Here is a lengthy example:
+
+(add-hook 'idl-mode-hook
+	  ;; For emacs version 18 replace above line with "(setq idl-mode-hook"
+	  (function 
+	   (lambda ()
+	     (setq			; Set options here
+	      idl-block-indent 3
+	      idl-main-block-indent 3
+	      idl-end-offset -3
+	      idl-continuation-indent 1
+	      idl-surround-by-blank t	; Turn on padding symbols =,<,>, etc.
+	      abbrev-mode t		; Turn on abbrevs
+	      idl-pad-keyword nil       ; Remove spaces for keyword assign '='
+	      ;; If abbrev-mode is off, then case changes 
+	      ;; will not occur (the next 2 lines).
+	      idl-reserved-word-upcase t ; Change reserved words to upper case
+	      idl-abbrev-change-case nil ; Don't force case of other expansions
+	      idl-hang-indent-regexp ": " ; Change from "- "
+	      idl-show-block nil	; Turn off blinking to matching begin
+	      idl-abbrev-move t		; Allow abbrevs to move point backwards
+	      case-fold-search nil	; Make searches case sensitive
+	      )
+	     ;; Run other functions here
+	     (idl-auto-fill-mode 0)	; Turn off auto filling
+	     ;; Pad with with 1 space (if -n is used then make the 
+	     ;; padding a minimum of n spaces.)  The defaults use -1
+	     ;; instead of 1.
+	     (idl-action-and-binding "=" '(idl-expand-equal 1 1))
+	     (idl-action-and-binding "<" '(idl-surround 1 1))
+	     (idl-action-and-binding ">" '(idl-surround 1 1))
+	     (idl-action-and-binding "&" '(idl-surround 1 1))
+	     ;; Capitalize system variable names
+	     (idl-action-and-binding idl-sysvar '(capitalize-word 1))
+	     ;; Only pad after comma and with exactly 1 space
+	     (idl-action-and-binding "," '(idl-surround nil 1))
+	     ;; Set some personal bindings
+	     ;; (In this case, makes `,' have the normal self-insert behavior.)
+	     (local-set-key "," 'self-insert-command)
+	     ;; Create a newline, indenting the original and new line.
+	     ;; A similar function that does _not_ reindent the original
+	     ;; line is on "\C-j" (The default for emacs programming modes).
+	     (local-set-key "\n" 'idl-newline)
+	     ;; (local-set-key "\C-j" 'idl-newline) ; My preference.
+	     )))
+
+  You can get a pop-up menu of the functions in an IDL file if you
+  have imenu.el.  If you do not already use imenu.el and want to, add
+  the following to your .emacs to bind the menu to shift-mouse-button-3:
+
+(cond (window-system 
+       (define-key global-map [S-down-mouse-3] 'goto-index-pos))
+          
+  Note: In versions of imenu.el included with Emacs use "imenu" in
+  place of "goto-index-pos".
+    
+---
+
+Here is the default keymap for idl-mode.  For more info see help for
+the individual key or the bound function:
+
+LFD (or "C-j")  idl-newline
+menu-bar        Prefix Command
+=               idl-surround
+,               idl-surround
+>               idl-surround
+<               idl-surround
+&               idl-surround
+C-c             Prefix Command
+ESC             Prefix Command
+"               idl-show-matching-quote
+'               idl-show-matching-quote
+
+C-c C-w         idl-while
+C-c C-r         idl-repeat
+C-c C-f         idl-for
+C-c C-d         idl-debug-map
+C-c C-c         idl-case
+C-c RET         idl-doc-modification
+C-c C-h         idl-doc-header
+C-c C-a         idl-auto-fill-mode
+C-c C-n         idl-next-statement
+C-c C-p         idl-previous-statement
+C-c ;           idl-toggle-comment-region
+
+ESC q           idl-fill-paragraph
+ESC C-q         idl-indent-subprogram
+ESC RET         idl-split-line
+ESC C-u         idl-backward-up-block
+ESC C-d         idl-down-block
+ESC C-p         idl-backward-block
+ESC C-n         idl-forward-block
+ESC C-h         idl-mark-subprogram
+ESC C-e         idl-end-of-subprogram
+ESC C-a         idl-beginning-of-subprogram
+ESC TAB         idl-hard-tab
+
+---
+
+Abbrev list.
+Abbrev on left, expansion on right:
+
+".rf"	 "readf,"
+".re"	 "read,"	
+".pt"	 "plot,"
+".cf"	 "float()"
+".wu"	 "writeu,"
+".cd"	 "double()"
+".pr"	 ""
+".cc"	 "complex()"
+".cb"	 "byte()"
+".ow"	 "openw,"
+".ou"	 "openu,"
+".or"	 "openr,"
+".on"	 "on_error,"
+".oi"	 "on_ioerror,"	
+".fu"	 FUNCTION template
+".w"	 WHILE template
+".u"	 "until"		
+".t"	 "then"		
+".ew"	 "endwhile"	
+".r"	 REPEAT template
+".p"	 "print,"		
+".n"	 "n_elements()"	
+".er"	 "endrep"		
+".su"	 "strupcase()"	
+".k"	 "keyword_set()"	
+".st"	 "strput()"		
+".en"	 "endif"		
+".sr"	 "strtrim()"		
+".h"	 "help,"		
+".el"	 "endif else"	
+".g"	 "goto,"		
+".sp"	 "strpos()"		
+".f"	 FOR template
+".ei"	 "endif else if"
+".e"	 "else"		
+".sn"	 "strlen()"		
+".cx"	 "fix()"		
+".sm"	 "strmid()"		
+".c"	 CASE template	
+".sl"	 "strlowcase()"	
+".rt"	 "return"		
+".ef"	 "endfor"	
+".b"	 "begin"		
+".ee"	 "endelse"
+".ec"	 "endcase"
+".cs"	 "string()"		
+".co"	 "common"		
+".sc"	 "strcompress()"	
+".cl"	 "long()"		

@@ -1,0 +1,567 @@
+10,12c10,11
+< C           FROM ANY GRID TO ANY GRID FOR SCALAR FIELDS.
+< C           BITMAPS ARE NOW ALLOWED EVEN WHEN INVALID POINTS ARE WITHIN
+< C           THE BICUBIC TEMPLATE PROVIDED THE MINIMUM WEIGHT IS REACHED. 
+---
+> C           FROM ANY GRID TO ANY GRID FOR VECTOR FIELDS.
+> C           IT REQUIRES THAT NO INPUT FIELDS HAVE BITMAPS (IBI=0).
+15,18c14
+< C           CONFINED WITHIN THE RANGE OF THE SURROUNDING 16 POINTS.
+< C           ANOTHER OPTION IS THE MINIMUM PERCENTAGE FOR MASK,
+< C           I.E. PERCENT VALID INPUT DATA REQUIRED TO MAKE OUTPUT DATA,
+< C           (IPOPT(2)) WHICH DEFAULTS TO 50 (IF IPOPT(2)=-1).
+---
+> C           CONFINED WITHIN THE RANGE OF THE SURROUNDING 4 POINTS.
+49,57d44
+< C 1999-04-08  IREDELL  SPLIT IJKGDS INTO TWO PIECES
+< C 2000-02-07  GILBERT  ENSURE THAT VECTOR COMPONENTS ARE ROTATED
+< C                      TO THE GRID ORIENTATION.
+< C 2001-06-18  IREDELL  INCLUDE MINIMUM MASK PERCENTAGE OPTION
+< C 2002-01-17  IREDELL  SAVE DATA FROM LAST CALL FOR OPTIMIZATION
+< C 2007-05-22  IREDELL  EXTRAPOLATE UP TO HALF A GRID CELL
+< C 2007-10-30  IREDELL  CORRECT NORTH POLE INDEXING PROBLEM,
+< C                      UNIFY MASKED AND NON-MASKED ALGORITHMS,
+< C                      AND SAVE WEIGHTS FOR PERFORMANCE.
+67,68d53
+< C                IPOPT(2) IS MINIMUM PERCENTAGE FOR MASK
+< C                (DEFAULTS TO 50 IF IPOPT(2)=-1)
+77c62
+< C     IBI      - INTEGER (KM) INPUT BITMAP FLAGS
+---
+> C     IBI      - INTEGER (KM) INPUT BITMAP FLAGS (MUST BE ALL 0)
+104a90
+> C                11   INVALID INPUT BITMAPS
+108,109c94
+< C   IJKGDS0      SET UP PARAMETERS FOR IJKGDS1
+< C   (IJKGDS1)    RETURN FIELD POSITION FOR A GIVEN GRID POINT
+---
+> C   (IJKGDS)     RETURN FIELD POSITION FOR A GIVEN GRID POINT
+117,127c102,109
+<       IMPLICIT NONE
+<       INTEGER,INTENT(IN):: IPOPT(20),KGDSI(200),KGDSO(200),MI,MO,KM
+<       INTEGER,INTENT(IN):: IBI(KM)
+<       LOGICAL*1,INTENT(IN):: LI(MI,KM)
+<       REAL,INTENT(IN):: UI(MI,KM),VI(MI,KM)
+<       INTEGER,INTENT(INOUT):: NO
+<       REAL,INTENT(INOUT):: RLAT(MO),RLON(MO),CROT(MO),SROT(MO)
+<       INTEGER,INTENT(OUT):: IBO(KM)
+<       LOGICAL*1,INTENT(OUT):: LO(MO,KM)
+<       REAL,INTENT(OUT):: UO(MO,KM),VO(MO,KM)
+<       INTEGER,INTENT(OUT):: IRET
+---
+> CFPP$ EXPAND(IJKGDS,MOVECT)
+>       INTEGER IPOPT(20)
+>       INTEGER KGDSI(200),KGDSO(200)
+>       INTEGER IBI(KM),IBO(KM)
+>       LOGICAL*1 LI(MI,KM),LO(MO,KM)
+>       REAL UI(MI,KM),VI(MI,KM),UO(MO,KM),VO(MO,KM)
+>       REAL RLAT(MO),RLON(MO)
+>       REAL CROT(MO),SROT(MO)
+129,134d110
+<       INTEGER IJX(4),IJY(4)
+<       REAL WX(4),WY(4)
+<       INTEGER IJKGDSA(20)
+<       REAL,PARAMETER:: FILL=-9999.
+<       INTEGER MCON,MP,N,I,J,K,NK,NV,IJKGDS1
+<       REAL PMP,XIJ,YIJ,XF,YF,U,V,W,DUM,UMIN,UMAX,VMIN,VMAX
+136,152c112,116
+<       REAL CM,SM,UROT,VROT
+<       INTEGER,SAVE:: KGDSIX(200)=-1,KGDSOX(200)=-1,NOX=-1,IRETX=-1
+<       INTEGER,ALLOCATABLE,SAVE:: NXY(:,:,:),NC(:)
+<       REAL,ALLOCATABLE,SAVE:: RLATX(:),RLONX(:),CROTX(:),SROTX(:)
+<       REAL,ALLOCATABLE,SAVE:: WXY(:,:,:),CXY(:,:,:),SXY(:,:,:)
+< C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+< C  SET PARAMETERS
+<       IRET=0
+<       MCON=IPOPT(1)
+<       MP=IPOPT(2)
+<       IF(MP.EQ.-1.OR.MP.EQ.0) MP=50
+<       IF(MP.LT.0.OR.MP.GT.100) IRET=32
+<       PMP=MP*0.01
+< C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+< C  SAVE OR SKIP WEIGHT COMPUTATION
+<       IF(IRET.EQ.0.AND.(KGDSO(1).LT.0.OR.
+<      &    ANY(KGDSI.NE.KGDSIX).OR.ANY(KGDSO.NE.KGDSOX))) THEN
+---
+>       INTEGER N11(MO),N21(MO),N12(MO),N22(MO)
+>       REAL W11(MO),W21(MO),W12(MO),W22(MO)
+>       REAL C11(MO),C21(MO),C12(MO),C22(MO)
+>       REAL S11(MO),S21(MO),S12(MO),S22(MO)
+>       PARAMETER(FILL=-9999.)
+155,159c119,124
+<         IF(KGDSO(1).GE.0) THEN
+<           CALL GDSWIZ(KGDSO, 0,MO,FILL,XPTS,YPTS,RLON,RLAT,NO,
+<      &                1,CROT,SROT)
+<           IF(NO.EQ.0) IRET=3
+<         ENDIF
+---
+>       IRET=0
+>       IF(KGDSO(1).GE.0) THEN
+>         CALL GDSWIZ(KGDSO, 0,MO,FILL,XPTS,YPTS,RLON,RLAT,NO,1,CROT,SROT)
+>         IF(NO.EQ.0) IRET=3
+>       ENDIF
+>       CALL GDSWIZ(KGDSI, 0,MI,FILL,XPTI,YPTI,RLOI,RLAI,NV,1,CROI,SROI)
+161,164c126,139
+< C  LOCATE INPUT POINTS
+<         CALL GDSWIZ(KGDSI,-1,NO,FILL,XPTS,YPTS,RLON,RLAT,NV,0,DUM,DUM)
+<         IF(IRET.EQ.0.AND.NV.EQ.0) IRET=2
+<         CALL GDSWIZ(KGDSI, 0,MI,FILL,XPTI,YPTI,RLOI,RLAI,NV,1,CROI,SROI)
+---
+> C  LOCATE INPUT POINTS AND COMPUTE THEIR WEIGHTS AND ROTATIONS
+>       CALL GDSWIZ(KGDSI,-1,NO,FILL,XPTS,YPTS,RLON,RLAT,NV,0,DUM,DUM)
+>       IF(IRET.EQ.0.AND.NV.EQ.0) IRET=2
+>       DO K=1,KM
+>         IF(IBI(K).NE.0) IRET=11
+>       ENDDO
+> CMIC$ DO ALL AUTOSCOPE
+>       DO K=1,KM
+>         DO N=1,NO
+>           UO(N,K)=0
+>           VO(N,K)=0
+>           LO(N,K)=.FALSE.
+>         ENDDO
+>       ENDDO
+166,176c141,211
+< C  ALLOCATE AND SAVE GRID DATA
+<         KGDSIX=KGDSI
+<         KGDSOX=KGDSO
+<         IF(NOX.NE.NO) THEN
+<           IF(NOX.GE.0) DEALLOCATE(RLATX,RLONX,CROTX,SROTX,NC,
+<      &                            NXY,WXY,CXY,SXY)
+<           ALLOCATE(RLATX(NO),RLONX(NO),CROTX(NO),SROTX(NO),NC(NO),
+<      &             NXY(4,4,NO),WXY(4,4,NO),CXY(4,4,NO),SXY(4,4,NO))
+<           NOX=NO
+<         ENDIF
+<         IRETX=IRET
+---
+> C  COMPUTE CORNERS
+>       IF(IRET.EQ.0) THEN
+>         DO N=1,NO
+>           XI=XPTS(N)
+>           YI=YPTS(N)
+>           IF(XI.NE.FILL.AND.YI.NE.FILL) THEN
+>             I1=XI-1
+>             I2=I1+3
+>             J1=YI-1
+>             J2=J1+3
+>             XF=XI-I1-1
+>             YF=YI-J1-1
+>             N11(N)=IJKGDS(I1,J1,KGDSI)
+>             N21(N)=IJKGDS(I2,J1,KGDSI)
+>             N12(N)=IJKGDS(I1,J2,KGDSI)
+>             N22(N)=IJKGDS(I2,J2,KGDSI)
+>             IF(MIN(N11(N),N21(N),N12(N),N22(N)).GT.0) THEN
+>               W11(N)=XF*(1-XF)*(2-XF)*YF*(1-YF)*(2-YF)/36
+>               W21(N)=XF*(1-XF)*(1+XF)*YF*(1-YF)*(2-YF)/36
+>               W12(N)=XF*(1-XF)*(2-XF)*YF*(1-YF)*(1+YF)/36
+>               W22(N)=XF*(1-XF)*(1+XF)*YF*(1-YF)*(1+YF)/36
+>             ELSE
+>               N11(N)=0
+>               N21(N)=0
+>               N12(N)=0
+>               N22(N)=0
+>             ENDIF
+>             IF(N11(N).GT.0) THEN
+>               CALL MOVECT(RLAI(N11(N)),RLOI(N11(N)),RLAT(N),RLON(N),
+>      &                    CM11,SM11)
+>               CALL MOVECT(RLAI(N21(N)),RLOI(N21(N)),RLAT(N),RLON(N),
+>      &                    CM21,SM21)
+>               CALL MOVECT(RLAI(N12(N)),RLOI(N12(N)),RLAT(N),RLON(N),
+>      &                    CM12,SM12)
+>               CALL MOVECT(RLAI(N22(N)),RLOI(N22(N)),RLAT(N),RLON(N),
+>      &                    CM22,SM22)
+>               C11(N)=CM11*CROI(N11(N))+SM11*SROI(N11(N))
+>               S11(N)=SM11*CROI(N11(N))-CM11*SROI(N11(N))
+>               C21(N)=CM21*CROI(N21(N))+SM21*SROI(N21(N))
+>               S21(N)=SM21*CROI(N21(N))-CM21*SROI(N21(N))
+>               C12(N)=CM12*CROI(N12(N))+SM12*SROI(N12(N))
+>               S12(N)=SM12*CROI(N12(N))-CM12*SROI(N12(N))
+>               C22(N)=CM22*CROI(N22(N))+SM22*SROI(N22(N))
+>               S22(N)=SM22*CROI(N22(N))-CM22*SROI(N22(N))
+>             ENDIF
+>           ELSE
+>             N11(N)=0
+>             N21(N)=0
+>             N12(N)=0
+>             N22(N)=0
+>           ENDIF
+>         ENDDO
+> CMIC$ DO ALL AUTOSCOPE
+>         DO K=1,KM
+>           DO N=1,NO
+>             IF(N11(N).GT.0) THEN
+>               U11=C11(N)*UI(N11(N),K)-S11(N)*VI(N11(N),K)
+>               V11=S11(N)*UI(N11(N),K)+C11(N)*VI(N11(N),K)
+>               U21=C21(N)*UI(N21(N),K)-S21(N)*VI(N21(N),K)
+>               V21=S21(N)*UI(N21(N),K)+C21(N)*VI(N21(N),K)
+>               U12=C12(N)*UI(N12(N),K)-S12(N)*VI(N12(N),K)
+>               V12=S12(N)*UI(N12(N),K)+C12(N)*VI(N12(N),K)
+>               U22=C22(N)*UI(N22(N),K)-S22(N)*VI(N22(N),K)
+>               V22=S22(N)*UI(N22(N),K)+C22(N)*VI(N22(N),K)
+>               UO(N,K)=UO(N,K)+W11(N)*U11+W21(N)*U21
+>      &                       +W12(N)*U12+W22(N)*U22
+>               VO(N,K)=VO(N,K)+W11(N)*V11+W21(N)*V21
+>      &                       +W12(N)*V12+W22(N)*V22
+>             ENDIF
+>           ENDDO
+>         ENDDO
+178,182c213,259
+< C  COMPUTE WEIGHTS
+<         IF(IRET.EQ.0) THEN
+<           CALL IJKGDS0(KGDSI,IJKGDSA)
+< C$OMP PARALLEL DO
+< C$OMP&PRIVATE(N,XIJ,YIJ,IJX,IJY,XF,YF,J,I,WX,WY,CM,SM)
+---
+> C  COMPUTE TOPS AND BOTTOMS
+>         DO N=1,NO
+>           XI=XPTS(N)
+>           YI=YPTS(N)
+>           IF(XI.NE.FILL.AND.YI.NE.FILL) THEN
+>             LP=N11(N)
+>             IF(LP.GT.0) THEN
+>               I1=XI
+>               I2=I1+1
+>               J1=YI-1
+>               J2=J1+3
+>               XF=XI-I1
+>               YF=YI-J1-1
+>               N11(N)=IJKGDS(I1,J1,KGDSI)
+>               N21(N)=IJKGDS(I2,J1,KGDSI)
+>               N12(N)=IJKGDS(I1,J2,KGDSI)
+>               N22(N)=IJKGDS(I2,J2,KGDSI)
+>               W11(N)=-(1+XF)*(1-XF)*(2-XF)*YF*(1-YF)*(2-YF)/12
+>               W21(N)=-XF*(2-XF)*(1+XF)*YF*(1-YF)*(2-YF)/12
+>               W12(N)=-(1+XF)*(1-XF)*(2-XF)*YF*(1-YF)*(1+YF)/12
+>               W22(N)=-XF*(2-XF)*(1+XF)*YF*(1-YF)*(1+YF)/12
+>               CALL MOVECT(RLAI(N11(N)),RLOI(N11(N)),RLAT(N),RLON(N),
+>      &                    CM11,SM11)
+>               CALL MOVECT(RLAI(N21(N)),RLOI(N21(N)),RLAT(N),RLON(N),
+>      &                    CM21,SM21)
+>               CALL MOVECT(RLAI(N12(N)),RLOI(N12(N)),RLAT(N),RLON(N),
+>      &                    CM12,SM12)
+>               CALL MOVECT(RLAI(N22(N)),RLOI(N22(N)),RLAT(N),RLON(N),
+>      &                    CM22,SM22)
+>               C11(N)=CM11*CROI(N11(N))+SM11*SROI(N11(N))
+>               S11(N)=SM11*CROI(N11(N))-CM11*SROI(N11(N))
+>               C21(N)=CM21*CROI(N21(N))+SM21*SROI(N21(N))
+>               S21(N)=SM21*CROI(N21(N))-CM21*SROI(N21(N))
+>               C12(N)=CM12*CROI(N12(N))+SM12*SROI(N12(N))
+>               S12(N)=SM12*CROI(N12(N))-CM12*SROI(N12(N))
+>               C22(N)=CM22*CROI(N22(N))+SM22*SROI(N22(N))
+>               S22(N)=SM22*CROI(N22(N))-CM22*SROI(N22(N))
+>             ENDIF
+>           ELSE
+>             N11(N)=0
+>             N21(N)=0
+>             N12(N)=0
+>             N22(N)=0
+>           ENDIF
+>         ENDDO
+> CMIC$ DO ALL AUTOSCOPE
+>         DO K=1,KM
+184,235c261,273
+<             RLONX(N)=RLON(N)
+<             RLATX(N)=RLAT(N)
+<             CROTX(N)=CROT(N)
+<             SROTX(N)=SROT(N)
+<             XIJ=XPTS(N)
+<             YIJ=YPTS(N)
+<             IF(XIJ.NE.FILL.AND.YIJ.NE.FILL) THEN
+<               IJX(1:4)=FLOOR(XIJ-1)+(/0,1,2,3/)
+<               IJY(1:4)=FLOOR(YIJ-1)+(/0,1,2,3/)
+<               XF=XIJ-IJX(2)
+<               YF=YIJ-IJY(2)
+<               DO J=1,4
+<                 DO I=1,4
+<                   NXY(I,J,N)=IJKGDS1(IJX(I),IJY(J),IJKGDSA)
+<                 ENDDO
+<               ENDDO
+<               IF(MINVAL(NXY(1:4,1:4,N)).GT.0) THEN
+< C  BICUBIC WHERE 16-POINT STENCIL IS AVAILABLE
+<                 NC(N)=1
+<                 WX(1)=XF*(1-XF)*(2-XF)/(-6.)
+<                 WX(2)=(XF+1)*(1-XF)*(2-XF)/2.
+<                 WX(3)=(XF+1)*XF*(2-XF)/2.
+<                 WX(4)=(XF+1)*XF*(1-XF)/(-6.)
+<                 WY(1)=YF*(1-YF)*(2-YF)/(-6.)
+<                 WY(2)=(YF+1)*(1-YF)*(2-YF)/2.
+<                 WY(3)=(YF+1)*YF*(2-YF)/2.
+<                 WY(4)=(YF+1)*YF*(1-YF)/(-6.)
+<               ELSE
+< C  BILINEAR ELSEWHERE NEAR THE EDGE OF THE GRID
+<                 NC(N)=2
+<                 WX(1)=0
+<                 WX(2)=(1-XF)
+<                 WX(3)=XF
+<                 WX(4)=0
+<                 WY(1)=0
+<                 WY(2)=(1-YF)
+<                 WY(3)=YF
+<                 WY(4)=0
+<               ENDIF
+<               DO J=1,4
+<                 DO I=1,4
+<                   WXY(I,J,N)=WX(I)*WY(J)
+<                   IF(NXY(I,J,N).GT.0) THEN
+<                     CALL MOVECT(RLAI(NXY(I,J,N)),RLOI(NXY(I,J,N)),
+<      &                          RLAT(N),RLON(N),CM,SM)
+<                     CXY(I,J,N)=CM*CROI(NXY(I,J,N))+SM*SROI(NXY(I,J,N))
+<                     SXY(I,J,N)=SM*CROI(NXY(I,J,N))-CM*SROI(NXY(I,J,N))
+<                   ENDIF
+<                 ENDDO
+<               ENDDO
+<             ELSE
+<               NC(N)=0
+---
+>             IF(N11(N).GT.0) THEN
+>               U11=C11(N)*UI(N11(N),K)-S11(N)*VI(N11(N),K)
+>               V11=S11(N)*UI(N11(N),K)+C11(N)*VI(N11(N),K)
+>               U21=C21(N)*UI(N21(N),K)-S21(N)*VI(N21(N),K)
+>               V21=S21(N)*UI(N21(N),K)+C21(N)*VI(N21(N),K)
+>               U12=C12(N)*UI(N12(N),K)-S12(N)*VI(N12(N),K)
+>               V12=S12(N)*UI(N12(N),K)+C12(N)*VI(N12(N),K)
+>               U22=C22(N)*UI(N22(N),K)-S22(N)*VI(N22(N),K)
+>               V22=S22(N)*UI(N22(N),K)+C22(N)*VI(N22(N),K)
+>               UO(N,K)=UO(N,K)+W11(N)*U11+W21(N)*U21
+>      &                       +W12(N)*U12+W22(N)*U22
+>               VO(N,K)=VO(N,K)+W11(N)*V11+W21(N)*V21
+>      &                       +W12(N)*V12+W22(N)*V22
+238,239c276
+<         ENDIF
+<       ENDIF
+---
+>         ENDDO
+241,244c278,324
+< C  INTERPOLATE OVER ALL FIELDS
+<       IF(IRET.EQ.0.AND.IRETX.EQ.0) THEN
+<         IF(KGDSO(1).GE.0) THEN
+<           NO=NOX
+---
+> C  COMPUTE LEFTS AND RIGHTS
+>         DO N=1,NO
+>           XI=XPTS(N)
+>           YI=YPTS(N)
+>           IF(XI.NE.FILL.AND.YI.NE.FILL) THEN
+>             LP=N11(N)
+>             IF(LP.GT.0) THEN
+>               I1=XI-1
+>               I2=I1+3
+>               J1=YI
+>               J2=J1+1
+>               XF=XI-I1-1
+>               YF=YI-J1
+>               N11(N)=IJKGDS(I1,J1,KGDSI)
+>               N21(N)=IJKGDS(I2,J1,KGDSI)
+>               N12(N)=IJKGDS(I1,J2,KGDSI)
+>               N22(N)=IJKGDS(I2,J2,KGDSI)
+>               W11(N)=-XF*(1-XF)*(2-XF)*(1+YF)*(1-YF)*(2-YF)/12
+>               W21(N)=-XF*(1-XF)*(1+XF)*(1+YF)*(1-YF)*(2-YF)/12
+>               W12(N)=-XF*(1-XF)*(2-XF)*YF*(2-YF)*(1+YF)/12
+>               W22(N)=-XF*(1-XF)*(1+XF)*YF*(2-YF)*(1+YF)/12
+>               CALL MOVECT(RLAI(N11(N)),RLOI(N11(N)),RLAT(N),RLON(N),
+>      &                    CM11,SM11)
+>               CALL MOVECT(RLAI(N21(N)),RLOI(N21(N)),RLAT(N),RLON(N),
+>      &                    CM21,SM21)
+>               CALL MOVECT(RLAI(N12(N)),RLOI(N12(N)),RLAT(N),RLON(N),
+>      &                    CM12,SM12)
+>               CALL MOVECT(RLAI(N22(N)),RLOI(N22(N)),RLAT(N),RLON(N),
+>      &                    CM22,SM22)
+>               C11(N)=CM11*CROI(N11(N))+SM11*SROI(N11(N))
+>               S11(N)=SM11*CROI(N11(N))-CM11*SROI(N11(N))
+>               C21(N)=CM21*CROI(N21(N))+SM21*SROI(N21(N))
+>               S21(N)=SM21*CROI(N21(N))-CM21*SROI(N21(N))
+>               C12(N)=CM12*CROI(N12(N))+SM12*SROI(N12(N))
+>               S12(N)=SM12*CROI(N12(N))-CM12*SROI(N12(N))
+>               C22(N)=CM22*CROI(N22(N))+SM22*SROI(N22(N))
+>               S22(N)=SM22*CROI(N22(N))-CM22*SROI(N22(N))
+>             ENDIF
+>           ELSE
+>             N11(N)=0
+>             N21(N)=0
+>             N12(N)=0
+>             N22(N)=0
+>           ENDIF
+>         ENDDO
+> CMIC$ DO ALL AUTOSCOPE
+>         DO K=1,KM
+246,249c326,339
+<             RLON(N)=RLONX(N)
+<             RLAT(N)=RLATX(N)
+<             CROT(N)=CROTX(N)
+<             SROT(N)=SROTX(N)
+---
+>             IF(N11(N).GT.0) THEN
+>               U11=C11(N)*UI(N11(N),K)-S11(N)*VI(N11(N),K)
+>               V11=S11(N)*UI(N11(N),K)+C11(N)*VI(N11(N),K)
+>               U21=C21(N)*UI(N21(N),K)-S21(N)*VI(N21(N),K)
+>               V21=S21(N)*UI(N21(N),K)+C21(N)*VI(N21(N),K)
+>               U12=C12(N)*UI(N12(N),K)-S12(N)*VI(N12(N),K)
+>               V12=S12(N)*UI(N12(N),K)+C12(N)*VI(N12(N),K)
+>               U22=C22(N)*UI(N22(N),K)-S22(N)*VI(N22(N),K)
+>               V22=S22(N)*UI(N22(N),K)+C22(N)*VI(N22(N),K)
+>               UO(N,K)=UO(N,K)+W11(N)*U11+W21(N)*U21
+>      &                       +W12(N)*U12+W22(N)*U22
+>               VO(N,K)=VO(N,K)+W11(N)*V11+W21(N)*V21
+>      &                       +W12(N)*V12+W22(N)*V22
+>             ENDIF
+251,290c341,368
+<         ENDIF
+< C$OMP PARALLEL DO
+< C$OMP&PRIVATE(NK,K,N,U,V,W,UMIN,UMAX,VMIN,VMAX,UROT,VROT,J,I)
+<         DO NK=1,NO*KM
+<           K=(NK-1)/NO+1
+<           N=NK-NO*(K-1)
+<           IF(NC(N).GT.0) THEN
+<             U=0
+<             V=0
+<             W=0
+<             IF(MCON.GT.0) UMIN=HUGE(UMIN)
+<             IF(MCON.GT.0) UMAX=-HUGE(UMAX)
+<             IF(MCON.GT.0) VMIN=HUGE(VMIN)
+<             IF(MCON.GT.0) VMAX=-HUGE(VMAX)
+<             DO J=NC(N),5-NC(N)
+<               DO I=NC(N),5-NC(N)
+<                 IF(NXY(I,J,N).GT.0.AND.
+<      &             (IBI(K).EQ.0.OR.LI(NXY(I,J,N),K))) THEN
+<                   UROT=CXY(I,J,N)*UI(NXY(I,J,N),K)-
+<      &                 SXY(I,J,N)*VI(NXY(I,J,N),K)
+<                   VROT=SXY(I,J,N)*UI(NXY(I,J,N),K)+
+<      &                 CXY(I,J,N)*VI(NXY(I,J,N),K)
+<                   U=U+WXY(I,J,N)*UROT
+<                   V=V+WXY(I,J,N)*VROT
+<                   W=W+WXY(I,J,N)
+<                   IF(MCON.GT.0) UMIN=MIN(UMIN,UROT)
+<                   IF(MCON.GT.0) UMAX=MAX(UMAX,UROT)
+<                   IF(MCON.GT.0) VMIN=MIN(VMIN,VROT)
+<                   IF(MCON.GT.0) VMAX=MAX(VMAX,VROT)
+<                 ENDIF
+<               ENDDO
+<             ENDDO
+<             LO(N,K)=W.GE.PMP
+<             IF(LO(N,K)) THEN
+<               UROT=CROT(N)*U-SROT(N)*V
+<               VROT=SROT(N)*U+CROT(N)*V
+<               UO(N,K)=UROT/W
+<               VO(N,K)=VROT/W
+<               IF(MCON.GT.0) UO(N,K)=MIN(MAX(UO(N,K),UMIN),UMAX)
+<               IF(MCON.GT.0) VO(N,K)=MIN(MAX(VO(N,K),VMIN),VMAX)
+---
+>         ENDDO
+> C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+> C  COMPUTE CENTERS
+>         DO N=1,NO
+>           XI=XPTS(N)
+>           YI=YPTS(N)
+>           IF(XI.NE.FILL.AND.YI.NE.FILL) THEN
+>             LP=N11(N)
+>             I1=XI
+>             I2=I1+1
+>             J1=YI
+>             J2=J1+1
+>             XF=XI-I1
+>             YF=YI-J1
+>             N11(N)=IJKGDS(I1,J1,KGDSI)
+>             N21(N)=IJKGDS(I2,J1,KGDSI)
+>             N12(N)=IJKGDS(I1,J2,KGDSI)
+>             N22(N)=IJKGDS(I2,J2,KGDSI)
+>             IF(LP.GT.0) THEN
+>               W11(N)=(1+XF)*(1-XF)*(2-XF)*(1+YF)*(1-YF)*(2-YF)/4
+>               W21(N)=XF*(2-XF)*(1+XF)*(1+YF)*(1-YF)*(2-YF)/4
+>               W12(N)=(1+XF)*(1-XF)*(2-XF)*YF*(2-YF)*(1+YF)/4
+>               W22(N)=XF*(2-XF)*(1+XF)*YF*(2-YF)*(1+YF)/4
+>             ELSEIF(MIN(N11(N),N21(N),N12(N),N22(N)).GT.0) THEN
+>               W11(N)=(1-XF)*(1-YF)
+>               W21(N)=XF*(1-YF)
+>               W12(N)=(1-XF)*YF
+>               W22(N)=XF*YF
+292,293c370,391
+<               UO(N,K)=0.
+<               VO(N,K)=0.
+---
+>               N11(N)=0
+>               N21(N)=0
+>               N12(N)=0
+>               N22(N)=0
+>             ENDIF
+>             IF(N11(N).GT.0) THEN
+>               CALL MOVECT(RLAI(N11(N)),RLOI(N11(N)),RLAT(N),RLON(N),
+>      &                    CM11,SM11)
+>               CALL MOVECT(RLAI(N21(N)),RLOI(N21(N)),RLAT(N),RLON(N),
+>      &                    CM21,SM21)
+>               CALL MOVECT(RLAI(N12(N)),RLOI(N12(N)),RLAT(N),RLON(N),
+>      &                    CM12,SM12)
+>               CALL MOVECT(RLAI(N22(N)),RLOI(N22(N)),RLAT(N),RLON(N),
+>      &                    CM22,SM22)
+>               C11(N)=CM11*CROI(N11(N))+SM11*SROI(N11(N))
+>               S11(N)=SM11*CROI(N11(N))-CM11*SROI(N11(N))
+>               C21(N)=CM21*CROI(N21(N))+SM21*SROI(N21(N))
+>               S21(N)=SM21*CROI(N21(N))-CM21*SROI(N21(N))
+>               C12(N)=CM12*CROI(N12(N))+SM12*SROI(N12(N))
+>               S12(N)=SM12*CROI(N12(N))-CM12*SROI(N12(N))
+>               C22(N)=CM22*CROI(N22(N))+SM22*SROI(N22(N))
+>               S22(N)=SM22*CROI(N22(N))-CM22*SROI(N22(N))
+296,298c394,397
+<             LO(N,K)=.FALSE.
+<             UO(N,K)=0.
+<             VO(N,K)=0.
+---
+>             N11(N)=0
+>             N21(N)=0
+>             N12(N)=0
+>             N22(N)=0
+300a400
+> CMIC$ DO ALL AUTOSCOPE
+302,303c402,426
+<           IBO(K)=IBI(K)
+<           IF(.NOT.ALL(LO(1:NO,K))) IBO(K)=1
+---
+>           DO N=1,NO
+>             IF(N11(N).GT.0) THEN
+>               U11=C11(N)*UI(N11(N),K)-S11(N)*VI(N11(N),K)
+>               V11=S11(N)*UI(N11(N),K)+C11(N)*VI(N11(N),K)
+>               U21=C21(N)*UI(N21(N),K)-S21(N)*VI(N21(N),K)
+>               V21=S21(N)*UI(N21(N),K)+C21(N)*VI(N21(N),K)
+>               U12=C12(N)*UI(N12(N),K)-S12(N)*VI(N12(N),K)
+>               V12=S12(N)*UI(N12(N),K)+C12(N)*VI(N12(N),K)
+>               U22=C22(N)*UI(N22(N),K)-S22(N)*VI(N22(N),K)
+>               V22=S22(N)*UI(N22(N),K)+C22(N)*VI(N22(N),K)
+>               UO(N,K)=UO(N,K)+W11(N)*U11+W21(N)*U21
+>      &                       +W12(N)*U12+W22(N)*U22
+>               VO(N,K)=VO(N,K)+W11(N)*V11+W21(N)*V21
+>      &                       +W12(N)*V12+W22(N)*V22
+>               IF(IPOPT(1).GT.0) THEN
+>                 UMIN=MIN(U11,U21,U12,U22)
+>                 VMIN=MIN(V11,V21,V12,V22)
+>                 UMAX=MAX(U11,U21,U12,U22)
+>                 VMAX=MAX(V11,V21,V12,V22)
+>                 UO(N,K)=MIN(MAX(UO(N,K),UMIN),UMAX)
+>                 VO(N,K)=MIN(MAX(VO(N,K),VMIN),VMAX)
+>               ENDIF
+>               LO(N,K)=.TRUE.
+>             ENDIF
+>           ENDDO
+305,309d427
+<         IF(KGDSO(1).EQ.0) CALL POLFIXV(NO,MO,KM,RLAT,RLON,IBO,LO,UO,VO)
+< C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<       ELSE
+<         IF(IRET.EQ.0) IRET=IRETX
+<         IF(KGDSO(1).GE.0) NO=0
+311a430,447
+> CMIC$ DO ALL AUTOSCOPE
+>       DO K=1,KM
+>         IBO(K)=IBI(K)
+>         DO N=1,NO
+>           IF(LO(N,K)) THEN
+>             UROT=CROT(N)*UO(N,K)-SROT(N)*VO(N,K)
+>             VROT=SROT(N)*UO(N,K)+CROT(N)*VO(N,K)
+>             UO(N,K)=UROT
+>             VO(N,K)=VROT
+>           ELSE
+>             IBO(K)=1
+>             UO(N,K)=0.
+>             VO(N,K)=0.
+>           ENDIF
+>         ENDDO
+>       ENDDO
+>       IF(KGDSO(1).EQ.0) CALL POLFIXV(NO,MO,KM,RLAT,RLON,IBO,LO,UO,VO)
+> C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

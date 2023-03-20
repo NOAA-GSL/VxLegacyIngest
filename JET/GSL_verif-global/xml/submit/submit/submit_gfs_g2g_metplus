@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto/1.3.3
+
+rocotorun -w /whome/amb-verif/GSL_verif-global/xml/metplus_gfs_g2g.xml -d /whome/amb-verif/GSL_verif-global/xml/db/metplus_gfs_g2g.db

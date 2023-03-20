@@ -1,0 +1,2 @@
+20220121181706 | fe1 | copyVerifFiles2GSL.pl -sourceDir /lfs4/BMC/amb-verif/backfill/hrrr_ops/move
+copyVerifFiles2GSL.pl: completed in 939 sec -- Fri Jan 21 18:32:45 2022 GMT --

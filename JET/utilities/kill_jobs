@@ -1,0 +1,7 @@
+#!/bin/sh
+fe_nodes='fe1 fe2 fe3 fe4 fe5 fe6 fe7 fe8'
+for fe in $fe_nodes
+   do
+   echo 'looking on ' $fe
+   ssh $fe ps -el | grep $1 | awk '{print "echo " $4} ' | sh
+done

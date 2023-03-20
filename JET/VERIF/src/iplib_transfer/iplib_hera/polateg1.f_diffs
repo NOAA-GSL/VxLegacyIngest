@@ -1,0 +1,502 @@
+6c6
+< C SUBPROGRAM:  POLATEG1   INTERPOLATE SCALAR FIELD GRADIENTS (BICUBIC)
+---
+> C SUBPROGRAM:  POLATEG0   INTERPOLATE SCALAR FIELD GRADIENTS (BICUBIC)
+12,13c12
+< C           BITMAPS ARE NOW ALLOWED, BUT BILINEAR INTERPOLATION IS DONE
+< C           WHEN ANY INVALID DATA IS WITHIN THE BICUBIC TEMPLATE.
+---
+> C           IT REQUIRES THAT NO INPUT FIELDS HAVE BITMAPS (IBI=0).
+40d38
+< C 1999-04-08  IREDELL  SPLIT IJKGDS INTO TWO PIECES
+80a79
+> C                11   INVALID INPUT BITMAPS
+84,86c83,84
+< C   IJKGDS0      SET UP PARAMETERS FOR IJKGDS1
+< C   (IJKGDS1)    RETURN FIELD POSITION FOR A GIVEN GRID POINT
+< C   POLFIXV      MAKE MULTIPLE POLE VECTOR VALUES CONSISTENT
+---
+> C   (IJKGDS)     RETURN FIELD POSITION FOR A GIVEN GRID POINT
+> C   POLFIXS      MAKE MULTIPLE POLE SCALAR VALUES CONSISTENT
+108d105
+<       INTEGER NC(MO)
+111,113d107
+<       REAL WX11L(MO),WX21L(MO),WX12L(MO),WX22L(MO)
+<       REAL WY11L(MO),WY21L(MO),WY12L(MO),WY22L(MO)
+<       INTEGER IJKGDSA(20)
+134,135c128,130
+< C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+< C  ZERO OUT OUTPUT
+---
+>       DO K=1,KM
+>         IF(IBI(K).NE.0) IRET=11
+>       ENDDO
+139d133
+<           LO(N,K)=.FALSE.
+141a136
+>           LO(N,K)=.FALSE.
+147d141
+<         CALL IJKGDS0(KGDSI,IJKGDSA)
+149d142
+<           NC(N)=0
+159,162c152,155
+<             N11(N)=IJKGDS1(I1,J1,IJKGDSA)
+<             N21(N)=IJKGDS1(I2,J1,IJKGDSA)
+<             N12(N)=IJKGDS1(I1,J2,IJKGDSA)
+<             N22(N)=IJKGDS1(I2,J2,IJKGDSA)
+---
+>             N11(N)=IJKGDS(I1,J1,KGDSI)
+>             N21(N)=IJKGDS(I2,J1,KGDSI)
+>             N12(N)=IJKGDS(I1,J2,KGDSI)
+>             N22(N)=IJKGDS(I2,J2,KGDSI)
+164d156
+<               NC(N)=1
+198a191,195
+>             ELSE
+>               N11(N)=0
+>               N21(N)=0
+>               N12(N)=0
+>               N22(N)=0
+199a197,201
+>           ELSE
+>             N11(N)=0
+>             N21(N)=0
+>             N12(N)=0
+>             N22(N)=0
+205,218c207,211
+<             IF(NC(N).GT.0) THEN
+<               LO(N,K)=(IBI(K).EQ.0.OR.
+<      &                (LI(N11(N),K).AND.LI(N21(N),K).AND.
+<      &                 LI(N12(N),K).AND.LI(N22(N),K)))
+<               IF(LO(N,K)) THEN
+<                 G11=GI(N11(N),K)
+<                 G21=GI(N21(N),K)
+<                 G12=GI(N12(N),K)
+<                 G22=GI(N22(N),K)
+<                 XO(N,K)=XO(N,K)+WX11(N)*G11+WX21(N)*G21
+<      &                         +WX12(N)*G12+WX22(N)*G22
+<                 YO(N,K)=YO(N,K)+WY11(N)*G11+WY21(N)*G21
+<      &                         +WY12(N)*G12+WY22(N)*G22
+<               ENDIF
+---
+>             IF(N11(N).GT.0) THEN
+>               XO(N,K)=XO(N,K)+WX11(N)*GI(N11(N),K)+WX21(N)*GI(N21(N),K)
+>      &                       +WX12(N)*GI(N12(N),K)+WX22(N)*GI(N22(N),K)
+>               YO(N,K)=YO(N,K)+WY11(N)*GI(N11(N),K)+WY21(N)*GI(N21(N),K)
+>      &                       +WY12(N)*GI(N12(N),K)+WY22(N)*GI(N22(N),K)
+225,271c218,272
+<           IF(NC(N).GT.0) THEN
+<             XI=XPTS(N)
+<             YI=YPTS(N)
+<             I1=XI
+<             I2=I1+1
+<             J1=YI-1
+<             J2=J1+3
+<             XF=XI-I1
+<             YF=YI-J1-1
+<             N11(N)=IJKGDS1(I1,J1,IJKGDSA)
+<             N21(N)=IJKGDS1(I2,J1,IJKGDSA)
+<             N12(N)=IJKGDS1(I1,J2,IJKGDSA)
+<             N22(N)=IJKGDS1(I2,J2,IJKGDSA)
+<             FX=DPR/(RERTH*CLAT(N))
+<             WX11(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+<      &               (YF*(1-YF)*(2-YF))/12*XLON(N)+
+<      &               (-(1+XF)*(1-XF)*(2-XF))/12*YLON(N)*
+<      &               ((1-YF)*(2-YF)-YF*(2-YF)-YF*(1-YF)))*FX
+<             WX21(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+<      &               (YF*(1-YF)*(2-YF))/12*XLON(N)+
+<      &               (-XF*(2-XF)*(1+XF))/12*YLON(N)*
+<      &               ((1-YF)*(2-YF)-YF*(2-YF)-YF*(1-YF)))*FX
+<             WX12(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+<      &               (YF*(1-YF)*(1+YF))/12*XLON(N)+
+<      &               (-(1+XF)*(1-XF)*(2-XF))/12*YLON(N)*
+<      &               ((1-YF)*(1+YF)-YF*(1+YF)+YF*(1-YF)))*FX
+<             WX22(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+<      &               (YF*(1-YF)*(1+YF))/12*XLON(N)+
+<      &               (-XF*(2-XF)*(1+XF))/12*YLON(N)*
+<      &               ((1-YF)*(1+YF)-YF*(1+YF)+YF*(1-YF)))*FX
+<             FY=DPR/RERTH
+<             WY11(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+<      &               (YF*(1-YF)*(2-YF))/12*XLAT(N)+
+<      &               (-(1+XF)*(1-XF)*(2-XF))/12*YLAT(N)*
+<      &               ((1-YF)*(2-YF)-YF*(2-YF)-YF*(1-YF)))*FY
+<             WY21(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+<      &               (YF*(1-YF)*(2-YF))/12*XLAT(N)+
+<      &               (-XF*(2-XF)*(1+XF))/12*YLAT(N)*
+<      &               ((1-YF)*(2-YF)-YF*(2-YF)-YF*(1-YF)))*FY
+<             WY12(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+<      &               (YF*(1-YF)*(1+YF))/12*XLAT(N)+
+<      &               (-(1+XF)*(1-XF)*(2-XF))/12*YLAT(N)*
+<      &               ((1-YF)*(1+YF)-YF*(1+YF)+YF*(1-YF)))*FY
+<             WY22(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+<      &               (YF*(1-YF)*(1+YF))/12*XLAT(N)+
+<      &               (-XF*(2-XF)*(1+XF))/12*YLAT(N)*
+<      &               ((1-YF)*(1+YF)-YF*(1+YF)+YF*(1-YF)))*FY
+---
+>           XI=XPTS(N)
+>           YI=YPTS(N)
+>           IF(XI.NE.FILL.AND.YI.NE.FILL.AND.ABS(RLAT(N)).LE.PLAT) THEN
+>             LP=N11(N)
+>             IF(LP.GT.0) THEN
+>               I1=XI
+>               I2=I1+1
+>               J1=YI-1
+>               J2=J1+3
+>               XF=XI-I1
+>               YF=YI-J1-1
+>               N11(N)=IJKGDS(I1,J1,KGDSI)
+>               N21(N)=IJKGDS(I2,J1,KGDSI)
+>               N12(N)=IJKGDS(I1,J2,KGDSI)
+>               N22(N)=IJKGDS(I2,J2,KGDSI)
+>               FX=DPR/(RERTH*CLAT(N))
+>               WX11(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+>      &                 (YF*(1-YF)*(2-YF))/12*XLON(N)+
+>      &                 (-(1+XF)*(1-XF)*(2-XF))/12*YLON(N)*
+>      &                 ((1-YF)*(2-YF)-YF*(2-YF)-YF*(1-YF)))*FX
+>               WX21(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+>      &                 (YF*(1-YF)*(2-YF))/12*XLON(N)+
+>      &                 (-XF*(2-XF)*(1+XF))/12*YLON(N)*
+>      &                 ((1-YF)*(2-YF)-YF*(2-YF)-YF*(1-YF)))*FX
+>               WX12(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+>      &                 (YF*(1-YF)*(1+YF))/12*XLON(N)+
+>      &                 (-(1+XF)*(1-XF)*(2-XF))/12*YLON(N)*
+>      &                 ((1-YF)*(1+YF)-YF*(1+YF)+YF*(1-YF)))*FX
+>               WX22(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+>      &                 (YF*(1-YF)*(1+YF))/12*XLON(N)+
+>      &                 (-XF*(2-XF)*(1+XF))/12*YLON(N)*
+>      &                 ((1-YF)*(1+YF)-YF*(1+YF)+YF*(1-YF)))*FX
+>               FY=DPR/RERTH
+>               WY11(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+>      &                 (YF*(1-YF)*(2-YF))/12*XLAT(N)+
+>      &                 (-(1+XF)*(1-XF)*(2-XF))/12*YLAT(N)*
+>      &                 ((1-YF)*(2-YF)-YF*(2-YF)-YF*(1-YF)))*FY
+>               WY21(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+>      &                 (YF*(1-YF)*(2-YF))/12*XLAT(N)+
+>      &                 (-XF*(2-XF)*(1+XF))/12*YLAT(N)*
+>      &                 ((1-YF)*(2-YF)-YF*(2-YF)-YF*(1-YF)))*FY
+>               WY12(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+>      &                 (YF*(1-YF)*(1+YF))/12*XLAT(N)+
+>      &                 (-(1+XF)*(1-XF)*(2-XF))/12*YLAT(N)*
+>      &                 ((1-YF)*(1+YF)-YF*(1+YF)+YF*(1-YF)))*FY
+>               WY22(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+>      &                 (YF*(1-YF)*(1+YF))/12*XLAT(N)+
+>      &                 (-XF*(2-XF)*(1+XF))/12*YLAT(N)*
+>      &                 ((1-YF)*(1+YF)-YF*(1+YF)+YF*(1-YF)))*FY
+>             ENDIF
+>           ELSE
+>             N11(N)=0
+>             N21(N)=0
+>             N12(N)=0
+>             N22(N)=0
+277,290c278,282
+<             IF(NC(N).GT.0) THEN
+<               LO(N,K)=LO(N,K).AND.(IBI(K).EQ.0.OR.
+<      &                (LI(N11(N),K).AND.LI(N21(N),K).AND.
+<      &                 LI(N12(N),K).AND.LI(N22(N),K)))
+<               IF(LO(N,K)) THEN
+<                 G11=GI(N11(N),K)
+<                 G21=GI(N21(N),K)
+<                 G12=GI(N12(N),K)
+<                 G22=GI(N22(N),K)
+<                 XO(N,K)=XO(N,K)+WX11(N)*G11+WX21(N)*G21
+<      &                         +WX12(N)*G12+WX22(N)*G22
+<                 YO(N,K)=YO(N,K)+WY11(N)*G11+WY21(N)*G21
+<      &                         +WY12(N)*G12+WY22(N)*G22
+<               ENDIF
+---
+>             IF(N11(N).GT.0) THEN
+>               XO(N,K)=XO(N,K)+WX11(N)*GI(N11(N),K)+WX21(N)*GI(N21(N),K)
+>      &                       +WX12(N)*GI(N12(N),K)+WX22(N)*GI(N22(N),K)
+>               YO(N,K)=YO(N,K)+WY11(N)*GI(N11(N),K)+WY21(N)*GI(N21(N),K)
+>      &                       +WY12(N)*GI(N12(N),K)+WY22(N)*GI(N22(N),K)
+297,343c289,343
+<           IF(NC(N).GT.0) THEN
+<             XI=XPTS(N)
+<             YI=YPTS(N)
+<             I1=XI-1
+<             I2=I1+3
+<             J1=YI
+<             J2=J1+1
+<             XF=XI-I1-1
+<             YF=YI-J1
+<             N11(N)=IJKGDS1(I1,J1,IJKGDSA)
+<             N21(N)=IJKGDS1(I2,J1,IJKGDSA)
+<             N12(N)=IJKGDS1(I1,J2,IJKGDSA)
+<             N22(N)=IJKGDS1(I2,J2,IJKGDSA)
+<             FX=DPR/(RERTH*CLAT(N))
+<             WX11(N)=(((1-XF)*(2-XF)-XF*(2-XF)-XF*(1-XF))*
+<      &               (-(1+YF)*(1-YF)*(2-YF))/12*XLON(N)+
+<      &               (XF*(1-XF)*(2-XF))/12*YLON(N)*
+<      &               (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FX
+<             WX21(N)=(((1-XF)*(1+XF)-XF*(1+XF)+XF*(1-XF))*
+<      &               (-(1+YF)*(1-YF)*(2-YF))/12*XLON(N)+
+<      &               (XF*(1-XF)*(1+XF))/12*YLON(N)*
+<      &               (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FX
+<             WX12(N)=(((1-XF)*(2-XF)-XF*(2-XF)-XF*(1-XF))*
+<      &               (-YF*(2-YF)*(1+YF))/12*XLON(N)+
+<      &               (XF*(1-XF)*(2-XF))/12*YLON(N)*
+<      &               (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FX
+<             WX22(N)=(((1-XF)*(1+XF)-XF*(1+XF)+XF*(1-XF))*
+<      &               (-YF*(2-YF)*(1+YF))/12*XLON(N)+
+<      &               (XF*(1-XF)*(1+XF))/12*YLON(N)*
+<      &               (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FX
+<             FY=DPR/RERTH
+<             WY11(N)=(((1-XF)*(2-XF)-XF*(2-XF)-XF*(1-XF))*
+<      &               (-(1+YF)*(1-YF)*(2-YF))/12*XLAT(N)+
+<      &               (XF*(1-XF)*(2-XF))/12*YLAT(N)*
+<      &               (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FY
+<             WY21(N)=(((1-XF)*(1+XF)-XF*(1+XF)+XF*(1-XF))*
+<      &               (-(1+YF)*(1-YF)*(2-YF))/12*XLAT(N)+
+<      &               (XF*(1-XF)*(1+XF))/12*YLAT(N)*
+<      &               (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FY
+<             WY12(N)=(((1-XF)*(2-XF)-XF*(2-XF)-XF*(1-XF))*
+<      &               (-YF*(2-YF)*(1+YF))/12*XLAT(N)+
+<      &               (XF*(1-XF)*(2-XF))/12*YLAT(N)*
+<      &               (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FY
+<             WY22(N)=(((1-XF)*(1+XF)-XF*(1+XF)+XF*(1-XF))*
+<      &               (-YF*(2-YF)*(1+YF))/12*XLAT(N)+
+<      &               (XF*(1-XF)*(1+XF))/12*YLAT(N)*
+<      &               (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FY
+---
+>           XI=XPTS(N)
+>           YI=YPTS(N)
+>           IF(XI.NE.FILL.AND.YI.NE.FILL.AND.ABS(RLAT(N)).LE.PLAT) THEN
+>             LP=N11(N)
+>             IF(LP.GT.0) THEN
+>               I1=XI-1
+>               I2=I1+3
+>               J1=YI
+>               J2=J1+1
+>               XF=XI-I1-1
+>               YF=YI-J1
+>               N11(N)=IJKGDS(I1,J1,KGDSI)
+>               N21(N)=IJKGDS(I2,J1,KGDSI)
+>               N12(N)=IJKGDS(I1,J2,KGDSI)
+>               N22(N)=IJKGDS(I2,J2,KGDSI)
+>               FX=DPR/(RERTH*CLAT(N))
+>               WX11(N)=(((1-XF)*(2-XF)-XF*(2-XF)-XF*(1-XF))*
+>      &                 (-(1+YF)*(1-YF)*(2-YF))/12*XLON(N)+
+>      &                 (XF*(1-XF)*(2-XF))/12*YLON(N)*
+>      &                 (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FX
+>               WX21(N)=(((1-XF)*(1+XF)-XF*(1+XF)+XF*(1-XF))*
+>      &                 (-(1+YF)*(1-YF)*(2-YF))/12*XLON(N)+
+>      &                 (XF*(1-XF)*(1+XF))/12*YLON(N)*
+>      &                 (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FX
+>               WX12(N)=(((1-XF)*(2-XF)-XF*(2-XF)-XF*(1-XF))*
+>      &                 (-YF*(2-YF)*(1+YF))/12*XLON(N)+
+>      &                 (XF*(1-XF)*(2-XF))/12*YLON(N)*
+>      &                 (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FX
+>               WX22(N)=(((1-XF)*(1+XF)-XF*(1+XF)+XF*(1-XF))*
+>      &                 (-YF*(2-YF)*(1+YF))/12*XLON(N)+
+>      &                 (XF*(1-XF)*(1+XF))/12*YLON(N)*
+>      &                 (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FX
+>               FY=DPR/RERTH
+>               WY11(N)=(((1-XF)*(2-XF)-XF*(2-XF)-XF*(1-XF))*
+>      &                 (-(1+YF)*(1-YF)*(2-YF))/12*XLAT(N)+
+>      &                 (XF*(1-XF)*(2-XF))/12*YLAT(N)*
+>      &                 (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FY
+>               WY21(N)=(((1-XF)*(1+XF)-XF*(1+XF)+XF*(1-XF))*
+>      &                 (-(1+YF)*(1-YF)*(2-YF))/12*XLAT(N)+
+>      &                 (XF*(1-XF)*(1+XF))/12*YLAT(N)*
+>      &                 (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FY
+>               WY12(N)=(((1-XF)*(2-XF)-XF*(2-XF)-XF*(1-XF))*
+>      &                 (-YF*(2-YF)*(1+YF))/12*XLAT(N)+
+>      &                 (XF*(1-XF)*(2-XF))/12*YLAT(N)*
+>      &                 (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FY
+>               WY22(N)=(((1-XF)*(1+XF)-XF*(1+XF)+XF*(1-XF))*
+>      &                 (-YF*(2-YF)*(1+YF))/12*XLAT(N)+
+>      &                 (XF*(1-XF)*(1+XF))/12*YLAT(N)*
+>      &                 (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FY
+>             ENDIF
+>           ELSE
+>             N11(N)=0
+>             N21(N)=0
+>             N12(N)=0
+>             N22(N)=0
+349,362c349,353
+<             IF(NC(N).GT.0) THEN
+<               LO(N,K)=LO(N,K).AND.(IBI(K).EQ.0.OR.
+<      &                (LI(N11(N),K).AND.LI(N21(N),K).AND.
+<      &                 LI(N12(N),K).AND.LI(N22(N),K)))
+<               IF(LO(N,K)) THEN
+<                 G11=GI(N11(N),K)
+<                 G21=GI(N21(N),K)
+<                 G12=GI(N12(N),K)
+<                 G22=GI(N22(N),K)
+<                 XO(N,K)=XO(N,K)+WX11(N)*G11+WX21(N)*G21
+<      &                         +WX12(N)*G12+WX22(N)*G22
+<                 YO(N,K)=YO(N,K)+WY11(N)*G11+WY21(N)*G21
+<      &                         +WY12(N)*G12+WY22(N)*G22
+<               ENDIF
+---
+>             IF(N11(N).GT.0) THEN
+>               XO(N,K)=XO(N,K)+WX11(N)*GI(N11(N),K)+WX21(N)*GI(N21(N),K)
+>      &                       +WX12(N)*GI(N12(N),K)+WX22(N)*GI(N22(N),K)
+>               YO(N,K)=YO(N,K)+WY11(N)*GI(N11(N),K)+WY21(N)*GI(N21(N),K)
+>      &                       +WY12(N)*GI(N12(N),K)+WY22(N)*GI(N22(N),K)
+369,371c360,363
+<           IF(NC(N).GT.0) THEN
+<             XI=XPTS(N)
+<             YI=YPTS(N)
+---
+>           XI=XPTS(N)
+>           YI=YPTS(N)
+>           IF(XI.NE.FILL.AND.YI.NE.FILL.AND.ABS(RLAT(N)).LE.PLAT) THEN
+>             LP=N11(N)
+378,415c370,430
+<             N11(N)=IJKGDS1(I1,J1,IJKGDSA)
+<             N21(N)=IJKGDS1(I2,J1,IJKGDSA)
+<             N12(N)=IJKGDS1(I1,J2,IJKGDSA)
+<             N22(N)=IJKGDS1(I2,J2,IJKGDSA)
+<             FX=DPR/(RERTH*CLAT(N))
+<             WX11(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+<      &               (-(1+YF)*(1-YF)*(2-YF))/4*XLON(N)+
+<      &               (-(1+XF)*(1-XF)*(2-XF))/4*YLON(N)*
+<      &               (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FX
+<             WX21(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+<      &               (-(1+YF)*(1-YF)*(2-YF))/4*XLON(N)+
+<      &               (-XF*(2-XF)*(1+XF))/4*YLON(N)*
+<      &               (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FX
+<             WX12(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+<      &               (-YF*(2-YF)*(1+YF))/4*XLON(N)+
+<      &               (-(1+XF)*(1-XF)*(2-XF))/4*YLON(N)*
+<      &               (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FX
+<             WX22(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+<      &               (-YF*(2-YF)*(1+YF))/4*XLON(N)+
+<      &               (-XF*(2-XF)*(1+XF))/4*YLON(N)*
+<      &               (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FX
+<             FY=DPR/RERTH
+<             WY11(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+<      &               (-(1+YF)*(1-YF)*(2-YF))/4*XLAT(N)+
+<      &               (-(1+XF)*(1-XF)*(2-XF))/4*YLAT(N)*
+<      &               (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FY
+<             WY21(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+<      &               (-(1+YF)*(1-YF)*(2-YF))/4*XLAT(N)+
+<      &               (-XF*(2-XF)*(1+XF))/4*YLAT(N)*
+<      &               (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FY
+<             WY12(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+<      &               (-YF*(2-YF)*(1+YF))/4*XLAT(N)+
+<      &               (-(1+XF)*(1-XF)*(2-XF))/4*YLAT(N)*
+<      &               (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FY
+<             WY22(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+<      &               (-YF*(2-YF)*(1+YF))/4*XLAT(N)+
+<      &               (-XF*(2-XF)*(1+XF))/4*YLAT(N)*
+<      &               (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FY
+---
+>             N11(N)=IJKGDS(I1,J1,KGDSI)
+>             N21(N)=IJKGDS(I2,J1,KGDSI)
+>             N12(N)=IJKGDS(I1,J2,KGDSI)
+>             N22(N)=IJKGDS(I2,J2,KGDSI)
+>             IF(LP.GT.0) THEN
+>               FX=DPR/(RERTH*CLAT(N))
+>               WX11(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+>      &                 (-(1+YF)*(1-YF)*(2-YF))/4*XLON(N)+
+>      &                 (-(1+XF)*(1-XF)*(2-XF))/4*YLON(N)*
+>      &                 (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FX
+>               WX21(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+>      &                 (-(1+YF)*(1-YF)*(2-YF))/4*XLON(N)+
+>      &                 (-XF*(2-XF)*(1+XF))/4*YLON(N)*
+>      &                 (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FX
+>               WX12(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+>      &                 (-YF*(2-YF)*(1+YF))/4*XLON(N)+
+>      &                 (-(1+XF)*(1-XF)*(2-XF))/4*YLON(N)*
+>      &                 (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FX
+>               WX22(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+>      &                 (-YF*(2-YF)*(1+YF))/4*XLON(N)+
+>      &                 (-XF*(2-XF)*(1+XF))/4*YLON(N)*
+>      &                 (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FX
+>               FY=DPR/RERTH
+>               WY11(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+>      &                 (-(1+YF)*(1-YF)*(2-YF))/4*XLAT(N)+
+>      &                 (-(1+XF)*(1-XF)*(2-XF))/4*YLAT(N)*
+>      &                 (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FY
+>               WY21(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+>      &                 (-(1+YF)*(1-YF)*(2-YF))/4*XLAT(N)+
+>      &                 (-XF*(2-XF)*(1+XF))/4*YLAT(N)*
+>      &                 (-(1-YF)*(2-YF)+(1+YF)*(2-YF)+(1+YF)*(1-YF)))*FY
+>               WY12(N)=((-(1-XF)*(2-XF)+(1+XF)*(2-XF)+(1+XF)*(1-XF))*
+>      &                 (-YF*(2-YF)*(1+YF))/4*XLAT(N)+
+>      &                 (-(1+XF)*(1-XF)*(2-XF))/4*YLAT(N)*
+>      &                 (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FY
+>               WY22(N)=((-(2-XF)*(1+XF)+XF*(1+XF)-XF*(2-XF))*
+>      &                 (-YF*(2-YF)*(1+YF))/4*XLAT(N)+
+>      &                 (-XF*(2-XF)*(1+XF))/4*YLAT(N)*
+>      &                 (-(2-YF)*(1+YF)+YF*(1+YF)-YF*(2-YF)))*FY
+>             ELSEIF(MIN(N11(N),N21(N),N12(N),N22(N)).GT.0) THEN
+>               FACX=DPR/(RERTH*CLAT(N))
+>               WX11(N)=(-(1-YF)*XLON(N)-(1-XF)*YLON(N))*FACX
+>               WX21(N)=((1-YF)*XLON(N)-XF*YLON(N))*FACX
+>               WX12(N)=(-YF*XLON(N)+(1-XF)*YLON(N))*FACX
+>               WX22(N)=(YF*XLON(N)+XF*YLON(N))*FACX
+>               FACY=DPR/RERTH
+>               WY11(N)=(-(1-YF)*XLAT(N)-(1-XF)*YLAT(N))*FACY
+>               WY21(N)=((1-YF)*XLAT(N)-XF*YLAT(N))*FACY
+>               WY12(N)=(-YF*XLAT(N)+(1-XF)*YLAT(N))*FACY
+>               WY22(N)=(YF*XLAT(N)+XF*YLAT(N))*FACY
+>             ELSE
+>               N11(N)=0
+>               N21(N)=0
+>               N12(N)=0
+>               N22(N)=0
+>             ENDIF
+>           ELSE
+>             N11(N)=0
+>             N21(N)=0
+>             N12(N)=0
+>             N22(N)=0
+421,438c436,443
+<             IF(N11(N).GT.0.AND.(IBI(K).EQ.0.OR.
+<      &         (LI(N11(N),K).AND.LI(N21(N),K).AND.
+<      &          LI(N12(N),K).AND.LI(N22(N),K)))) THEN
+<               G11=GI(N11(N),K)
+<               G21=GI(N21(N),K)
+<               G12=GI(N12(N),K)
+<               G22=GI(N22(N),K)
+<               IF(LO(N,K)) THEN
+<                 XO(N,K)=XO(N,K)+WX11(N)*G11+WX21(N)*G21
+<      &                         +WX12(N)*G12+WX22(N)*G22
+<                 YO(N,K)=YO(N,K)+WY11(N)*G11+WY21(N)*G21
+<      &                         +WY12(N)*G12+WY22(N)*G22
+<               ELSE
+<                 LO(N,K)=.TRUE.
+<                 XO(N,K)=WX11L(N)*G11+WX21L(N)*G21
+<      &                  WX12L(N)*G12+WX22L(N)*G22
+<                 YO(N,K)=WY11L(N)*G11+WY21L(N)*G21
+<      &                  WY12L(N)*G12+WY22L(N)*G22
+---
+>             IF(N11(N).GT.0) THEN
+>               XO(N,K)=XO(N,K)+WX11(N)*GI(N11(N),K)+WX21(N)*GI(N21(N),K)
+>      &                       +WX12(N)*GI(N12(N),K)+WX22(N)*GI(N22(N),K)
+>               YO(N,K)=YO(N,K)+WY11(N)*GI(N11(N),K)+WY21(N)*GI(N21(N),K)
+>      &                       +WY12(N)*GI(N12(N),K)+WY22(N)*GI(N22(N),K)
+>               IF(IPOPT(1).GT.0) THEN
+>                 XO(N,K)=0.
+>                 YO(N,K)=0.
+440,448c445
+<               XROT=CROT(N)*XO(N,K)-SROT(N)*YO(N,K)
+<               YROT=SROT(N)*XO(N,K)+CROT(N)*YO(N,K)
+<               XO(N,K)=XROT
+<               YO(N,K)=YROT
+<             ELSE
+<               IBO(K)=1
+<               LO(N,K)=.FALSE.
+<               XO(N,K)=0.
+<               YO(N,K)=0.
+---
+>               LO(N,K)=.TRUE.
+452a450,464
+> C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+> CMIC$ DO ALL AUTOSCOPE
+>       DO K=1,KM
+>         IBO(K)=0
+>         DO N=1,NO
+>           IF(LO(N,K)) THEN
+>             XROT=CROT(N)*XO(N,K)-SROT(N)*YO(N,K)
+>             YROT=SROT(N)*XO(N,K)+CROT(N)*YO(N,K)
+>             XO(N,K)=XROT
+>             YO(N,K)=YROT
+>           ELSE
+>             IBO(K)=1
+>           ENDIF
+>         ENDDO
+>       ENDDO

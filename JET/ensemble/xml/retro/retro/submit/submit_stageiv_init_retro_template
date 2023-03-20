@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/ensemble/xml/retro/stageiv_init_retro_template.xml -d /whome/amb-verif/ensemble/xml/retro/db/stageiv_init_retro_template.db

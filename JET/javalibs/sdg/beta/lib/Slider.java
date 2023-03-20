@@ -1,0 +1,878 @@
+/*
+Open Source License/Disclaimer, 
+Forecast Systems Laboratory
+NOAA/OAR/FSL
+325 Broadway Boulder, CO 80305 
+
+This software is distributed under the Open Source Definition, which
+may be found at http://www.opensource.org/osd.html. In particular,
+redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:  
+<ul>
+<li> Redistributions of source code must retain this notice, this list of
+  conditions and the following disclaimer. 
+
+<li> Redistributions in binary form must provide access to this notice,
+  this list of conditions and the  following disclaimer, and the
+  underlying source code.
+  
+<li> All modifications to this software must be clearly documented, and
+  are solely the responsibility of the agent making the
+  modifications.
+  
+<li> If significant modifications or enhancements are made to this
+  software, the Forecast Systems Laboratory should be notified.
+</ul>
+    
+THIS SOFTWARE AND ITS DOCUMENTATION ARE IN THE PUBLIC DOMAIN AND ARE
+FURNISHED "AS IS." THE AUTHORS, THE UNITED STATES GOVERNMENT, ITS
+INSTRUMENTALITIES, OFFICERS, EMPLOYEES, AND AGENTS MAKE NO WARRANTY,
+EXPRESS OR IMPLIED, AS TO THE USEFULNESS OF THE SOFTWARE AND
+DOCUMENTATION FOR ANY PURPOSE. THEY ASSUME NO RESPONSIBILITY (1) FOR THE
+USE OF THE SOFTWARE AND DOCUMENTATION; OR (2) TO PROVIDE TECHNICAL
+SUPPORT TO USERS. 
+*/
+package lib;
+
+import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+
+/**
+   This creates a slider bar with one or two beads, the moving of which
+   allows the user to set and reset a one- or two-ended range.  Also, the bar
+   optionally shows a color range between two beads.
+
+   The 'a' axis is the long axis, starting at either the bottom or
+   the left, depending on whether the slider is vertical or horizontal.
+   The 'b' axis is the short axis.  (The mapping is done by local
+   versions of fillRect, fillRoundRect, drawLine, and draw_clean_string,
+   and get_ab.)
+
+   Version history:
+   5-8-00 Upgraded to be independent of ACARSCanvas, and to use listeners.
+          This makes it no longer compatible with Java 1.0 (probably).
+
+   5-9-00 Upgraded to allow horizontal or vertical orientation
+          axis a is the long axis, axis b is the short axis
+
+   1-24-01 Upgraded to the java 1.1 event model
+
+   11-July-01 Corrected a bug that appeared when there is only 1 bead
+              and it is at the far left position.  (It wasn't found
+	      by get_object.
+
+   26-Mar-02 Cleaned up some variables to decrease garbage collection
+
+   9-July-02 Cleaned up notifyListeners, loadBuffer, and paint so that
+             listeners are notified when the beads are reset under program
+	     control, and so loadBuffer isn't called more often than
+	     necessary. 
+	     Also, added makeLabel to support labels that automatically
+	     update when the beads are moved.
+	     
+ 10-July-02  Added method doesNotInclude.
+
+  6-March-03 Added methods getMinimumSize and getPreferredSize().  These
+             were required to keep layouts happy that look for these,
+	     such as GridBagLayout.  (This became a problem in JRE 1.3
+	     and 1.4 used by Netscape7, Mozilla, etc.)
+
+  1-Dec-03   Changed doesNotInclude to test on the bead position rather
+             than the min and max value.  Range is set to 'unlimited' only
+	     when the respective bead is at an endpoint, even if the min
+	     or max value equals the default.  This was needed to allow
+	     the range < default_max_value and >= default_min_value to
+	     be distinguished from  'unlimited'.
+
+  Feb-2004   Added method setTitleMinMax.
+
+  1-Feb-04  Cleaned up loadBuffer and elsewhere to use a (double)dw
+             instead of (int)dw, to make a more uniform color bar
+
+  25-May-04 action makeLabel changed to use class MyLabel instead of
+            Label.  (This done to avoid huge fonts that show up in
+	    Labels under linux.)
+   
+*/
+public class Slider extends Canvas
+  implements SliderListener, MouseListener, MouseMotionListener {
+  //generates a dragable bar
+  Dimension size;
+  int size_a,size_b;		// size of Slider in long and short dimension
+  Image image_buffer;
+  boolean image_buffer_created=false;
+  MyLabel label=null;
+  String title="";
+  Graphics bg;
+  //Dimension bead;  //beads on each end of the bar
+  int beadsize_a,beadsize_b;		// sides of bead on long and short axis
+  //Dimension axis;  //the line on which the bar and beads slide
+  int axis_a,axis_b;		// the line on which the bar and beads slide
+  //Dimension bar;
+  int bar_a,bar_b;		// the color bar between the beads
+  int default_bar_a;
+  int barstart_a;   //the upper or right end of the bar
+  int a_start;
+  boolean bead1=true;		// false to not have bead1
+  int n_beads = 2;
+  int bottom = beadsize_a;			// bottom, or left side
+  int bead1_a,bead2_a;  //the POSITION of beads 1&2 on the long axis
+  int bead1_b,bead2_b;  // ditto on the short axis
+  Color bead_color;
+  Color touched_bead_color;
+  int sliding_object=0; //1=bead 1, 2 = bead 2, 3 = bar;
+  int touched_object=0;		// object the mouse is over
+  Font f;
+  int n_labels = 4;
+  int f_height;
+  double linear;
+  boolean dragging=false;
+  String s;
+  int x,y,x_size,y_size,x_arc,y_arc,dh,lower,a,b,a_label,aa,inc;
+  int s_b,s_a;
+  double val,range;
+  Point p = new Point(0,0);
+  private boolean showing_colors = true;
+  // fixed_color = true to have colors NOT slide along the bar
+  private boolean fixed_color = false;
+  private double default_min_val = -1.e10;
+  private double default_max_val = 1.e10;
+  private double desired_min_val = -1.e10;
+  private double desired_max_val = 1.e10;
+  private double display_scale = 1;	// scale values for display
+  private String display_units = "";	// Units for values that are displayed
+  private Color[] color = null;
+  private float[] colorLimit = null;
+  private Vector slider_listeners=null;
+  private boolean horizontal=false; // true for a horizontal bar
+  private double increment;		// min quantization increment
+  private int decimals;     // #digits after '.' to display near slider
+  private int dm1;	      // #digits after '.' to display on legend
+  
+  /** this constructor for a bar without colors
+      arguments: default_min, default max
+      display_scale = number to divide actual values by before
+                      displaying them, eg 1000.
+      display_units = units that correspond with the scaled values,
+                      eg " Kft" for kilo-ft
+      increment = minimum digitization unit for unscaled values,
+                      e.g., 10. for 10 ft increments
+      decimals = number of digits after the decimal pt to display
+                      near the sliding balls (one fewer digit is
+		      displayed on the legend)
+      bead1 = false to eliminate the left (or lower) bead
+  */
+public Slider(Dimension size,
+	      double default_min_val, double default_max_val,
+	      double display_scale, String display_units,
+	      double increment, int decimals,boolean bead1) {
+  this.size = size;
+  this.default_min_val = default_min_val;
+  this.desired_min_val = default_min_val;
+  this.default_max_val = default_max_val;
+  this.desired_max_val = default_max_val;
+  this.display_scale = display_scale;
+  this.display_units = display_units;
+  this.increment = increment;
+  this.decimals = decimals;
+  this.bead1=bead1;
+  this.showing_colors=false;
+  this.slider_listeners = new Vector();
+  f = new Font("Helvetica",Font.PLAIN,10);
+  FontMetrics fm = getFontMetrics(f);
+  f_height = fm.getHeight();
+  setSize(size);
+  addListener(this);
+  addMouseListener(this);
+  addMouseMotionListener(this);
+  
+  dm1 = decimals -1;
+  if(dm1 < 0) dm1 = 0;
+  if(size.height > size.width) {
+    //slider is oriented vertically
+    horizontal=false;
+    size_a = size.height;
+    size_b = size.width;
+  } else {
+    horizontal=true;
+    size_a = size.width;
+    size_b = size.height;
+  }
+  axis_a = size_a;
+  axis_b = 2;
+  beadsize_a = 10;
+  beadsize_b = 20;
+  bottom = beadsize_a;
+  if(!bead1) {
+    // only a rt (or upper) bead
+    n_beads=1;
+    bottom=0;
+  }
+  default_bar_a = size_a - n_beads* beadsize_a;
+  bar_a = default_bar_a;
+  bar_b = 10;
+  bead1_b = size_b/2 - beadsize_b/2;
+  bead2_b = bead1_b;
+  bead1_a = 0;
+  barstart_a = bottom;
+  bead2_a = barstart_a +bar_a;
+  bead_color = new Color(255,170,0);
+  touched_bead_color = new Color(255,255,0);
+  linear = (default_max_val - default_min_val) /
+    (size_a - n_beads*beadsize_a);
+}
+
+  /** this constructor for a bar with colors
+      (always has two beads)
+  */
+public Slider(Dimension size,
+	      double default_min_val, double default_max_val,
+	      double display_scale, String display_units,
+	      double increment, int decimals, Color[] color) {
+  this(size, default_min_val, default_max_val,
+       display_scale,display_units,increment,decimals,true);
+  this.showing_colors=true;
+  this.color = color;
+}
+  
+  /** this constructor for a bar with colors and specific,
+      possible non-linear color limits
+      (always has two beads, and colors fixed on the bar)
+  */
+public Slider(Dimension size,
+	      double default_max_val,
+	      double display_scale, String display_units,
+	      double increment, int decimals, Color[] color,
+	      float[] colorLimit) {
+  this(size, colorLimit[0], default_max_val,
+       display_scale,display_units,increment,decimals,true);
+  this.showing_colors=true;
+  this.fixed_color=true;
+  this.color = color;
+  this.colorLimit = colorLimit;
+}
+  
+public void update (Graphics g) {
+    //leave out the clear screen
+    paint(g);
+}
+
+public void paint(Graphics g) {
+  if(! image_buffer_created) {
+    //create an off-screen image buffer if needed
+    image_buffer = createImage(size_a,size_b);
+    bg = image_buffer.getGraphics();
+    image_buffer_created=true;
+    loadBuffer();
+  }
+  g.drawImage(image_buffer,0,0,this);
+}
+
+public void set_n_labels(int n_labels) {
+  this.n_labels = n_labels;
+}
+
+public void set_bead2(double bead2_val) {
+  bead2_a = val_to_a(bead2_val) + bottom;
+  bar_a = bead2_a - barstart_a;
+  get_min_max();
+  notifyListeners();
+}
+
+public void set_beads(double bead1_val, double bead2_val) {
+  bead1_a = val_to_a(bead1_val);
+  //bead1_a = (int)((bead1_val - default_min_val)/a_to_val);
+  barstart_a = bead1_a + beadsize_a;
+  set_bead2(bead2_val);
+  get_min_max();
+  notifyListeners();
+}  
+
+private void get_min_max() {
+  // get desired min and max
+  //desired_max_val = (bead2_a-bottom)*a_to_val + default_min_val;
+  desired_max_val = a_to_val(bead2_a - bottom);
+  //desired_min_val = bead1_a*a_to_val + default_min_val;
+  desired_min_val = a_to_val(bead1_a);
+  //quantize
+  desired_min_val = increment*Math.round(desired_min_val/increment);
+  desired_max_val = increment*Math.round(desired_max_val/increment);
+  /* if(color != null) {
+    delta_val_per_color =
+      (desired_max_val - desired_min_val) /
+      color.length;
+      }*/
+}
+ 
+public void loadBuffer() {
+  if(bg == null) {
+    return;
+  }
+  bg.setColor(Color.white);
+  fillRect(bg,0,0,size_a,size_b);
+
+  get_min_max();
+  //draw the axis;
+  bg.setColor(Color.black);
+  fillRect(bg,0,size_b/2 - axis_b/2,axis_a,axis_b);
+
+  //draw the colors
+  if(showing_colors && color != null) {
+    int dh = 4;
+    double dw = bar_a/(double)color.length;
+    int lower = barstart_a;
+    if(fixed_color) {
+      dw = default_bar_a/(double)color.length;
+      lower = bottom;
+    }
+    int left_end = lower;
+    int right_end = 0;
+    for(int i = 0; i< color.length;i++) {
+      right_end = lower + (int)Math.round((i+1) * dw);
+      bg.setColor(color[i]);
+      fillRect(bg,left_end,size_b/2 - dh/2,right_end - left_end,dh);
+      left_end = right_end;
+    }
+  }
+    
+  //labels
+  // try to get a reasonable (general) set of labels
+  inc = default_bar_a/n_labels;
+  int a;
+  for(int i=0;i<n_labels;i++) {
+    a = i * inc + inc/2;
+    val = a_to_val(a);
+    s = get_value_string(val,dm1);
+    aa = bottom - f_height/2;
+    if(horizontal) {
+      aa = bottom;
+    }
+    a_label = aa + a;
+      //(int)((val-default_min_val)/a_to_val);
+    draw_clean_string(s,bg,f,a_label,size_b/2,
+		      0.5,Color.black,Color.white);
+  }
+  
+  //draw the beads
+  if(bead1) {
+    bg.setColor(bead_color);
+    if(touched_object == 1) {
+      bg.setColor(touched_bead_color);
+    }
+    fillRoundRect(bg,bead1_a,bead1_b,beadsize_a,beadsize_b,
+		  beadsize_b/2,beadsize_b/2);
+  }
+  bg.setColor(bead_color);
+  if(touched_object == 2) {
+    bg.setColor(touched_bead_color);
+  }
+  fillRoundRect(bg,bead2_a,bead2_b,beadsize_a,beadsize_b,
+		beadsize_b/2,beadsize_b/2);
+  
+  //draw the arrows in the beads
+  bg.setColor(Color.black);
+  if(bead1) {
+    //bead1 arrow
+    drawLine(bg,bead1_a,              bead1_b+beadsize_b/4,
+	     bead1_a+beadsize_a,   bead1_b +beadsize_b/2);
+    drawLine(bg,bead1_a+beadsize_a,   bead1_b+beadsize_b/2,
+	     bead1_a,              bead1_b+(3*beadsize_b)/4);
+  }
+  //bead2 arrow
+  drawLine(bg,bead2_a,              bead2_b+beadsize_b/2,
+	   bead2_a+beadsize_a,   bead2_b +beadsize_b/4);
+  drawLine(bg,bead2_a+beadsize_a,   bead2_b+(3*beadsize_b)/4,
+	   bead2_a,              bead2_b+beadsize_b/2 );
+  
+  //and, if we moved a bead, draw the apropriate height
+  if(sliding_object == 1) {
+    //val = bead1_a*a_to_val + default_min_val;
+    val = a_to_val(bead1_a);
+    s = get_value_string(val,decimals);
+    s_b = size_b/2;
+    s_a = bead1_a + beadsize_a;
+    draw_clean_string(s,bg,f,s_a,s_b,0.5,Color.black,Color.white);
+  } else if(sliding_object == 2) {
+    //val = (bead2_a - bottom)*a_to_val + default_min_val;
+    val = a_to_val(bead2_a - bottom);
+    s = get_value_string(val,decimals);
+    s_b = size_b/2;
+    s_a = bead2_a;
+    // number below bead for visibility on vertical slider
+    if(!horizontal) s_a -= f_height; 
+    draw_clean_string(s,bg,f,s_a,s_b,0.5,Color.black,Color.white);
+  } else if(sliding_object == 3) {
+    //the bar is being moved
+    //val = ((bead1_a +bead2_a)/2)*a_to_val + default_min_val;
+    val = a_to_val((bead1_a +bead2_a)/2);
+    s = get_value_string(val,decimals);
+    s_b = size_b/2;
+    s_a = (bead1_a + bead2_a)/2 - f_height/2;
+    draw_clean_string(s,bg,f,s_a,s_b,0.5,Color.black,Color.white);
+  }
+}
+
+public String get_value_string(double a, int digits) {
+  return  MyUtil.goodRoundString(
+	         (increment * Math.round(a/increment))/display_scale,
+		  -1.e99,1.e99,"",digits
+		 )
+          + display_units;
+}
+  
+public void mousePressed(MouseEvent e) {
+  
+  dragging=false;
+  p = get_ab(e.getX(),e.getY());
+  a = p.x;
+  b = p.y;
+  sliding_object = get_object(a,b);
+  if(sliding_object != 0) {
+    a_start = a;
+  }
+}
+  
+public int get_object(int a, int b) {
+  int sliding_object=0;
+  //find out what (if anything) we are sliding
+  if(b < size_b/2 - beadsize_b/2 ||
+     b  > size_b/2 + beadsize_b/2) {
+    //not on a bead or the bar
+    sliding_object = 0;
+  } else if(bead1 &&a >= bead1_a && a <= bead1_a + beadsize_a) {
+    //we are on bead 1
+    sliding_object = 1;
+  } else if(a >= bead2_a && a <= bead2_a + beadsize_a) {
+    //we are on bead 2
+    sliding_object = 2;
+  } else if(a >= barstart_a && a <= barstart_a + bar_a &&
+	    b >= size_b/2 - bar_b/2 &&
+	    b <= size_b/2 + bar_b/2) {
+    //we are on the bar
+    sliding_object = 3;
+  }
+  return sliding_object;
+}
+
+public void mouseDragged(MouseEvent e) {
+  dragging=true;
+  p = get_ab(e.getX(),e.getY());
+  a = p.x;
+  b = p.y;
+  if(sliding_object != 0) {
+    //move the appropriate item
+    int da = a - a_start;
+    if(sliding_object == 1) {
+      bead1_move(da);
+      bead2_adjust();
+      bar_adjust();
+    } else if(sliding_object == 2) {
+      bead2_move(da);
+      bead1_adjust();
+      bar_adjust();
+    } else if(sliding_object == 3) {
+      if(can_move_bead1(da) && can_move_bead2(da)) {
+	bead1_move(da);
+	bead2_move(da);
+	bar_adjust();
+      }
+    }
+  }
+  a_start = a;
+  loadBuffer();
+  repaint();
+}
+
+public void mouseReleased(MouseEvent e) {
+  Point p = get_ab(e.getX(),e.getY());
+  int a = p.x;
+  int b = p.y;
+  if(!dragging) {
+    //no drag was done, so we must want to reset
+    desired_min_val = default_min_val;
+    desired_max_val = default_max_val;
+    bead1_a = 0;
+    bar_a = size_a - n_beads*beadsize_a;
+    barstart_a = bottom;
+    bead2_a = size_a - beadsize_a;
+    /* if(color != null) {
+      delta_val_per_color =
+	(desired_max_val - desired_min_val) /
+	color.length;
+	}*/
+    get_min_max();
+  } else {
+    //finish the drag
+    mouseDragged(e);
+  }
+  sliding_object = 0;
+  dragging=false;
+  notifyListeners();
+}
+  
+public boolean can_move_bead1(int da) {
+  boolean result = false;
+  if(bead1) {
+    //check that we can move up enough
+    if(da > 0 && bead1_a + da <= size_a - n_beads*beadsize_a) {
+      result= true;
+    }
+    //check that we can move down enough
+    if(da < 0 && bead1_a + da >= 0) {
+      result= true;
+    }
+  }
+  //if we get here, we dont have enough space to move by da.
+  return result;
+}
+  
+public boolean can_move_bead2(int da) {
+  //check that we can move up enough
+  if(da > 0 && bead2_a + beadsize_a + da <= size_a) {
+    return true;
+  }
+  //check that we can move down enough
+  if(da < 0 && bead2_a + da >= bottom) {
+    return true;
+  }
+  //if we get here, we dont have enough space to move by da.
+  return false;
+}
+  
+public void bead1_move(int da) {
+  bead1_a += da;
+  if(bead1_a > size_a - n_beads* beadsize_a) {
+    //we are at the top (below bead2)
+    bead1_a = size_a - n_beads*beadsize_a;
+  } else if(bead1_a < 0) {
+    //we are at the bottom
+    bead1_a = 0;
+  }
+}
+  
+public void bead2_move(int da) {
+  bead2_a += da;
+  if(bead2_a > size_a - beadsize_a) {
+    //we are at the top
+    bead2_a = size_a - beadsize_a;
+  } else if(bead2_a < bottom) {
+    //we are at the bottom (atop bead1)
+    bead2_a = bottom;
+  }
+}
+
+public void bead1_adjust() {
+  //make sure we do not overlap bead 2
+  bar_a = bead2_a - (bead1_a + beadsize_a);
+  if(bar_a < 0) {
+    bar_a=0;
+    bead1_a = bead2_a - beadsize_a;
+  }
+}
+  
+public void bead2_adjust() {
+  //make sure we do not overlap bead 1
+  bar_a = bead2_a - (bead1_a + bottom);
+  if(bar_a < 0) {
+    bar_a=0;
+    bead2_a = bead1_a + bottom;
+  }
+}
+
+public void bar_adjust() {
+  bar_a = bead2_a - (bead1_a + bottom);
+  barstart_a = bead1_a + bottom;
+}
+
+  /**
+   *  Routines that map for vertical or horizontal bar
+   */
+
+public Image createImage(int a_size, int b_size) {
+  if(horizontal) {
+    return super.createImage(a_size,b_size);
+  } else {
+    return super.createImage(b_size,a_size);
+  }
+}
+  
+private Point get_ab(int x, int y) {
+  if(horizontal) {
+    return new Point(x,y);
+  } else {
+    //vertical case
+    return new Point(size.height-y,x);
+  }
+}
+  
+private void fillRect(Graphics g,int a, int b, int a_size, int b_size) {
+  if(horizontal) {
+    x=a;
+    y=b;
+    x_size = a_size;
+    y_size = b_size;
+  } else {
+    //vertical case
+    x_size = b_size;
+    y_size = a_size;
+    y = size.height - a - a_size;
+    x = b;
+  }
+  g.fillRect(x,y,x_size,y_size);
+}
+  
+private void fillRoundRect(Graphics g,
+			   int a, int b, int a_size, int b_size,
+			   int a_arc, int b_arc) {
+  if(horizontal) {
+    x=a;
+    y=b;
+    x_size = a_size;
+    y_size = b_size;
+    x_arc = a_arc;
+    y_arc = b_arc;
+  } else {
+    //vertical case
+    x_size = b_size;
+    y_size = a_size;
+    y = size.height - a - a_size;
+    x = b;
+    x_arc = b_arc;
+    y_arc = a_arc;
+  }
+  g.fillRoundRect(x,y,x_size,y_size,x_arc,y_arc);
+}
+  
+private void drawLine(Graphics g, int a1, int b1, int a2, int b2) {
+  int x1,y1,x2,y2;
+  if(horizontal) {
+    x1 = a1;
+    x2 = a2;
+    y1 = b1;
+    y2 = b2;
+  } else {
+    //vertical case
+    x1 = b1;
+    x2 = b2;
+    y1 = size.height - a1;
+    y2 = size.height - a2;
+  }
+  g.drawLine(x1,y1,x2,y2);
+}
+
+private void draw_clean_string(String s, Graphics g, Font f,
+			       int a, int b,
+			       double alignment,
+			       Color foreground, Color background) {
+  int x,y;
+  if(horizontal) {
+    x = a;
+    y = b;
+    //draw a white line across the bar at the appropriate place
+    Color old = g.getColor();
+    g.setColor(Color.white);
+    g.drawLine(x,b-2,x,b+2);
+    g.setColor(old);
+    //and draw the value above the line
+    MyUtil.draw_clean_string(s,g,f,x,y-2,alignment,foreground,background);
+  } else {
+    //take vertical case first.  this will need more work for horizontal
+    x = b;
+    y = size.height - a;
+    MyUtil.draw_clean_string(s,g,f,x,y,alignment,foreground,background);
+  }
+}
+  
+public void set_showing_colors(boolean b) {
+  showing_colors = b;
+  loadBuffer();
+  repaint();
+}
+  
+public void addListener(SliderListener rcl) {
+  if(slider_listeners.contains(rcl)) {
+    Debug.println("Eror: trying to add the same SliderListener "+
+		  "to Slider more than once");
+  } else {
+    slider_listeners.addElement(rcl);
+  }
+}
+
+public void notifyListeners() {
+  SliderListener rcl;
+  for(int i=0;i<slider_listeners.size(); i++) {
+    rcl = (SliderListener) slider_listeners.elementAt(i);
+    rcl.sliderAction(this,desired_min_val,desired_max_val);
+  }
+}
+
+public void sliderAction(Slider s, double min, double max) {
+  loadBuffer();
+  repaint();
+  set_label_text();
+}
+
+private void set_label_text() {
+  if(label != null) {
+    String smin =
+      MyUtil.goodRoundString(desired_min_val/display_scale,
+			     -1e10,1e10,"",decimals);
+    String smax =
+      MyUtil.goodRoundString(desired_max_val/display_scale,
+			     -1e10,1e10,"",decimals);
+    String t2 = "";
+    if(bead1 && bead1_a != 0) {
+      // bead1 not at left end
+      t2 += " >= "+smin+display_units;
+    }
+    if(bead2_a != size_a - beadsize_a) {
+      // bead2 not at right end
+      if(! t2.equals("")) {
+	t2 += " and ";
+      }
+      if(bead1) {
+	// if no bead 1, don't need a less-than sign, because the
+	// single bead2 might be used for >, <, or =, and the
+	// title can specify which.
+	t2 += " < ";
+      }
+      t2 += smax+display_units;
+    }
+    if(t2.equals("")) {
+      t2 += " UNLIMITED";
+    }
+    label.setText(title+t2);
+  }
+}
+  
+public MyLabel makeLabel(String title, int alignment) {
+  this.title = title;
+  label = new MyLabel(f,title);
+  set_label_text();
+  return label;
+}
+
+public void setTitleMinMax(String title,double min, double max) {
+  this.title = title;
+  default_min_val = min;
+  default_max_val = max;
+  desired_min_val = default_min_val;
+  desired_max_val = default_max_val;
+  linear = (default_max_val - default_min_val) /
+    (size_a - n_beads*beadsize_a);
+  bead1_a = 0;
+  bar_a = size_a - n_beads*beadsize_a;
+  barstart_a = bottom;
+  bead2_a = size_a - beadsize_a;
+  // reset increment (and decimal) to be consistent with
+  // this range of values
+  int ilog10 = (int)Math.round(Math.log((max - min)/20)/2.3);
+  increment = Math.pow(10,ilog10);
+  decimals = 0;
+  if(ilog10 < 0) {
+    decimals = Math.abs(ilog10);
+  }
+  dm1 = decimals;
+  get_min_max();
+  // reset defaults to be consistent with quantization
+  default_min_val = desired_min_val;
+  default_max_val = desired_max_val;
+  set_label_text();
+  loadBuffer();
+  repaint();
+}
+
+public void setTitle(String title) {
+  this.title = title;
+  set_label_text();
+}
+  
+public boolean doesNotInclude(double val) {
+  boolean result = false;
+  if(Double.isNaN(val)) {
+    result = true;
+  } else if(bead1 && bead1_a != 0 &&      // bead1 not at left end
+     val < desired_min_val) {
+    result = true;		// val is too low
+  } else if(bead2_a != size_a - beadsize_a && // bead2 not at right end
+	    val >= desired_max_val) {
+    result = true;		// val is too high
+  }
+  return result;
+}
+
+private double a_to_val(int a) {
+  double result;
+  if(colorLimit == null) {
+    result =  linear*a + default_min_val;
+  } else if(a >= default_bar_a){
+    result = default_max_val;
+  } else if(a <= 0) {
+    result = default_min_val;
+  } else {
+    // calculate val based on possibly non-linear color limits
+    // first get color this is on
+    double dw = default_bar_a/(double)color.length;
+    double delta = ((a - lower) % Math.round(dw))/dw;
+    int max_index = colorLimit.length-1;
+    int i = (int)Math.round((a - lower)/dw);
+    if(i < max_index) {
+      result = colorLimit[i] + delta *(colorLimit[i+1] - colorLimit[i]);
+    } else {
+      result = colorLimit[max_index] +
+	delta * (default_max_val - colorLimit[max_index]);
+    }
+  }
+  return result;
+}
+
+private int val_to_a(double val) {
+  int result;
+  if(colorLimit == null) {
+    result = (int)( (val - default_min_val)/linear);
+  } else {
+    int max_index = colorLimit.length-1;
+    int index = 0;
+    double delta = 0;
+    if(val < default_min_val) {
+      result = 0;
+    } else if(val >= default_max_val) {
+      a = default_bar_a;
+    } else if(val > colorLimit[max_index]) {
+      index = max_index;
+      delta = (val - colorLimit[max_index])/
+	(default_max_val - colorLimit[max_index]);
+    } else {
+      for(int k = max_index-1;k<=0;k--) {
+	if(val > colorLimit[k]) {
+	  index = k;
+	  delta = (val - colorLimit[k]) /
+	    (colorLimit[k+1] - colorLimit[k]);
+	  break;
+	}
+      }
+    }
+    double dw = default_bar_a/(double)color.length;
+    result = (int)Math.round((index + delta) * dw);
+  }
+  return result;
+}
+
+// these two overrides seem to help gridbaglayouts. 3/6/03
+public Dimension getMinimumSize() {
+  return size;
+}
+
+public Dimension getPreferredSize() {
+  return size;
+}
+  
+  // to keep the mouse interfaces happy...
+public void mouseExited(MouseEvent e) {}
+public void mouseClicked(MouseEvent e) {}
+public void mouseEntered(MouseEvent e) {}
+public void mouseMoved(MouseEvent e) {}
+  
+} //end of classSlider

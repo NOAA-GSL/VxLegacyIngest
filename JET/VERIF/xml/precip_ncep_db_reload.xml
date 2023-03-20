@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/VERIF/bin">
+    <!ENTITY EXEC_DIR "/home/amb-verif/VERIF/exec">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/VERIF/verif/precip">
+    <!ENTITY WEB_DIR "/home/amb-verif/VERIF/verif/web">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/StageIV/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/amb-verif/VERIF/verif/precip/StageIV/log">
+    <!ENTITY OBS_DIR "/public/data/precip/stage4/6hr/netcdf">
+    
+    <!ENTITY RAP_OPER_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RAP_OPER/realtime">
+    <!ENTITY RAP_OPER_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RAP_OPER/log">
+    <!ENTITY RAP_OPER_DIR "/public/data/grib/ftp_rap_hyb/7/0/105/0_151987_30">
+    <!ENTITY RAP_OPER_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RAP_OPERvStageIV/realtime">
+    <!ENTITY RAP_OPER_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RAP_OPERvStageIV/log">
+
+    <!ENTITY HRRR_OPER_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRR_OPER/realtime">
+    <!ENTITY HRRR_OPER_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRR_OPER/log">
+    <!ENTITY HRRR_OPER_DIR "/public/data/grids/hrrr/conus/wrfsfc/grib2">
+    <!ENTITY HRRR_OPER_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRR_OPERvStageIV/realtime">
+    <!ENTITY HRRR_OPER_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRR_OPERvStageIV/log">
+
+    <!ENTITY RAPV4_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RAPV4/realtime">
+    <!ENTITY RAPV4_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RAPV4/log">
+    <!ENTITY RAPV4_DIR "/public/data/grib/ftp_rapv4_iso/7/0/105/0_151987_30">
+    <!ENTITY RAPV4_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RAPV4vStageIV/realtime">
+    <!ENTITY RAPV4_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RAPV4vStageIV/log">
+
+    <!ENTITY RAPV4_NCO_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RAPV4_NCO/realtime">
+    <!ENTITY RAPV4_NCO_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RAPV4_NCO/log">
+    <!ENTITY RAPV4_NCO_DIR "/public/data/grib/ftp_rapv4_nco_iso/7/0/105/0_151987_30">
+    <!ENTITY RAPV4_NCO_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RAPV4_NCOvStageIV/realtime">
+    <!ENTITY RAPV4_NCO_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RAPV4_NCOvStageIV/log">
+
+    <!ENTITY RAPV5_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RAPV5/realtime">
+    <!ENTITY RAPV5_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RAPV5/log">
+    <!ENTITY RAPV5_DIR "/public/data/grib/ftp_rapv5_iso/7/0/105/0_151987_30">
+    <!ENTITY RAPV5_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RAPV5vStageIV/realtime">
+    <!ENTITY RAPV5_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RAPV5vStageIV/log">
+
+    <!ENTITY HRRRV3_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV3/realtime">
+    <!ENTITY HRRRV3_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV3/log">
+    <!ENTITY HRRRV3_DIR "/public/data/grids/hrrrv3/conus/wrfprs/grib2">
+    <!ENTITY HRRRV3_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV3vStageIV/realtime">
+    <!ENTITY HRRRV3_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV3vStageIV/log">
+
+    <!ENTITY HRRRV3_NCO_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV3_NCO/realtime">
+    <!ENTITY HRRRV3_NCO_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV3_NCO/log">
+    <!ENTITY HRRRV3_NCO_DIR "/public/data/grids/hrrrv3_nco/conus/wrfprs/grib2">
+    <!ENTITY HRRRV3_NCO_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV3_NCOvStageIV/realtime">
+    <!ENTITY HRRRV3_NCO_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV3_NCOvStageIV/log">
+
+    <!ENTITY HRRRV4_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV4/realtime">
+    <!ENTITY HRRRV4_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV4/log">
+    <!ENTITY HRRRV4_DIR "/public/data/grids/hrrrv4/conus/wrfprs/grib2">
+    <!ENTITY HRRRV4_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV4vStageIV/realtime">
+    <!ENTITY HRRRV4_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRRV4vStageIV/log">
+
+    <!ENTITY NAM_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/NAM/realtime">
+    <!ENTITY NAM_LOG_DIR "/home/amb-verif/VERIF/verif/precip/NAM/log">
+    <!ENTITY NAM_DIR "/public/data/grids/nam/A218/grib2">
+    <!ENTITY NAM_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/NAMvStageIV/realtime">
+    <!ENTITY NAM_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/NAMvStageIV/log">
+    
+    <!ENTITY NAM_NEST_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/NAM_NEST/realtime">
+    <!ENTITY NAM_NEST_LOG_DIR "/home/amb-verif/VERIF/verif/precip/NAM_NEST/log">
+    <!ENTITY NAM_NEST_DIR "/public/data/grids/nam/conusnest/grib2">
+    <!ENTITY NAM_NEST_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/NAM_NESTvStageIV/realtime">
+    <!ENTITY NAM_NEST_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/NAM_NESTvStageIV/log">
+
+    <!ENTITY NSSL_WRF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/NSSL_WRF/realtime">
+    <!ENTITY NSSL_WRF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/NSSL_WRF/log">
+    <!ENTITY NSSL_WRF_DIR_G1 "/public/data/grids/nssl/wrf4km/grib">
+    <!ENTITY NSSL_WRF_DIR "/public/data/grids/nssl/wrf4km/grib">
+    <!ENTITY NSSL_WRF_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/NSSL_WRFvStageIV/realtime">
+    <!ENTITY NSSL_WRF_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/NSSL_WRFvStageIV/log">
+
+    <!ENTITY HIRESW_ARW_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HIRESW_ARW/realtime">
+    <!ENTITY HIRESW_ARW_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HIRESW_ARW/log">
+    <!ENTITY HIRESW_ARW_DIR "/public/data/grids/hiresw/conus/arw/grib2">
+    <!ENTITY HIRESW_ARW_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HIRESW_ARWvStageIV/realtime">
+    <!ENTITY HIRESW_ARW_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HIRESW_ARWvStageIV/log">
+
+    <!ENTITY HIRESW_NMMB_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HIRESW_NMMB/realtime">
+    <!ENTITY HIRESW_NMMB_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HIRESW_NMMB/log">
+    <!ENTITY HIRESW_NMMB_DIR "/public/data/grids/hiresw/conus/nmmb/grib2">
+    <!ENTITY HIRESW_NMMB_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HIRESW_NMMBvStageIV/realtime">
+    <!ENTITY HIRESW_NMMB_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HIRESW_NMMBvStageIV/log">
+
+    <!ENTITY PCP_MASK "/home/amb-verif/VERIF/static/stageIV_pcp_mask.nc">
+
+    <!ENTITY CYCDEFS1 "24hr">
+    <!ENTITY CYCDEFS2 "6hr,12hr,24hr">
+    <!ENTITY TDIFF1 "300">
+    <!ENTITY TDIFF2 "900">
+
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "00:40:00">
+    <!ENTITY SERVICE_WALL_LIMIT "00:40:00">
+    <!ENTITY DEADLINE "10800">
+    <!ENTITY WAIT "3600">
+
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>3G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<native>-l partition=tjet:ujet:sjet:vjet:xjet -W umask=022</native>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<native>-l partition=service -W umask=022</native>'>
+
+    <!ENTITY YMDH10800
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-10800">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-10800">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-10800">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-10800">@H</cyclestr></value>
+	</envar>'>
+    
+    <!ENTITY YMDH21600
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-21600">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-21600">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-21600">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-21600">@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH86400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-86400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-86400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-86400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-86400">@H</cyclestr></value>
+	</envar>'>
+
+]>
+
+<workflow realtime="F" scheduler="slurm" cyclethrottle="6" cyclelifespan="0:03:00:00">
+
+  <cycledef group="6hr">201910100000 201910160000 6:00:00</cycledef>
+  <cycledef group="24hr">201910101200 201910161200 24:00:00</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/ncep_workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="precip_ncep_db" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_ncep_db</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip_ncep_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/pop_precip_sql_tables.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>34</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>RAP_OPERvStageIV/realtime HRRR_OPERvStageIV/realtime RAPV4vStageIV/realtime RAPV4_NCOvStageIV/realtime RAPV5vStageIV/realtime HRRRV3vStageIV/realtime HRRRV3_NCOvStageIV/realtime HRRRV4vStageIV/realtime NAMvStageIV/realtime NAM_NESTvStageIV/realtime NSSL_WRFvStageIV/realtime HIRESW_ARWvStageIV/realtime HIRESW_NMMBvStageIV/realtime</value>
+    </envar>
+    <envar>
+      <name>SQLMODELS</name>
+      <value>RAP_OPER HRRR_OPER RAPV4_EMC RAPV4_NCO RAPV5_EMC HRRRV3_EMC HRRRV3_NCO HRRRV4_EMC NAM NAM_NEST NSSL_WRF HIRESW_ARW HIRESW_NMMB</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+
+<!--    <dependency>
+      <timedep><cyclestr offset="&WAIT;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>
+-->
+  </task>
+    
+    <task name="precip2_ncep_db" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip2_ncep_db</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip2_ncep_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/pop_precip2_sql_tables.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>26</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>RAP_OPERvStageIV/realtime HRRR_OPERvStageIV/realtime RAPV4vStageIV/realtime RAPV4_NCOvStageIV/realtime RAPV5vStageIV/realtime HRRRV3vStageIV/realtime HRRRV3_NCOvStageIV/realtime HRRRV4vStageIV/realtime NAMvStageIV/realtime NAM_NESTvStageIV/realtime NSSL_WRFvStageIV/realtime HIRESW_ARWvStageIV/realtime HIRESW_NMMBvStageIV/realtime</value>
+    </envar>
+    <envar>
+      <name>SQLMODELS</name>
+      <value>RAP_OPER HRRR_OPER RAPV4_EMC RAPV4_NCO RAPV5_EMC HRRRV3_EMC HRRRV3_NCO HRRRV4_EMC NAM NAM_NEST NSSL_WRF HIRESW_ARW HIRESW_NMMB</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+
+<!--    <dependency>
+      <timedep><cyclestr offset="&WAIT;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>
+-->
+  </task>
+
+</workflow>

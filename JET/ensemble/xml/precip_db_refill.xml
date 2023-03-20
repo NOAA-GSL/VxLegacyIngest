@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/ensemble/bin">
+    <!ENTITY EXEC_DIR "/lfs1/BMC/dtc-hurr/MET/MET_releases/8.0/bin/">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/ensemble/verif/precip/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/ensemble/verif/precip">
+    <!ENTITY WEB_DIR "/home/amb-verif/ensemble/verif/web">
+    <!ENTITY CONFIG_DIR "/home/amb-verif/ensemble/config">
+    <!ENTITY METVIEWER_DIR "/home/amb-verif/metviewer/v2.7/metviewer">
+    <!ENTITY MVLOADER_DIR "/home/amb-verif/metviewer/mvloader">
+    
+    <!ENTITY CYCDEFS "6hr">
+    <!ENTITY TDIFF "3600">
+
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "00:40:00">
+    <!ENTITY SERVICE_WALL_LIMIT "00:40:00">
+    <!ENTITY DEADLINE "21600">
+    <!ENTITY WAIT "3600">
+    
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>6G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>'>
+	
+    <!ENTITY YMDH
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr>@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr>@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr>@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr>@H</cyclestr></value>
+	</envar>'>
+
+]>
+
+<workflow realtime="F" scheduler="slurm" cyclethrottle="12" cyclelifespan="0:00:30:00">
+
+  <cycledef group="6hr">201910010000 201912190000 6:00:00</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="precip_vxt_db" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_prob_precip_vxt_db</jobname>
+    <join><cyclestr>&WF_LOG_DIR;/precip_prob_precip_vxt_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/mvprocessing.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>MVLOADER_DIR</name>
+      <value>&MVLOADER_DIR;</value>
+    </envar>
+    <envar>
+      <name>METVIEWER_DIR</name>
+      <value>&METVIEWER_DIR;</value>
+    </envar>
+    <envar>
+      <name>DATA_DIRS</name>
+      <value>HRRREvStageIV/realtime HREFvStageIV/realtime</value>
+    </envar>
+    <envar>
+      <name>DATA_TYPE</name>
+      <value>grid_stat</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>HRRRE HREF</value>
+    </envar>
+    <envar>
+      <name>CFG_DIR</name>
+      <value>&CONFIG_DIR;</value>
+    </envar>
+    <envar>
+      <name>CFG_XML</name>
+      <value>mv_load_gsd_modelvxtest.xml</value>
+    </envar>
+
+  </task> 
+
+  <task name="precip_gsd_db" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_prob_precip_gsd_db</jobname>
+    <join><cyclestr>&WF_LOG_DIR;/precip_prob_precip_gsd_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/mvprocessing.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>MVLOADER_DIR</name>
+      <value>&MVLOADER_DIR;</value>
+    </envar>
+    <envar>
+      <name>METVIEWER_DIR</name>
+      <value>&METVIEWER_DIR;</value>
+    </envar>
+    <envar>
+      <name>DATA_DIRS</name>
+      <value>HRRREvStageIV/realtime HREFvStageIV/realtime</value>
+    </envar>
+    <envar>
+      <name>DATA_TYPE</name>
+      <value>grid_stat</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>HRRRE HREF</value>
+    </envar>
+    <envar>
+      <name>CFG_DIR</name>
+      <value>&CONFIG_DIR;</value>
+    </envar>
+    <envar>
+      <name>CFG_XML</name>
+      <value>mv_load_gsd.xml</value>
+    </envar>
+
+
+  </task>
+</workflow>

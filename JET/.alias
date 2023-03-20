@@ -1,0 +1,117 @@
+#
+# Put all desired aliases here -- should get source'd by .cshrc
+#
+alias c2f '$HOME/utilities/c2f.s \!*'
+alias cp 'cp -i' #confirm overwriting on copy, wrm
+
+if ($?TERM ) then
+	if($TERM == "xterm" ) then
+		#only do this for an xterm
+		alias cwdcmd '(dtitle &)'
+	endif
+endif
+
+# OVERRIDE crontab so we always use the global crontab instead of the per-node one
+# This to correct a PATH problem that started around 5 Nov 21
+alias crontab '/apps/local/bin/crontab \!*'
+alias scs 'scontrol show -d job \!*'
+alias q 'squeue -u $USER'
+alias size 'ls -alSh \!* | head -45'
+alias g 'grep -ni \!*'
+alias cgrep '$HOME/utilities/cgrep.pl \!*'
+alias el 'setenv TERM vt100; stty rows 45; elm'
+alias f2c '$HOME/utilities/f2c.s \!*'
+alias gmt 'date -u +"%y%j%H%M (GMT)"'
+alias ghqc 'cd ~moninger/umaps/hybhqc'
+alias ging 'cd ~moninger/umaps/hybing'
+alias gqc 'cd ~moninger/umaps/qcobs'
+alias h 'history \!* 45'
+alias j2mdy '$HOME/utilities/j2mdy \!*'
+alias kjobs '$HOME/utilities/kjobs.pl \!*'
+alias la 'ls -a'
+alias ll 'ls -la'
+alias to_db.pl '$HOME/utilities/to_db.pl \!*'
+alias mdy2j '$HOME/utilities/mdytoj \!*'
+alias mylp '(~moninger/bin/scripts/lp_background \!* > /dev/null &)'
+alias ncdump3 '$HOME/utilities/ncdump3.x \!*'
+alias ls 'ls -CF'
+alias lsl 'll | grep '^l' | cut -c42- '  #show links
+alias pprod 'pd /home/mtn3/prodgen/maps'
+alias pn '$HOME/utilities/mypn \!*'
+alias secs '$HOME/utilities/time70.pl \!*'
+alias grun 'cd ~moninger/umaps/run'
+alias kk 'kill %' #kill the current suspended job
+alias mv 'mv -i' #confirm overwriting on move, wrm
+alias rm 'rm -i'
+alias new 'll -lath \!* | head -45'
+alias weather 'finger weather@unidata.ucar.edu | more'
+alias xb 'xbiff \!* -geometry =48x48-50-97 &'
+alias xc 'xclock -bg white -fg black -title MT -geometry =80x80-5-5 &'
+alias f 'finger'
+alias j 'jobs'
+alias sta '$HOME/utilities/find-station.s \!*'
+alias t 'tail -200 \!*'
+alias temp 'telnet thermhost.colorado.edU 451 | grep -i temperature'
+alias zirk 'setenv DISPLAY zirkle.fsl.noaa.gov:0.0'
+alias sql 'mysql -p -u wcron0_user -h wolphin -pcohen_lee'
+
+# trying to get around the new useless version of python on Jet - JAH
+#alias python '/lfs1/projects/amb-verif/anaconda/bin/python'
+
+#undo stuff I don't like on bora
+unalias cd 
+
+#stuff stolen from Roushey
+# list only directories
+    alias lsd   '/bin/ls -dF \!* `/bin/ls -F | sed -n "/[@/]/s=[@/]==p"`'
+# common shorthand for pushd
+    alias pd    pushd
+    # common shorthand for popd
+    alias pp    popd
+    # cause popd to set 'lwd' as a side effect
+    alias popd  'popd \!:* ; setlwd'
+    # cause pushd to set 'lwd' as a side effect
+    alias pushd 'pushd \!:* ; setlwd'
+    # this causes the variable 'lwd' to always be the last pushed dir
+    alias setlwd        'set dirvar=(`dirs` $cwd); setenv lwd $dirvar[2]'
+
+
+# machine-dependent aliases
+if($?prompt && $?tcsh) then
+	alias giftool '/home/mtn1/moninger/www/gifs/giftool/giftool \!*'
+	alias myp '/bin/ps guxww'
+	alias acwhere /home/mtn1/moninger/acars/readacars.s
+	#quick emacs edit
+	alias e '(emacsclient \!* > /dev/null &)'
+	alias gobs 'cd /scratch/maps/moninger/hybdata'
+	alias httpdstart '/data/mab/httpd/httpd -d /data/mab/httpd'
+	alias pdoc '$HOME/utilities/pdoc.s \!*'
+	alias qcobs /home/mtn1/moninger/qcobs/printqcobs.s
+        alias usage '$HOME/utilities/usage.pl'
+	#alias precmd 'echo -n ${bold}\*${offbold}'
+endif
+
+if($HOST == mtn.fsl.noaa.gov) then
+alias looper '/data/maps/scripts/looper&'
+alias mosaic '~moninger/mosaic/mosaic &'
+# aliases for raobs
+source $HOME/utilities/raob-aliases-mtn
+endif
+	#aliases to control the title of an xwindow
+	#(from comp.x.windows or something)
+	alias dtitle 'echo -n  "]2;${HOST:s=.fsl.noaa.gov==}:$cwd:s=/home/mtn1/moninger/==]1;$cwd:s=/home/mtn1/moninger/=="'
+	alias title 'unalias cwdcmd; echo -n "]2;\!*]1;\!*"'
+
+
+endif
+endif
+#end machine-dependent aliases
+
+# alias to start dtitle working again after after it was turned off
+# by 'title'
+alias rtitle 'alias cwdcmd dtitle; dtitle'
+
+
+
+
+

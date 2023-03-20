@@ -1,0 +1,51 @@
+24d23
+< C 2003-06-11  IREDELL    INCREASE PRECISION
+68,76c67,68
+<       INTEGER,PARAMETER:: KD=SELECTED_REAL_KIND(15,45)
+<       REAL(KIND=KD):: RERTH,PI,DPR
+<       REAL(KIND=KD):: RLAT1,RLON1,RLAT0,RLON0
+<       REAL(KIND=KD):: SLAT1,CLAT1,SLAT0,CLAT0
+<       REAL(KIND=KD):: CLON1,SLATR,CLATR,CLONR
+<       REAL(KIND=KD):: RLATR,RLONR,DLATS,DLONS
+<       REAL(KIND=KD):: SLAT,CLAT,CLON
+<       PARAMETER(RERTH=6.3712E6_KD)
+<       PARAMETER(PI=3.14159265358979_KD,DPR=180._KD/PI)
+---
+>       PARAMETER(RERTH=6.3712E6)
+>       PARAMETER(PI=3.14159265358979,DPR=180./PI)
+79,82c71,74
+<         RLAT1=KGDS(4)*1.E-3_KD
+<         RLON1=KGDS(5)*1.E-3_KD
+<         RLAT0=KGDS(7)*1.E-3_KD
+<         RLON0=KGDS(8)*1.E-3_KD
+---
+>         RLAT1=KGDS(4)*1.E-3
+>         RLON1=KGDS(5)*1.E-3
+>         RLAT0=KGDS(7)*1.E-3
+>         RLON0=KGDS(8)*1.E-3
+96c88
+<         HS=SIGN(1._KD,MOD(RLON1-RLON0+180+3600,360._KD)-180)
+---
+>         HS=SIGN(1.,MOD(RLON1-RLON0+180+3600,360.)-180)
+144,145c136,137
+<                 CLON=MIN(MAX(CLON,-1._KD),1._KD)
+<                 RLON(N)=MOD(RLON0+HS*DPR*ACOS(CLON)+3600,360._KD)
+---
+>                 CLON=MIN(MAX(CLON,-1.),1.)
+>                 RLON(N)=MOD(RLON0+HS*DPR*ACOS(CLON)+3600,360.)
+152c144
+<                     CROT(N)=-SIGN(1._KD,SLATR*SLAT0)
+---
+>                     CROT(N)=-SIGN(1.,SLATR*SLAT0)
+174c166
+<               HS=SIGN(1._KD,MOD(RLON(N)-RLON0+180+3600,360._KD)-180)
+---
+>               HS=SIGN(1.,MOD(RLON(N)-RLON0+180+3600,360.)-180)
+190c182
+<                 CLONR=MIN(MAX(CLONR,-1._KD),1._KD)
+---
+>                 CLONR=MIN(MAX(CLONR,-1.),1.)
+204c196
+<                       CROT(N)=-SIGN(1._KD,SLATR*SLAT0)
+---
+>                       CROT(N)=-SIGN(1.,SLATR*SLAT0)

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/ensemble/bin">
+    <!ENTITY EXEC_DIR "/home/amb-verif/ensemble/exec">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/ensemble/verif/cref/log">
+    <!ENTITY MSS_DIR "/BMC/rtrr/5year/amb-verif/ensemble/cref">
+    
+    <!ENTITY HREF_REALTIME_DIR "/home/amb-verif/ensemble/verif/cref/HREF/realtime">
+    <!ENTITY HREF_LOG_DIR "/home/amb-verif/ensemble/verif/cref/HREF/log">
+    
+    <!ENTITY HREF_OPS_REALTIME_DIR "/home/amb-verif/ensemble/verif/cref/HREF_OPS/realtime">
+    <!ENTITY HREF_OPS_LOG_DIR "/home/amb-verif/ensemble/verif/cref/HREF_OPS/log">
+    
+    <!ENTITY HRRRE_REALTIME_DIR "/home/amb-verif/ensemble/verif/cref/HRRRE/realtime">
+    <!ENTITY HRRRE_LOG_DIR "/home/amb-verif/ensemble/verif/cref/HRRRE/log">
+    
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE_SERVICE "ppa-service">
+    <!ENTITY WALL_LIMIT "06:00:00">
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&WALL_LIMIT;</walltime>'>
+    
+    <!ENTITY YMDH
+	   '<envar>
+	      <name>YEAR</name>
+	      <value><cyclestr offset="-432000">@Y</cyclestr></value>
+	    </envar>
+	    <envar>
+	      <name>MONTH</name>
+	      <value><cyclestr offset="-432000">@m</cyclestr></value>
+	    </envar>
+	    <envar>
+	      <name>DAY</name>
+	      <value><cyclestr offset="-432000">@d</cyclestr></value>
+	    </envar>
+	    <envar>
+	      <name>HOUR</name>
+	      <value><cyclestr offset="-432000">@H</cyclestr></value>
+	    </envar>'>
+]>
+
+<workflow realtime="F" scheduler="slurm" cyclethrottle="2" cyclelifespan="1:00:00:00">
+
+  <log><cyclestr>&WF_LOG_DIR;/cref_arch_workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <cycledef group="1dy">201910010000 202003310000 24:00:00</cycledef>
+
+  <task name="HREF_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HREF_arch</jobname>
+    <join><cyclestr offset="-432000">&HREF_LOG_DIR;/HREF_arch_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_arch.py</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/HREF</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>LOGDIR</name>
+      <value>&HREF_LOG_DIR;</value>
+    </envar>
+    <envar>
+      <name>WFLOGDIR</name>
+      <value>&WF_LOG_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="HREF_OPS_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HREF_OPS_arch</jobname>
+    <join><cyclestr offset="-432000">&HREF_OPS_LOG_DIR;/HREF_OPS_arch_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_arch.py</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/HREF_OPS</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_OPS_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>LOGDIR</name>
+      <value>&HREF_OPS_LOG_DIR;</value>
+    </envar>
+    <envar>
+      <name>WFLOGDIR</name>
+      <value>&WF_LOG_DIR;</value>
+    </envar>
+  </task>
+
+  <task name="HRRRE_arch" cycledefs="1dy" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRRE_arch</jobname>
+    <join><cyclestr offset="-432000">&HRRRE_LOG_DIR;/HRRRE_arch_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_arch.py</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/HRRRE</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HRRRE_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>LOGDIR</name>
+      <value>&HRRRE_LOG_DIR;</value>
+    </envar>
+    <envar>
+      <name>WFLOGDIR</name>
+      <value>&WF_LOG_DIR;</value>
+    </envar>
+  </task>
+
+</workflow>

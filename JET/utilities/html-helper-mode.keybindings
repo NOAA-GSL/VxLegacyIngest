@@ -1,0 +1,175 @@
+Keybindings for html-helper-mode version 1.34
+
+Note - this list might well not be up to date. Your best bet is to look at the mode help for
+html-helper-mode, C-hm from within the mode.
+
+Every keysequence here inserts some HTML or HTML+ cookie. The point is then placed where
+you want to type in the information for that cookie. If you call the command with a prefix
+argument (by typing C-u first), then instead the cookie is placed around the current region.
+
+
+
+Mode bindings
+
+TAB         indent line
+RET         insert newline and indent
+
+M-TAB       complete tag at point
+M-C-f       move forward one mark
+M-C-b       move backward one mark
+
+M-C-t       insert the timestamp delimiter
+
+Common insertions
+
+M-RET       html-paragraph          <p>
+C-c-        html-horizontal-rule    <hr>
+C-cC-t#     html-header-#           <h#></h#>
+
+C-cC-al     html-anchor             <a href=""></a>
+
+C-cC-lu     html-unordered-list     <ul><li></ul>
+C-cC-ld     html-definition-list    <dl><dt><dd></dl>
+C-cC-li     html-smart-insert-item  <li>  or  <dt><dd> depending on context
+
+
+
+HTML insertion commands
+
+Every HTML and HTML+ cookie should have an insertion command. These commands can be
+used in two ways: by typing the beginning of the cookie and hitting M-TAB, for completion, or by
+typing it's somewhat-mnemonic keybinding.
+
+The keybindings aren't very good - I am constrained by emacs style to binding things only to
+C-cC-<letter>. Each class of HTML cookie is assigned to some particular C-cC-<letter>, and
+then within that map different letters insert different cookies.
+
+Prefix      Cookie class
+------      ------------
+C-cC-b      head element ("begin")
+C-cC-t      headers ("title" - sorry, C-cC-h has a special meaning in emacs)
+C-cC-a      anchors
+C-cC-s      logical styles ("styles")
+C-cC-p      physical styles
+C-cC-l      lists
+C-cC-n      annotations ("notes")
+C-cC-f      forms
+C-cC-i      images
+special     text elements
+special     entities
+
+Head elements - C-cC-b
+
+key         template                inserted text
+---         --------                -------------
+t           html-title              <title></title>
+i           html-isindex            <isindex>
+n           html-nextid             <nextid>
+l           html-link               <link href="">
+b           html-base               <base href="">
+
+Headers - C-cC-t
+
+1           html-header-1           <h1></h1>
+2           html-header-2           <h2></h2>
+3           html-header-3           <h3></h3>
+4           html-header-4           <h4></h4>
+5           html-header-5           <h5></h5>
+6           html-header-6           <h6></h6>
+
+Anchors - C-cC-a
+
+n           html-target-anchor      <a name=""></a>
+l           html-anchor             <a href=""></a>
+
+Logical styles - C-cC-s
+
+p           html-preformatted       <pre></pre>
+b           html-blockquote         <blockquote></blockquote>
+e           html-emphasized         <em></em>
+s           html-strong             <strong></strong>
+c           html-code               <code></code>
+x           html-sample             <samp></samp>
+r           html-citation           <cite></cite>
+k           html-keyboard           <kbd></kbd>
+v           html-variable           <var></var>
+d           html-definition         <dfn></dfn>
+a           html-address            <address></address>
+q           html-quote              <q></q>
+n           html-person             <person></person>
+y           html-acronym            <acronym></acronym>
+.           html-abbrev             <abbrev></abbrev>
+m           html-cmd                <cmd></cmd>
+g           html-arg                <arg></arg>
+l           html-lit                <lit></lit>
+
+Physical styles - C-cC-p
+
+b           html-bold               <b></b>
+i           html-italic             <i></i>
+u           html-underline          <u></u>
+f           html-fixed              <tt></tt>
+x           html-strikethru         <s></s>
+^           html-superscript        <sup></sup>
+_           html-subscript          <sub></sub>
+r           html-render             <render tag="" style="">   
+
+Lists - C-cC-l
+
+o           html-ordered-list       <ol><li></ol>
+u           html-unordered-list     <ul><li></ul>
+r           html-directory          <dir><li></dir>
+m           html-menu               <menu><li></menu>
+d           html-definition-list    <dl><dt><dd></dl>
+i           html-smart-insert-item  <li>  or  <dt><dd> depending on context
+l           html-item               <li>
+t           html-definition-item    <dt><dd>
+
+Annotations - C-cC-n
+
+a           html-abstract           <abstract></abstract>
+n           html-note               <note role=""></note>
+f           html-footnote           <footnote></footnote>
+m           html-margin             <margin></margin>
+
+Forms - C-cC-f
+
+f           html-form               <form action=""></form>
+t           html-input-text         <input name="" size="">
+i           html-input-int          <input type="INT" name="" size="">
+.           html-input-float        <input type="FLOAT" name="" size="">
+d           html-input-date         <input type="DATE" name="" size="">
+u           html-input-url          <input type="URL" name="" size="">
+c           html-input-check        <input type="CHECKBOX" name="">
+r           html-input-radio        <input type="RADIO" name="">
+g           html-input-image        <input type="IMAGE" name="" src="">
+s           html-input-scribble     <input type="SCRIBBLE" name="" size="">
+a           html-input-audio        <input type="AUDIO" name="">
+b           html-input-submit       <input type="SUBMIT" value="">
+x           html-input-reset        <input type="RESET" value="">
+p           html-input-textarea     <textarea name="" rows= cols=></textarea>
+c           html-input-select       <select name=""></select>
+
+Images - C-cC-i
+
+i           html-image              <img src="">
+t           html-alt-image          <img alt="" src="">
+a           html-align-image        <img align="" src="">
+e           html-align-alt-image    <img align="" src="" alt="">
+
+Text Elements
+
+M-RET       html-paragraph          <p>
+C-c-        html-horizontal-rule    <hr>
+C-cRET      html-break              <br>
+
+Entities
+
+C-c&        html-ampersand          &amp;
+C-c<        html-less-than          &lt;
+C-c>        html-greater-than       &gt;
+C-cSPC      html-nonbreaking-space  &nbsp;
+
+
+Last modified: Wed Feb 1 14:16:33 1995 
+Nelson Minar <nelson@santafe.edu>

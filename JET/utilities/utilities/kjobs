@@ -1,0 +1,14 @@
+#!/bin/tcsh -v
+# file kjobs.  kills all jobs that have <arg1> in their jobs line
+alias myp 'ps -ef | grep $LOGNAME'
+myp | grep -i $1 |grep -v grep | grep -v kjobs | awk '{print $2}' >! /tmp/kjobstemporaryfile
+#echo trying to kill:
+#more kjobstemporaryfile
+foreach jno (`cat /tmp/kjobstemporaryfile`)
+myp | grep "$jno" | grep -v grep > /dev/null
+if($status == 0) then
+nohup kill -9 $jno
+echo nohup kill -9 $jno
+endif
+end
+rm /tmp/kjobstemporaryfile

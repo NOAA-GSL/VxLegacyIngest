@@ -1,0 +1,13 @@
+&setup
+obsdate=2022061612
+obsmin=0,
+obsPath='/public/data/grids/gdas/prepbufr/restricted',
+obsfilename='20221671200.gdas.t12z.prepbufr.20220616',
+savePath='./',
+prefixobssavename='conv',
+/
+&obsset
+numobstype=1,
+obstype=120
+timewindow=6.0,
+/

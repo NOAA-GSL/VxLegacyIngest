@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto/1.3.0-RC3
+
+rocotorun -w /whome/amb-verif/VERIF_2.0/xml/cref_test.xml -d /whome/amb-verif/VERIF_2.0/db/cref_test.db

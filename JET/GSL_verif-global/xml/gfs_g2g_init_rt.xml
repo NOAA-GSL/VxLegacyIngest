@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/GSL_verif-global/bin">
+    <!ENTITY EXEC_DIR "/contrib/met/10.0.0/bin">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess">
+    <!ENTITY WEB_DIR "/home/amb-verif/GSL_verif-global/verif/web_reprocess">
+    <!ENTITY CONFIG_DIR "/home/amb-verif/GSL_verif-global/config">
+    
+    <!ENTITY FV3_GSL_L127_REALTIME_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/FV3_GSL_L127/realtime">
+    <!ENTITY FV3_GSL_L127_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/FV3_GSL_L127/log">
+    <!ENTITY FV3_GSL_L127_DIR "/home/rtfim/UFS-CAMsuite/FV3GFSrun/rt_ufscam_l127">
+    
+    <!ENTITY GFSv17_gf_REALTIME_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_gf/realtime">
+    <!ENTITY GFSv17_gf_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_gf/log">
+    <!ENTITY GFSv17_gf_DIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf">
+    
+    <!ENTITY GFSv17_mynn_REALTIME_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_mynn/realtime">
+    <!ENTITY GFSv17_mynn_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_mynn/log">
+    <!ENTITY GFSv17_mynn_DIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_mynn">
+    
+    <!ENTITY GFSv17_thmp_subcyc_REALTIME_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_thmp_subcyc/realtime">
+    <!ENTITY GFSv17_thmp_subcyc_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_thmp_subcyc/log">
+    <!ENTITY GFSv17_thmp_subcyc_DIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_thmp_subcyc">
+    
+    <!ENTITY ANL_REALTIME_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFS_anl/realtime">
+    <!ENTITY ANL_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFS_anl/log">
+    <!ENTITY ANL_DIR "/public/data/grids/gfs/0p25deg_anl/grib2">
+    
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+<!--
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE "ppa">
+-->
+    <!ENTITY PE_SERVICE "ppa-service">
+    <!ENTITY PE_WALL_LIMIT "01:00:00">
+    <!ENTITY SERVICE_WALL_LIMIT "01:00:00">
+    <!ENTITY DEADLINE "21600">
+    <!ENTITY WAIT "3600">
+    
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>6G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+	
+    <!ENTITY YMDH86400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-86400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-86400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-86400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-86400">@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr offset="-86400">@Y@m@d@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH172800
+       '<envar>
+          <name>YEAR</name>
+          <value><cyclestr offset="-172800">@Y</cyclestr></value>
+        </envar>
+        <envar>
+          <name>MONTH</name>
+          <value><cyclestr offset="-172800">@m</cyclestr></value>
+        </envar>
+        <envar>
+          <name>DAY</name>
+          <value><cyclestr offset="-172800">@d</cyclestr></value>
+        </envar>
+        <envar>
+          <name>HOUR</name>
+          <value><cyclestr offset="-172800">@H</cyclestr></value>
+        </envar>
+        <envar>
+          <name>YYYYMMDDHH</name>
+          <value><cyclestr offset="-172800">@Y@m@d@H</cyclestr></value>
+        </envar>'>
+
+]>
+
+<workflow realtime="T" scheduler="slurm" cyclethrottle="6" cyclelifespan="0:06:00:00">
+
+  <cycledef group="6hr">0 0,6,12,18 * * 2020-2029 *</cycledef>
+  <cycledef group="24hr">0 0 * * 2020-2029 *</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+<!--
+  <task name="FV3_GSL_L127_global_init" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/py_wrapper.ksh</command>
+    <jobname>FV3_GSL_L127_global_init</jobname>
+    <join><cyclestr offset="-172800">&FV3_GSL_L127_LOG_DIR;/FV3_GSL_L127_global_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH172800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/GFS_GSL_init_with_calc.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&FV3_GSL_L127_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&FV3_GSL_L127_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>fv3_gsl_L127</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 150 156 162 168</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>TMP,RH,SPFH,HGT,UGRD,VGRD,WIND</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <datadep age="120"><cyclestr offset="-172800">&FV3_GSL_L127_DIR;/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.pgrb2.0p25.f120</cyclestr></datadep>
+      </and>
+    </dependency>
+
+  </task>
+
+  <task name="GFSv17_gf_global_init" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/py_wrapper.ksh</command>
+    <jobname>GFSv17_gf_global_init</jobname>
+    <join><cyclestr offset="-172800">&GFSv17_gf_LOG_DIR;/GFSv17_gf_global_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH172800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/GFS_GSL_init_with_calc.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&GFSv17_gf_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&GFSv17_gf_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>gfsv17_gf</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 150 156 162 168</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>TMP,RH,SPFH,HGT,UGRD,VGRD,WIND</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <datadep age="120"><cyclestr offset="-172800">&GFSv17_gf_DIR;/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.pgrb2.0p25.f120</cyclestr></datadep>
+      </and>
+    </dependency>
+
+  </task>
+
+  <task name="GFSv17_mynn_global_init" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/py_wrapper.ksh</command>
+    <jobname>GFSv17_mynn_global_init</jobname>
+    <join><cyclestr offset="-172800">&GFSv17_mynn_LOG_DIR;/GFSv17_mynn_global_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH172800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/GFS_GSL_init_with_calc.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&GFSv17_mynn_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&GFSv17_mynn_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>gfsv17_mynn</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 150 156 162 168</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>TMP,RH,SPFH,HGT,UGRD,VGRD,WIND</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <datadep age="120"><cyclestr offset="-172800">&GFSv17_mynn_DIR;/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.pgrb2.0p25.f120</cyclestr></datadep>
+      </and>
+    </dependency>
+
+  </task>
+
+
+  <task name="ANL_global_init" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/py_wrapper.ksh</command>
+    <jobname>ANL_global_init</jobname>
+    <join><cyclestr offset="-86400">&ANL_LOG_DIR;/ANL_global_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/GFS_init_with_calc.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&ANL_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&ANL_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>gfs_anl</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>000</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>TMP,RH,SPFH,HGT,UGRD,VGRD,WIND</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <datadep age="120"><cyclestr offset="-86400">&ANL_DIR;/@y@j@H000000</cyclestr></datadep>
+      </and>
+    </dependency>
+
+  </task>
+
+-->
+</workflow>

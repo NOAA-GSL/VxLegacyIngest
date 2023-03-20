@@ -1,0 +1,108 @@
+# Grid to Grid Precipitation Example
+
+[config]
+# time looping - options are INIT, VALID, RETRO, and REALTIME
+LOOP_BY = VALID
+
+# Format of VALID_BEG and VALID_END
+VALID_TIME_FMT = %Y%m%d%H
+
+# Start time for METplus run
+VALID_BEG = 2019050500
+
+# End time for METplus run
+VALID_END = 2019050500
+
+# Increment between METplus runs in seconds. Must be >= 60
+VALID_INCREMENT = 86400
+
+# Options are times, processes
+# times = run all items in the PROCESS_LIST for a single initialization
+# time, then repeat until all times have been evaluated.
+# processes = run each item in the PROCESS_LIST for all times
+#   specified, then repeat for the next item in the PROCESS_LIST.
+LOOP_ORDER = times
+
+# List of applications to run
+PROCESS_LIST = GridStat
+
+# run pcp_combine on forecast data
+#FCST_PCP_COMBINE_RUN = False
+
+# mode of pcp_combine to use (SUM, ADD, SUBTRACT)
+#FCST_PCP_COMBINE_METHOD = SUM
+
+# list of variables to compare
+FCST_VAR1_NAME = APCP
+FCST_VAR1_LEVELS = A06
+FCST_VAR1_THRESH = gt25.4
+FCST_VAR1_OPTIONS = GRIB2_pdt = 9; thresh_hi = 40000;
+
+# list of forecast leads to process
+LEAD_SEQ = 6
+
+# description of data to be processed
+# used in output file path
+MODEL = HRRRE
+OBTYPE = STAGEIV
+
+# location of grid_stat MET config file
+GRID_STAT_CONFIG_FILE = {CONFIG_DIR}/GridStatConfig_PROB
+
+# Forecast data description variables
+#FCST_PCP_COMBINE_INPUT_DATATYPE = GRIB
+FCST_GRID_STAT_INPUT_DATATYPE = GRIB
+FCST_IS_PROB = True
+#FCST_PCP_COMBINE_INPUT_LEVEL = 6
+#FCST_PCP_COMBINE_IS_DAILY_FILE = false
+
+# Observation data description variables
+#  none needed
+
+[dir]
+#
+# Stuff I needed to add that I really shouldn't need to - JAH 20190508
+MET_BASE = /contrib/met/8.0/share/met/
+MET_INSTALL_DIR = /contrib/met/8.0/
+# End JAH
+# input and output data directories
+#FCST_PCP_COMBINE_INPUT_DIR = {INPUT_BASE}/grid_to_grid/gfs/fcst
+#FCST_PCP_COMBINE_OUTPUT_DIR = {OUTPUT_BASE}/gfs/bucket
+#FCST_GRID_STAT_INPUT_DIR = {OUTPUT_BASE}/gfs/bucket
+FCST_GRID_STAT_INPUT_DIR = /lfs1/projects/amb-verif/METplus_ensemble/test/input/model
+
+#OBS_GRID_STAT_INPUT_DIR = {INPUT_BASE}/grid_to_grid/daily_1deg_ccpa
+INPUT_BASE = /lfs1/projects/amb-verif/METplus_ensemble/test/input
+OBS_GRID_STAT_INPUT_DIR =   {INPUT_BASE}/obs
+
+#GRID_STAT_OUTPUT_DIR = {OUTPUT_BASE}/uswrp/met_out/{MODEL}/precip
+OUTPUT_BASE = /lfs1/projects/amb-verif/METplus_ensemble/test/output
+GRID_STAT_OUTPUT_DIR = {OUTPUT_BASE}/precip
+TMP_DIR = {OUTPUT_BASE}/tmp
+
+# location of configuration files used by MET applications
+#CONFIG_DIR={PARM_BASE}/use_cases/grid_to_grid/met_config
+CONFIG_DIR=/lfs1/projects/amb-verif/METplus_ensemble/METplus/parm/use_cases/qpf/met_config
+
+[filename_templates]
+# format of filenames
+# HRRRE
+#FCST_PCP_COMBINE_INPUT_TEMPLATE = pgbf{lead?fmt=%HHH}.gfs.{init?fmt=%Y%m%d%H}
+#FCST_PCP_COMBINE_OUTPUT_TEMPLATE = gfs.{init?fmt=%Y%m%d%H}_A{level?fmt=%HH}h
+#FCST_GRID_STAT_INPUT_TEMPLATE = gfs.{init?fmt=%Y%m%d%H}_A{level?fmt=%HH}h
+FCST_GRID_STAT_INPUT_TEMPLATE = hrrre_{init?fmt=%Y%m%d%H}_conus_{level?fmt=%HH}.grib2
+
+# StageIV
+OBS_GRID_STAT_INPUT_TEMPLATE = stageIV_6hr_precip.grib2
+
+GRID_STAT_OUTPUT_TEMPLATE = {valid?fmt=%Y%m%d%H%M}/grid_stat
+
+[exe]
+WGRIB2 = /apps/wgrib2/0.1.9.6a/bin/wgrib2
+CUT_EXE = /bin/cut
+TR_EXE = /bin/tr
+RM_EXE = /bin/rm
+NCAP2_EXE = /apps/nco/4.1.0-intel/bin/ncap2
+CONVERT_EXE = /bin/convert
+NCDUMP_EXE = /apps/netcdf/4.2.1.1-intel/bin/ncdump
+EGREP_EXE = /bin/egrep

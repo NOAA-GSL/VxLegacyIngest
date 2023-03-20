@@ -1,0 +1,37 @@
+<load_spec>
+  <email>molly.b.smith@noaa.gov</email>
+  <initialize_db>false</initialize_db>
+  <organization>gsd</organization>
+  <connection>
+    <management_system>mysql</management_system>
+    <host>137.75.133.134:3309</host>
+    <database>mv_gsl_mode_rt</database>
+    <user>met_admin</user>
+    <password>maPass4mv2018*GSD</password>
+  </connection>
+
+  <verbose>true</verbose>
+  <insert_size>1</insert_size>
+  <stat_header_db_check>false</stat_header_db_check>
+  <mode_header_db_check>true</mode_header_db_check>
+  <drop_indexes>false</drop_indexes>
+  <apply_indexes>true</apply_indexes>
+  <load_stat>false</load_stat>
+  <load_mode>true</load_mode>
+  <load_mpr>false</load_mpr>
+  <load_orank>false</load_orank>
+  <force_dup_file>false</force_dup_file>
+
+  <folder_tmpl>{main_dir}/{model}/{data_type}/{cycle}</folder_tmpl>
+  <load_val>
+    <field name="model">
+      <val>{model_list}</val>
+    </field>
+    <field name="data_type">
+      <val>{data_types}</val>
+    </field>
+  </load_val>
+
+  <load_xml>true</load_xml>
+  <load_note>GSL MODE Verification</load_note>
+</load_spec>

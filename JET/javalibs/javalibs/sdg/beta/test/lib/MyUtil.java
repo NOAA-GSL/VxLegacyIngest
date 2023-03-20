@@ -1,0 +1,313 @@
+/*
+Open Source License/Disclaimer, 
+Forecast Systems Laboratory
+NOAA/OAR/FSL
+325 Broadway Boulder, CO 80305 
+
+This software is distributed under the Open Source Definition, which
+may be found at http://www.opensource.org/osd.html. In particular,
+redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:  
+<ul>
+<li> Redistributions of source code must retain this notice, this list of
+  conditions and the following disclaimer. 
+
+<li> Redistributions in binary form must provide access to this notice,
+  this list of conditions and the  following disclaimer, and the
+  underlying source code.
+  
+<li> All modifications to this software must be clearly documented, and
+  are solely the responsibility of the agent making the
+  modifications.
+  
+<li> If significant modifications or enhancements are made to this
+  software, the Forecast Systems Laboratory should be notified.
+</ul>
+    
+THIS SOFTWARE AND ITS DOCUMENTATION ARE IN THE PUBLIC DOMAIN AND ARE
+FURNISHED "AS IS." THE AUTHORS, THE UNITED STATES GOVERNMENT, ITS
+INSTRUMENTALITIES, OFFICERS, EMPLOYEES, AND AGENTS MAKE NO WARRANTY,
+EXPRESS OR IMPLIED, AS TO THE USEFULNESS OF THE SOFTWARE AND
+DOCUMENTATION FOR ANY PURPOSE. THEY ASSUME NO RESPONSIBILITY (1) FOR THE
+USE OF THE SOFTWARE AND DOCUMENTATION; OR (2) TO PROVIDE TECHNICAL
+SUPPORT TO USERS. 
+*/
+package lib;
+
+import java.awt.*;
+import java.io.*;
+
+public final class MyUtil {
+    private static String[] blanks =
+      {""," ","  ","   ","    ","     ",
+       "      ","       ","        ","         ",
+       "          "};
+    private static String[] zeros =
+      {"","0","00","000","0000","00000","000000","0000000",
+     "00000000","000000000","0000000000"};
+    private static Color old_color;
+    private static Font old_font;
+    private static FontMetrics fm;
+    private static int val_height;
+    private static int val_width;
+    private static int delta;
+    private static int result,top,leading;
+    private static float fresult;
+    private static double factor,g,i;
+    private static String out;
+    private static boolean left_just;
+
+public static int atoi(String string) {
+    result=0;
+    try {
+      result = Integer.parseInt(string);
+    } catch (NumberFormatException e) {}
+    return result;
+  }
+
+public static float atof(String string) {
+    fresult=0;
+    try {
+      fresult = Float.valueOf(string).floatValue();
+    } catch (NumberFormatException e) {}
+    return fresult;
+  }
+
+public static double goodRound(double f, double min_value, double max_value,
+                     int bad_value,int decimal) {
+    if (f < min_value || f > max_value) {
+        return (bad_value);
+    } else {
+        //round to the decimal point implied by decimal
+        factor = Math.pow(10,decimal);
+        top = (int)Math.round(f*factor);
+        g = top/factor;
+        //Debug.println("f= "+f+", top= "+top+", g= "+g);
+        return g;
+    }
+}
+
+public static
+  String goodRoundString(double f, double min_value, double max_value,
+			 String bad, int decimal) {
+    i = goodRound(f,min_value,max_value, -99999,decimal);
+    if (i == -99999) {
+        return bad;
+    } else {
+        if(decimal == 0) {
+            return ""+(int)i;
+        } else {
+            return ""+i;
+        }
+    }
+}
+
+public static
+  String goodRoundString(double f, double min_value, double max_value,
+			 String bad, int decimal, int width) {
+    out = goodRoundString(f,min_value,max_value,bad,decimal);
+    return fixedWidth(out,width);
+}
+
+public static String fixedWidth(String out,int width) {
+  left_just = false;
+  leading=0;
+  if(width < 0) {
+    left_just = true;
+    width = -width;
+  }
+  if(out.length() >= width ) {
+    return out;
+  } else {
+    leading = Math.min(width - out.length(), blanks.length-1);
+    if(left_just) {
+      if(out.indexOf(".") != -1) {
+	//add zeros on the right
+	return out + zeros[leading];
+      } else {
+	return zeros[leading] + out;
+      }
+    } else {
+      return blanks[leading] + out;
+    }
+  }
+}
+
+public static void draw_clean_string(String val,Graphics g, Font f,int x,int y,
+                              double alignment,Color foreground,Color background) {
+  draw_clean_string(val,g,f,x,y,alignment,foreground,background,0);
+}
+
+public static void drawCleanString(String val,Graphics g, Font f,int x,int y,
+                              double alignment,Color foreground,Color background) {
+  draw_clean_string(val,g,f,x,y,alignment,foreground,background,0);
+}
+/**
+*   alignment = 0 means text is to the right of the (x,y) point
+*   alignment = 1 means text is to the left  of the (x,y) point
+*   y_alignment = 0 means text is above the (x,y) point
+*   y_alignment = 1 means text is below the (x,y) point
+*   y_alignment = 0.5 means text is centered (in y) on the (x,y) point
+*/
+public static void draw_clean_string(String val,Graphics g, Font f,int x,int y,
+                   double alignment,Color foreground,Color background,
+		   double y_alignment) {
+  old_color = g.getColor();
+  old_font = g.getFont();
+  fm = g.getFontMetrics(f);
+  val_height = fm.getHeight();
+  val_width = fm.stringWidth(val);
+  delta = (int)Math.round(.2*val_height);
+  g.setFont(f);
+  x = x - (int)(alignment*val_width);
+  y = y + (int)Math.round(y_alignment*val_height) - delta;
+  if(background != null) {
+    g.setColor(background);
+    g.fillRect(x-3,y-(int)(0.8*val_height),val_width+6,val_height);
+  }
+  g.setColor(foreground);
+  g.drawString(val,x,y);
+  g.setColor(old_color);
+  g.setFont(old_font);
+}
+
+public static void drawCleanString(String val,Graphics g, Font f,int x,int y,
+                      double alignment,Color foreground,Color background,
+                      double y_alignment) {
+    draw_clean_string(val,g,f,x,y,alignment,foreground,background,y_alignment);
+}
+
+public static void showTextOnScreen(String s, Graphics g, Font f,
+			     Point point, Color bgColor) {
+  
+  int yOffset = 0;
+  FontMetrics fm = g.getFontMetrics(f);
+  StringReader sr = new StringReader(s);
+  BufferedReader reader = new BufferedReader(sr);
+  Point newPoint = new Point(point);
+  try {
+    // Mark the string so that resetting returns to here.
+    reader.mark(4000);
+    
+    // Iterate through the text lines and find the longest one.
+    int maxWidth = 0;
+    int numLines = 0;
+    while (true) {
+      String line = reader.readLine();
+      
+      if (line == null) {
+	break;
+      }
+      
+      int width = fm.stringWidth(line);
+      if (width > maxWidth) {
+	maxWidth = width;
+      }
+      
+      numLines++;
+    }
+    
+    // Make sure the text all shows up on the canvas.
+    //  Create a new point which will be the top left corner of the text.
+    // 
+    newPoint = new Point(point.x - maxWidth / 2, point.y);
+    Rectangle clipRect = g.getClipBounds();
+    if (newPoint.x < 0) {
+      // Point is too close to the left edge to show text.
+      // 
+      newPoint.x = 0;
+    } else if (newPoint.x + maxWidth > clipRect.width) {
+      // Point is too close to the right edge.
+      //
+      newPoint.x = clipRect.width - maxWidth;
+      
+      // Test for negative value (text too big).
+      if (newPoint.x < 0) {
+	newPoint.x = 0;
+      }
+    }
+    
+    int maxHeight = numLines * fm.getHeight();
+    if (newPoint.y + maxHeight > clipRect.height) {
+      // Point is too close to the bottom to show all the text.
+      // 
+      newPoint.y = clipRect.height - maxHeight;
+    } 
+    // Test for negative value (text too big).
+    if (newPoint.y < 0) {
+      newPoint.y = 0;
+    }
+    
+    // Reset the reader back to the beginning of the text.
+    reader.reset();
+    
+    // Start with a colored background for the header.
+    while (true) {
+      
+      // Increase the y offset first, so first line gets drawn
+      //  below the reference point.
+      // 
+      yOffset += fm.getHeight();
+      
+      String line = reader.readLine();
+      
+      if (line == null) {
+	break;
+      }
+      
+      MyUtil.draw_clean_string(line, g, f,
+			       newPoint.x, newPoint.y + yOffset,
+			       0.0,
+			       Color.black, bgColor);
+    }
+  }
+  catch (IOException e) {
+    Debug.println("Error reading line from string reader: " + e);        
+    return;
+  }
+}
+
+  /** adapted from 'makeButton', on p 762 of P. Chan and R. Lee:
+   * "The Java Class Libraries", 2nd Ed. Vol 2
+   */
+public static GridBagConstraints addComponent(
+			   Container cont, Object arg,
+			   int x, int y, int w, int h,
+			   double weightx, double weighty) {
+  // this sets a default border around components
+  return addComponent(cont,arg,x,y,w,h,weightx,weighty,
+		      5,5,5,5);
+}
+			   
+public static GridBagConstraints addComponent(
+			   Container cont, Object arg,
+			   int x, int y, int w, int h,
+			   double weightx, double weighty,
+			   int top,int left,int bottom,int right) {
+  GridBagLayout gbl = (GridBagLayout)cont.getLayout();
+  GridBagConstraints c = new GridBagConstraints();
+  Component comp;
+
+  c.fill = GridBagConstraints.BOTH;
+  c.gridx = x;
+  c.gridy = y;
+  c.gridwidth = w;
+  c.gridheight = h;
+  c.weightx = weightx;
+  c.weighty = weighty;
+  c.anchor = GridBagConstraints.NORTH;
+  c.insets = new Insets(top,left,bottom,right); // top,left,botton,right
+
+  if(arg instanceof String) {
+    comp = new Button((String)arg);
+  } else {
+    comp = (Component)arg;
+  }
+  cont.add(comp);
+  gbl.setConstraints(comp,c);
+  return c;
+}
+  
+}
+

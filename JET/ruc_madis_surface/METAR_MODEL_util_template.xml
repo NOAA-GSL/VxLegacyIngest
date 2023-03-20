@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<options>
+   <output_dir>/lfs3/projects/amb-verif/scratch</output_dir>
+
+   <model>HRRR</model>
+   <start_time>1521763200</start_time>
+   <end_time>1521936000</end_time>
+
+   <all_fcst_lens>false</all_fcst_lens>
+   <all_stations>false</all_stations>
+   <all_variables>false</all_variables>
+
+   <!-- Only used if corresponding flag is set to FALSE-->
+   <fcst_len>
+      <val>0</val>
+      <val>1</val>
+   </fcst_len>
+   <stations>
+      <val>KDEN</val>
+      <val>KOMA</val>
+   </stations>
+   <variables>
+      <val>temp</val>
+      <val>dp</val>
+   </variables>
+
+   <!-- Only used if all_stations is set to TRUE-->
+   <min_latitude>39.0</min_latitude>
+   <max_latitude>41.0</max_latitude>
+   <min_longitude>-105.0</min_longitude>
+   <max_longitude>-103.0</max_longitude>
+
+</options>

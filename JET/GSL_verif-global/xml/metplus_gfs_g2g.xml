@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/GSL_verif-global/bin">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess">
+    <!ENTITY WEB_DIR "/home/amb-verif/GSL_verif-global/verif/web">
+    <!ENTITY CONFIG_DIR "/home/amb-verif/GSL_verif-global/config">
+    <!ENTITY POLY_DIR "/home/amb-verif/GSL_verif-global/static/poly">
+    <!ENTITY MET_DIR "/contrib/met/10.0.0/">
+    <!ENTITY MET_BASE "/contrib/met/10.0.0/share/met/">
+    <!ENTITY METPLUS_DIR "/contrib/met/METplus/METplus-4.0.0">
+    <!ENTITY METVIEWER_DIR "/home/amb-verif/metviewer/v2.10_int/metviewer">
+    <!ENTITY PYTHON_PATH "/lfs1/BMC/amb-verif/anaconda3/bin/python3">
+    <!ENTITY MVLOAD_PATH "/home/amb-verif/tcmet/bin/met_db_load.py">
+    
+    <!ENTITY ANL_REALTIME_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFS_anl/realtime">
+    
+    <!ENTITY FV3_GSL_L127_REALTIME_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/FV3_GSL_L127/realtime">
+    <!ENTITY FV3_GSL_L127_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/FV3_GSL_L127/log">
+    
+    <!ENTITY GFSv17_gf_REALTIME_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_gf/realtime">
+    <!ENTITY GFSv17_gf_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_gf/log">
+    
+    <!ENTITY GFSv17_mynn_REALTIME_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_mynn/realtime">
+    <!ENTITY GFSv17_mynn_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_mynn/log">
+    
+    <!ENTITY GFSv17_thmp_subcyc_REALTIME_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_thmp_subcyc/realtime">
+    <!ENTITY GFSv17_thmp_subcyc_LOG_DIR "/home/amb-verif/GSL_verif-global/verif/g2g_reprocess/GFSv17_thmp_subcyc/log">
+    
+    <!ENTITY CYCDEFS "6hr">
+ 
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+<!--
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE "ppa">
+-->
+    <!ENTITY PE_SERVICE "ppa-service">
+    <!ENTITY PE_WALL_LIMIT "04:00:00">
+    <!ENTITY SERVICE_WALL_LIMIT "04:00:00">
+    <!ENTITY DEADLINE "43200">
+    <!ENTITY WAIT "6900">
+    <!ENTITY WAIT1 "7200">
+    
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>6G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+	
+    <!ENTITY YMDH194400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-194400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-194400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-194400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-194400">@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr offset="-194400">@Y@m@d@H</cyclestr></value>
+	</envar>'>
+
+]>
+
+<workflow realtime="T" scheduler="slurm" cyclethrottle="6" cyclelifespan="0:06:00:00">
+
+  <cycledef group="6hr">0 0,6,12,18 * * 2020-2029 *</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <metatask>
+    <var name="tname">g2g_006 g2g_012 g2g_018 g2g_024 g2g_030 g2g_036 g2g_042 g2g_048 g2g_054 g2g_060 g2g_066 g2g_072 g2g_078 g2g_084 g2g_090 g2g_096 g2g_102 g2g_108 g2g_114 g2g_120 g2g_126 g2g_132 g2g_138 g2g_144 g2g_150 g2g_156 g2g_162 g2g_168</var>
+    <var name="fcst_len">6 12 18 24 30 36 42 48 54 60 66 72 78 84 90 96 102 108 114 120 126 132 138 144 150 156 162 168</var>
+
+<!-- 
+    <metatask>
+      <var name="taskname">FV3_GSL_L127_#tname#</var>
+      <var name="cfg">&CONFIG_DIR;/metplus/global_g2g_gfs_consolidated.conf</var>
+      <var name="region">global</var>
+      <var name="cdefs">&CYCDEFS;</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/metplus_wrapper.sh</command>
+	<jobname>#taskname#</jobname>
+	<join><cyclestr offset="-194400">&FV3_GSL_L127_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+	&PE_OPTS;    
+	&YMDH194400;
+	
+	<envar>
+	  <name>MET_DIR</name>
+	  <value>&MET_DIR;</value>
+        </envar>
+	<envar>
+	  <name>MET_BASE</name>
+	  <value>&MET_BASE;</value>
+        </envar>
+	<envar>
+	  <name>METPLUS_PATH</name>
+	  <value>&METPLUS_DIR;</value>
+        </envar>
+        <envar>
+          <name>WF_LOG_DIR</name>
+          <value>&WF_LOG_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&FV3_GSL_L127_REALTIME_DIR;</value>
+        </envar>
+	<envar>
+	  <name>OBSDIR</name>
+	  <value>&ANL_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>MODELDIR</name>
+	  <value>&FV3_GSL_L127_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>LOGDIR</name>
+	  <value>&FV3_GSL_L127_LOG_DIR;</value>
+	</envar>
+	<envar>
+	  <name>POLY_DIR</name>
+	  <value>&POLY_DIR;</value>
+	</envar>
+	<envar>
+	  <name>METPLUS_CFG</name>
+	  <value>#cfg#</value>
+	</envar>
+	<envar>
+	  <name>CFGDIR</name>
+	  <value>&CONFIG_DIR;</value>
+	</envar>
+	<envar>
+	  <name>FCSTLEN</name>
+	  <value>#fcst_len#</value>
+	</envar>
+	<envar>
+	  <name>REGION</name>
+	  <value>#region#</value>
+	</envar>
+	<envar>
+	  <name>MODEL</name>
+	  <value>FV3_GSL_L127</value>
+	</envar>
+        <envar>
+          <name>MODELSTRING</name>
+          <value>fv3_gsl_L127</value>
+        </envar>
+	<envar>
+	  <name>OBS</name>
+	  <value>ANLYS</value>
+	</envar>
+
+      </task>
+    </metatask>
+
+    <metatask>
+      <var name="taskname">GFSv17_gf_#tname#</var>
+      <var name="cfg">&CONFIG_DIR;/metplus/global_g2g_gfs_consolidated.conf</var>
+      <var name="region">global</var>
+      <var name="cdefs">&CYCDEFS;</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/metplus_wrapper.sh</command>
+	<jobname>#taskname#</jobname>
+	<join><cyclestr offset="-194400">&GFSv17_gf_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+	&PE_OPTS;    
+	&YMDH194400;
+	
+	<envar>
+	  <name>MET_DIR</name>
+	  <value>&MET_DIR;</value>
+        </envar>
+	<envar>
+	  <name>MET_BASE</name>
+	  <value>&MET_BASE;</value>
+        </envar>
+	<envar>
+	  <name>METPLUS_PATH</name>
+	  <value>&METPLUS_DIR;</value>
+        </envar>
+        <envar>
+          <name>WF_LOG_DIR</name>
+          <value>&WF_LOG_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&GFSv17_gf_REALTIME_DIR;</value>
+        </envar>
+	<envar>
+	  <name>OBSDIR</name>
+	  <value>&ANL_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>MODELDIR</name>
+	  <value>&GFSv17_gf_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>LOGDIR</name>
+	  <value>&GFSv17_gf_LOG_DIR;</value>
+	</envar>
+	<envar>
+	  <name>POLY_DIR</name>
+	  <value>&POLY_DIR;</value>
+	</envar>
+	<envar>
+	  <name>METPLUS_CFG</name>
+	  <value>#cfg#</value>
+	</envar>
+	<envar>
+	  <name>CFGDIR</name>
+	  <value>&CONFIG_DIR;</value>
+	</envar>
+	<envar>
+	  <name>FCSTLEN</name>
+	  <value>#fcst_len#</value>
+	</envar>
+	<envar>
+	  <name>REGION</name>
+	  <value>#region#</value>
+	</envar>
+	<envar>
+	  <name>MODEL</name>
+	  <value>GFSv17p8_gf</value>
+	</envar>
+        <envar>
+          <name>MODELSTRING</name>
+          <value>gfsv17_gf</value>
+        </envar>
+	<envar>
+	  <name>OBS</name>
+	  <value>ANLYS</value>
+	</envar>
+
+      </task>
+    </metatask>
+ 
+    <metatask>
+      <var name="taskname">GFSv17_mynn_#tname#</var>
+      <var name="cfg">&CONFIG_DIR;/metplus/global_g2g_gfs_consolidated.conf</var>
+      <var name="region">global</var>
+      <var name="cdefs">&CYCDEFS;</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/metplus_wrapper.sh</command>
+	<jobname>#taskname#</jobname>
+	<join><cyclestr offset="-194400">&GFSv17_mynn_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+	&PE_OPTS;    
+	&YMDH194400;
+	
+	<envar>
+	  <name>MET_DIR</name>
+	  <value>&MET_DIR;</value>
+        </envar>
+	<envar>
+	  <name>MET_BASE</name>
+	  <value>&MET_BASE;</value>
+        </envar>
+	<envar>
+	  <name>METPLUS_PATH</name>
+	  <value>&METPLUS_DIR;</value>
+        </envar>
+        <envar>
+          <name>WF_LOG_DIR</name>
+          <value>&WF_LOG_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&GFSv17_mynn_REALTIME_DIR;</value>
+        </envar>
+	<envar>
+	  <name>OBSDIR</name>
+	  <value>&ANL_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>MODELDIR</name>
+	  <value>&GFSv17_mynn_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>LOGDIR</name>
+	  <value>&GFSv17_mynn_LOG_DIR;</value>
+	</envar>
+	<envar>
+	  <name>POLY_DIR</name>
+	  <value>&POLY_DIR;</value>
+	</envar>
+	<envar>
+	  <name>METPLUS_CFG</name>
+	  <value>#cfg#</value>
+	</envar>
+	<envar>
+	  <name>CFGDIR</name>
+	  <value>&CONFIG_DIR;</value>
+	</envar>
+	<envar>
+	  <name>FCSTLEN</name>
+	  <value>#fcst_len#</value>
+	</envar>
+	<envar>
+	  <name>REGION</name>
+	  <value>#region#</value>
+	</envar>
+	<envar>
+	  <name>MODEL</name>
+	  <value>GFSv17p8_mynn</value>
+	</envar>
+        <envar>
+          <name>MODELSTRING</name>
+          <value>gfsv17_mynn</value>
+        </envar>
+	<envar>
+	  <name>OBS</name>
+	  <value>ANLYS</value>
+	</envar>
+    
+      </task>
+    </metatask>
+
+ -->
+  </metatask>
+
+<!--
+  <task name="gfs_g2g_db" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>gfs_g2g_db</jobname>
+    <join><cyclestr offset="-194400">&WF_LOG_DIR;/gfs_g2g_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH194400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/mvcopier.py</value>
+    </envar>
+    <envar>
+      <name>MAIN_DIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>PYTHON_PATH</name>
+      <value>&PYTHON_PATH;</value>
+    </envar>
+    <envar>
+      <name>MVLOAD_PATH</name>
+      <value>&MVLOAD_PATH;</value>
+    </envar>
+    <envar>
+      <name>CFG_DIR</name>
+      <value>&CONFIG_DIR;</value>
+    </envar>
+    <envar>
+      <name>CFG_XML</name>
+      <value>mv_load_gsd_modelvxtest.xml</value>
+    </envar>
+    <envar>
+      <name>MODEL_LIST</name>
+      <value>FV3_GSL_L127 GFSv17_gf GFSv17_mynn GFSv17_thmp_subcyc</value>
+    </envar>
+    <envar>
+      <name>DATA_TYPES</name>
+      <value>grid_stat</value>
+    </envar>
+
+    <dependency>
+      <timedep><cyclestr offset="&WAIT1;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>
+
+  </task> 
+-->
+
+  <task name="gfs_g2g_db2" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>gfs_g2g_db2</jobname>
+    <join><cyclestr offset="-194400">&WF_LOG_DIR;/gfs_g2g_db2_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH194400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/mvcopier.py</value>
+    </envar>
+    <envar>
+      <name>MAIN_DIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>PYTHON_PATH</name>
+      <value>&PYTHON_PATH;</value>
+    </envar>
+    <envar>
+      <name>MVLOAD_PATH</name>
+      <value>&MVLOAD_PATH;</value>
+    </envar>
+    <envar>
+      <name>CFG_DIR</name>
+      <value>&CONFIG_DIR;</value>
+    </envar>
+    <envar>
+      <name>CFG_XML</name>
+      <value>mv_load_gsd.xml</value>
+    </envar>
+    <envar>
+      <name>MODEL_LIST</name>
+      <value>FV3_GSL_L127 GFSv17_gf GFSv17_mynn</value>
+    </envar>
+    <envar>
+      <name>DATA_TYPES</name>
+      <value>grid_stat</value>
+    </envar>
+
+    <dependency>
+      <timedep><cyclestr offset="&WAIT;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>
+
+  </task> 
+
+</workflow>

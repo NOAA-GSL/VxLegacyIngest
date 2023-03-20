@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/VERIF/bin">
+    <!ENTITY EXEC_DIR "/home/amb-verif/VERIF/exec">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/VERIF/verif/precip_new/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/VERIF/verif/precip_new">
+    <!ENTITY WEB_DIR "/home/amb-verif/VERIF/verif/web">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip_new/StageIV/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/amb-verif/VERIF/verif/precip_new/StageIV/log">
+    <!ENTITY OBS_DIR "/public/data/precip/stage4/1hr/netcdf">
+    
+    <!ENTITY HRRR_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip_new/HRRR/realtime">
+    <!ENTITY HRRR_LOG_DIR "/home/amb-verif/VERIF/verif/precip_new/HRRR/log">
+    <!ENTITY HRRR_DIR "/home/rtrr/hrrr">
+    <!ENTITY HRRR_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip_new/HRRRvStageIV/realtime">
+    <!ENTITY HRRR_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip_new/HRRRvStageIV/log">
+    
+    <!ENTITY PCP_MASK "/home/amb-verif/VERIF/static/stageIV_pcp_mask.nc">
+
+    <!ENTITY CYCDEFS "1hr">
+
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "batch">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "00:40:00">
+    <!ENTITY SERVICE_WALL_LIMIT "00:40:00">
+    <!ENTITY DEADLINE "14400">
+    <!ENTITY WAIT "7200">
+    
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<native>-l partition=tjet:ujet:sjet:vjet:xjet -W umask=022</native>'>
+<!--	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>-->
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE_SERVICE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<native>-l partition=service -W umask=022</native>'>
+<!--	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>-->
+	
+    <!ENTITY YMDH10800
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-10800">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-10800">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-10800">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-10800">@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH18000
+       '<envar>
+          <name>YEAR</name>
+          <value><cyclestr offset="-18000">@Y</cyclestr></value>
+        </envar>
+        <envar>
+          <name>MONTH</name>
+          <value><cyclestr offset="-18000">@m</cyclestr></value>
+        </envar>
+        <envar>
+          <name>DAY</name>
+          <value><cyclestr offset="-18000">@d</cyclestr></value>
+        </envar>
+        <envar>
+          <name>HOUR</name>
+          <value><cyclestr offset="-18000">@H</cyclestr></value>
+        </envar>'>
+
+    <!ENTITY YMDH32400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-32400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-32400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-32400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-32400">@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH86400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-86400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-86400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-86400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-86400">@H</cyclestr></value>
+	</envar>'>
+
+]>
+
+<workflow realtime="F" scheduler="moabtorque" cyclethrottle="6" cyclelifespan="0:03:00:00">
+
+  <cycledef group="1hr">201902260000 201902261200 01:00:00</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="StageIV_interp" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>StageIV_interp</jobname>
+    <join><cyclestr offset="-86400">&OBS_LOG_DIR;/StageIV_interp_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;    
+    &YMDH86400;
+    
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/StageIV_interp2.py</value>
+    </envar>
+    <envar>
+    <name>EXECDIR</name>
+      <value>&EXEC_DIR;</value>
+      </envar>
+    <envar>
+      <name>NCLDIR</name>
+      <value>&SCRIPT_DIR;</value>
+    </envar>
+    <envar>
+      <name>SCRIPTDIR</name>
+      <value>&SCRIPT_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>OBSDIR</name>
+      <value>&OBS_DIR;</value>
+    </envar>
+    <envar>
+      <name>PCPMASK</name>
+      <value>&PCP_MASK;</value>
+    </envar>
+    <envar>
+      <name>IPOPTS</name>
+      <value>2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+    </envar>
+
+  </task>
+
+  <task name="HRRR_precip_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRR_precip_init</jobname>
+    <join><cyclestr offset="-10800">&HRRR_LOG_DIR;/HRRR_precip_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;    
+    &YMDH10800;
+    
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/WRF_init_precip_verif.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&HRRR_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HRRR_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>EXECDIR</name>
+      <value>&EXEC_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>hrrr</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 03 06 12 15 18 21 24 27 30 33 36</value>
+    </envar>
+    
+    <dependency>
+      <datadep age="120"><cyclestr offset="-10800">&HRRR_DIR;/@Y@m@d@H/postprd/wrftwo_hrconus_12.grib2</cyclestr></datadep>
+    </dependency>
+    
+  </task>
+  
+  <metatask>
+    <var name="taskname">HRRR_precip_03km HRRR_precip_13km HRRR_precip_20km HRRR_precip_40km HRRR_precip_80km</var>
+    <var name="interpgrid">03kmLC 13kmLC 20kmLC 40kmLC 80kmLC</var>
+    <var name="statfile">verif_03km verif_13km verif_20km verif_40km verif_80km</var>
+    <var name="ipopt">2 2 4 8 16</var>
+
+    <task name="#taskname#" cycledefs="1hr" maxtries="2">
+      <command>&SCRIPT_DIR;/wrapper.ksh</command>
+      <jobname>#taskname#</jobname>
+      <join><cyclestr offset="-10800">&HRRR_VERIF_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+      &PE_OPTS;    
+      &YMDH10800;
+	
+      <envar>
+        <name>SCRIPT</name>
+        <value>&SCRIPT_DIR;/1h_precip_verif.py</value>
+      </envar>
+      <envar>
+        <name>EXECDIR</name>
+        <value>&EXEC_DIR;</value>
+      </envar>
+      <envar>
+        <name>REALTIMEDIR</name>
+        <value>&HRRR_VERIF_REALTIME_DIR;</value>
+      </envar>
+      <envar>
+        <name>SCRIPTDIR</name>
+        <value>&SCRIPT_DIR;</value>
+      </envar>
+      <envar>
+        <name>OBSDIR</name>
+        <value>&OBS_REALTIME_DIR;</value>
+      </envar>
+      <envar>
+        <name>MODELDIR</name>
+        <value>&HRRR_REALTIME_DIR;</value>
+      </envar>
+      <envar>
+        <name>MODELGRID</name>
+        <value>03kmLC</value>
+      </envar>
+      <envar>
+        <name>INTERPGRID</name>
+        <value>#interpgrid#</value>
+      </envar>
+        <envar>
+        <name>MODEL</name>
+        <value>hrrr</value>
+      </envar>
+      <envar>
+        <name>NCLMODEL</name>
+        <value>HRRR</value>
+      </envar>
+      <envar>
+        <name>STATF</name>
+        <value>#statfile#</value>
+      </envar>
+      <envar>
+        <name>IPOPTS</name>
+        <value>#ipopt# -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+      </envar>
+      <envar>
+        <name>ACCUMLENS</name>
+        <value>01 03 06 12 15 18 21 24 27 30 33 36</value>
+      </envar>
+
+      <dependency>
+        <and>
+	  <taskdep task="StageIV_interp"/>
+<!--	  <taskdep task="HRRR_precip_init"/>  -->
+	  <timedep><cyclestr offset="240">@Y@m@d@H@M@S</cyclestr></timedep>
+        </and>
+      </dependency>
+    
+    </task>
+  </metatask>
+
+<!--  <task name="precip_web" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_web</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip_web@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_web_stage.py</value>
+    </envar>
+    <envar>
+      <name>MAINDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;</value>
+    </envar>
+    <envar>
+      <name>SRCMODELS</name>
+      <value>HRRRvStageIV RAPvStageIV RUCvStageIV</value>
+    </envar>
+    <envar>
+      <name>SRCGRIDS</name>
+      <value>03kmLC 13kmLC 20kmLC 40kmLC 80kmLC</value>
+    </envar>
+    <envar>
+      <name>DIRMODELS</name>
+      <value>hrrr rap ruc</value>
+    </envar>
+    <envar>
+      <name>WEBMODELS</name>
+      <value>hrrr rap ruc</value>
+    </envar>
+    <envar>
+      <name>WEBGRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+    
+    <dependency>
+      <and>
+        <taskdep task="HRRR_precip2_13km"/>
+	<taskdep task="RAP_precip2_13km"/>
+	<taskdep task="RUC_precip2_13km"/> 
+      </and>
+    </dependency>
+
+  </task>
+-->
+<!--  <task name="precip_cp" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_cp</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip_cp@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/cp_verif_to_gsd.py</value>
+    </envar>
+    <envar>
+      <name>MAINDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;</value>
+    </envar>
+    <envar>
+      <name>VAR</name>
+      <value>precip</value>
+    </envar>
+    <envar>
+      <name>WEBMODELS</name>
+      <value>hrrr rap ruc</value>
+    </envar>
+    <envar>
+      <name>WEBGRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+    
+    <dependency>
+      <taskdep task="precip_web"/>
+    </dependency>
+    
+  </task>
+ -->
+<!-- 
+  <task name="precip_db" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_db</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/pop_new_precip_sql_tables.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>HRRRvStageIV/realtime</value>
+    </envar>
+    <envar>
+      <name>SQLMODELS</name>
+      <value>HRRR</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+
+    <dependency>
+      <timedep><cyclestr offset="&WAIT;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>
+
+  </task>
+-->
+</workflow>

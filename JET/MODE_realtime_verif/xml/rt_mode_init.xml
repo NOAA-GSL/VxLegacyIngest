@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE workflow [
+
+<!ENTITY SCRIPT_DIR "/home/amb-verif/MODE_realtime_verif/bin">
+<!ENTITY WF_LOG_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/log">
+<!ENTITY MAIN_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt">
+<!ENTITY WEB_DIR "/home/amb-verif/MODE_realtime_verif/verif/web">
+<!ENTITY CONFIG_DIR "/home/amb-verif/MODE_realtime_verif/config">
+<!ENTITY POLY_DIR "/home/amb-verif/MODE_realtime_verif/static/poly">
+<!ENTITY MET_DIR "/contrib/met/10.0.0/">
+<!ENTITY MET_BASE "/contrib/met/10.0.0/share/met/">
+<!ENTITY PYTHON_PATH "/lfs1/BMC/amb-verif/anaconda3/bin/python3">
+<!ENTITY MVLOAD_PATH "/home/amb-verif/tcmet/bin/met_db_load.py">
+
+<!ENTITY HRRR_OPS_REALTIME_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/HRRR_OPS/realtime">
+<!ENTITY HRRR_OPS_LOG_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/HRRR_OPS/log">
+<!ENTITY HRRR_OPS_DIR "/lfs4/BMC/public/data/grib/hrrr_wrfsfc/7/0/83/0_1905141_30">
+    
+<!ENTITY RRFS_NA_3km_dev1_HRRR_REALTIME_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/RRFS_NA_3km_dev1_HRRR/realtime">
+<!ENTITY RRFS_NA_3km_dev1_HRRR_LOG_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/RRFS_NA_3km_dev1_HRRR/log">
+<!ENTITY RRFS_NA_3km_dev1_HRRR_DIR "/lfs4/BMC/rtwbl/mhu/wcoss/emc/rrfsna">
+    
+<!ENTITY RRFS_A_REALTIME_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/RRFS_A/realtime">
+<!ENTITY RRFS_A_LOG_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/RRFS_A/log">
+<!ENTITY RRFS_A_DIR "/lfs4/BMC/rtwbl/mhu/wcoss/emc/rrfs">
+    
+<!ENTITY RRFS_B_REALTIME_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/RRFS_B/realtime">
+<!ENTITY RRFS_B_LOG_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/RRFS_B/log">
+<!ENTITY RRFS_B_DIR "/lfs4/BMC/nrtrr/NCO_dirs/ptmp/com/RRFS_CONUS/para">
+    
+<!ENTITY OBS_REALTIME_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/OBS/realtime">
+<!ENTITY OBS_LOG_DIR "/home/amb-verif/MODE_realtime_verif/verif/mode_rt/OBS/log">
+<!ENTITY MRMS_DIR "/public/data/radar/mrms">
+<!ENTITY STAGE4_DIR "/public/data/precip/stage4/grib2">
+    
+<!ENTITY PROJECT "amb-verif">
+<!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+<!--
+<!ENTITY PE_SERVICE "service">
+<!ENTITY PE "ppa">
+-->
+<!ENTITY PE_SERVICE "ppa-service">
+<!ENTITY PE_WALL_LIMIT "02:00:00">
+<!ENTITY SERVICE_WALL_LIMIT "01:00:00">
+<!ENTITY DEADLINE "21:00:00">
+<!ENTITY WAIT "3600">
+
+<!ENTITY PE_OPTS
+   '<account>&PROJECT;</account>
+    <partition>&PE;</partition>
+    <native>--exclusive</native>
+    <cores>1</cores>
+    <memory>10G</memory>
+    <walltime>&PE_WALL_LIMIT;</walltime>
+    <deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+<!ENTITY LITE_OPTS
+   '<account>&PROJECT;</account>
+    <partition>&PE;</partition>
+    <cores>1</cores>
+    <memory>2G</memory>
+    <walltime>&SERVICE_WALL_LIMIT;</walltime>
+    <deadline><cyclestr offset="&WAIT;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+<!ENTITY SERVICE_OPTS
+   '<account>&PROJECT;</account>
+    <partition>&PE_SERVICE;</partition>
+    <native>--exclusive</native>
+    <cores>1</cores>
+    <memory>10G</memory>
+    <walltime>&SERVICE_WALL_LIMIT;</walltime>
+    <deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+        
+<!ENTITY YMDH
+   '<envar>
+      <name>YEAR</name>
+      <value><cyclestr>@Y</cyclestr></value>
+    </envar>
+    <envar>
+      <name>MONTH</name>
+      <value><cyclestr>@m</cyclestr></value>
+    </envar>
+    <envar>
+      <name>DAY</name>
+      <value><cyclestr>@d</cyclestr></value>
+    </envar>
+    <envar>
+      <name>HOUR</name>
+      <value><cyclestr>@H</cyclestr></value>
+    </envar>
+    <envar>
+      <name>YYYYMMDDHH</name>
+      <value><cyclestr>@Y@m@d@H</cyclestr></value>
+    </envar>'>
+
+<!ENTITY YMDH43200
+   '<envar>
+      <name>YEAR</name>
+      <value><cyclestr offset="-43200">@Y</cyclestr></value>
+    </envar>
+    <envar>
+      <name>MONTH</name>
+      <value><cyclestr offset="-43200">@m</cyclestr></value>
+    </envar>
+    <envar>
+      <name>DAY</name>
+      <value><cyclestr offset="-43200">@d</cyclestr></value>
+    </envar>
+    <envar>
+      <name>HOUR</name>
+      <value><cyclestr offset="-43200">@H</cyclestr></value>
+    </envar>
+    <envar>
+      <name>YYYYMMDDHH</name>
+      <value><cyclestr offset="-43200">@Y@m@d@H</cyclestr></value>
+    </envar>'>
+
+<!ENTITY YMDH75600
+   '<envar>
+      <name>YEAR</name>
+      <value><cyclestr offset="-75600">@Y</cyclestr></value>
+    </envar>
+    <envar>
+      <name>MONTH</name>
+      <value><cyclestr offset="-75600">@m</cyclestr></value>
+    </envar>
+    <envar>
+      <name>DAY</name>
+      <value><cyclestr offset="-75600">@d</cyclestr></value>
+    </envar>
+    <envar>
+      <name>HOUR</name>
+      <value><cyclestr offset="-75600">@H</cyclestr></value>
+    </envar>
+    <envar>
+      <name>YYYYMMDDHH</name>
+      <value><cyclestr offset="-75600">@Y@m@d@H</cyclestr></value>
+    </envar>'>
+
+]>
+
+<workflow realtime="T" scheduler="slurm" cyclethrottle="36" cyclelifespan="01:12:00:00">
+
+  <cycledef group="all">00 * * * 2020-2029 *</cycledef>
+  <cycledef group="6hr">0 0,6,12,18 * * 2020-2029 *</cycledef>
+
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="get_REFC_obs" cycledefs="all" maxtries="10">
+     <command>&SCRIPT_DIR;/run_get_MRMS_file.bash</command>
+     <jobname><cyclestr>get_compref_obs_@Y@m@d@H</cyclestr></jobname>
+     <join><cyclestr>&OBS_LOG_DIR;/compref/get_obs_@Y@m@d@H.out</cyclestr></join>
+
+     &LITE_OPTS;
+     &YMDH;
+
+     <envar>
+        <name>SCRIPT_DIR</name>
+        <value>&SCRIPT_DIR;</value>
+     </envar>
+     <envar>
+        <name>TIME</name>
+        <value><cyclestr>@Y@m@d@H@M</cyclestr></value>
+     </envar>
+     <envar>
+        <name>OUT_DIR</name>
+        <value>&OBS_REALTIME_DIR;/compref</value>
+     </envar>
+     <envar>
+        <name>OBS_ROOT</name>
+        <value>&MRMS_DIR;</value>
+     </envar>
+     <dependency>
+        <timedep><cyclestr offset="00:05:00">@Y@m@d@H@M@S</cyclestr></timedep>
+     </dependency>
+  </task>
+
+  <task name="get_precip_obs" cycledefs="6hr" maxtries="10">
+
+     <command>&SCRIPT_DIR;/get_precip_obs.bash</command>
+     <jobname><cyclestr offset="-43200">get_precip_obs_@Y@m@d@H</cyclestr></jobname>
+     <join><cyclestr offset="-43200">&OBS_LOG_DIR;/precip/get_obs_@Y@m@d@H.out</cyclestr></join>
+
+     &LITE_OPTS;
+     &YMDH43200;
+
+     <envar>
+        <name>SCRIPT_DIR</name>
+        <value>&SCRIPT_DIR;</value>
+     </envar>
+     <envar>
+        <name>TIME</name>
+        <value><cyclestr offset="-43200">@Y@m@d@H</cyclestr></value>
+     </envar>
+     <envar>
+        <name>OUT_DIR</name>
+        <value>&OBS_REALTIME_DIR;/precip</value>
+     </envar>
+     <envar>
+        <name>OBS_ROOT</name>
+        <value>&STAGE4_DIR;</value>
+     </envar>
+     
+     <dependency>
+        <datadep><cyclestr offset="-43200">&STAGE4_DIR;/st4_conus.@Y@m@d@H.06h.grb2</cyclestr></datadep>
+     </dependency>
+
+  </task>
+  
+  <task name="get_hrrr_ops" cycledefs="all" maxtries="10">
+     <command>&SCRIPT_DIR;/get_hrrr_model.bash</command>
+     <jobname><cyclestr offset="-75600">get_hrrr_ops_@Y@m@d@H</cyclestr></jobname>
+     <join><cyclestr offset="-75600">&HRRR_OPS_LOG_DIR;/get_hrrr_ops_@Y@m@d@H.out</cyclestr></join>
+
+     &LITE_OPTS;
+     &YMDH75600;
+
+     <envar>
+        <name>SCRIPT_DIR</name>
+        <value>&SCRIPT_DIR;</value>
+     </envar>
+     <envar>
+        <name>FCSTLEADS</name>
+        <value><cyclestr offset="-75600">00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 24 30 36 48</cyclestr></value>
+     </envar>
+     <envar>
+        <name>OUT_DIR</name>
+        <value>&HRRR_OPS_REALTIME_DIR;</value>
+     </envar>
+     <envar>
+        <name>DATA_DIR</name>
+        <value>&HRRR_OPS_DIR;</value>
+     </envar>
+
+     <dependency>
+        <datadep><cyclestr offset="-75600">&HRRR_OPS_DIR;/@y@j@H000000</cyclestr></datadep>
+     </dependency>
+
+  </task>
+
+  <task name="get_rrfs_na_3km_hrrr" cycledefs="all" maxtries="10">
+     <command>&SCRIPT_DIR;/get_rrfs_model.bash</command>
+     <jobname><cyclestr offset="-75600">get_rrfs_na_3km_hrrr_@Y@m@d@H</cyclestr></jobname>
+     <join><cyclestr offset="-75600">&RRFS_NA_3km_dev1_HRRR_LOG_DIR;/get_rrfs_na_3km_hrrr_@Y@m@d@H.out</cyclestr></join>
+
+     &LITE_OPTS;
+     &YMDH75600;
+
+     <envar>
+        <name>SCRIPT_DIR</name>
+        <value>&SCRIPT_DIR;</value>
+     </envar>
+     <envar>
+        <name>FCSTLEADS</name>
+        <value><cyclestr offset="-75600">00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 24 30 36 48</cyclestr></value>
+     </envar>
+     <envar>
+        <name>OUT_DIR</name>
+        <value>&RRFS_NA_3km_dev1_HRRR_REALTIME_DIR;</value>
+     </envar>
+     <envar>
+        <name>DATA_DIR</name>
+        <value>&RRFS_NA_3km_dev1_HRRR_DIR;</value>
+     </envar>
+     <envar>
+        <name>RRFS_TYPE</name>
+        <value>RRFS_NA_3km</value>
+     </envar>
+
+     <dependency>
+        <datadep><cyclestr offset="-75600">&RRFS_NA_3km_dev1_HRRR_DIR;/rrfs_a.@Y@m@d/@H/rrfs.t00z.prslev.f000.conus_3km.grib2</cyclestr></datadep>
+     </dependency>
+
+  </task>
+
+  <task name="get_rrfs_a" cycledefs="all" maxtries="10">
+     <command>&SCRIPT_DIR;/get_rrfs_model.bash</command>
+     <jobname><cyclestr offset="-75600">get_rrfs_a_@Y@m@d@H</cyclestr></jobname>
+     <join><cyclestr offset="-75600">&RRFS_A_LOG_DIR;/get_rrfs_a_@Y@m@d@H.out</cyclestr></join>
+
+     &LITE_OPTS;
+     &YMDH75600;
+
+     <envar>
+        <name>SCRIPT_DIR</name>
+        <value>&SCRIPT_DIR;</value>
+     </envar>
+     <envar>
+        <name>FCSTLEADS</name>
+        <value><cyclestr offset="-75600">00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 24 30 36 48</cyclestr></value>
+     </envar>
+     <envar>
+        <name>OUT_DIR</name>
+        <value>&RRFS_A_REALTIME_DIR;</value>
+     </envar>
+     <envar>
+        <name>DATA_DIR</name>
+        <value>&RRFS_A_DIR;</value>
+     </envar>
+     <envar>
+        <name>RRFS_TYPE</name>
+        <value>RRFS_A</value>
+     </envar>
+
+     <dependency>
+        <datadep><cyclestr offset="-75600">&RRFS_A_DIR;/rrfs_a.@Y@m@d/@H/RRFS_CONUS.t@Hz.bgsfcf000.tm00.grib2</cyclestr></datadep>
+     </dependency>
+
+  </task>
+
+  <task name="get_rrfs_b" cycledefs="all" maxtries="10">
+     <command>&SCRIPT_DIR;/get_rrfs_model.bash</command>
+     <jobname><cyclestr offset="-75600">get_rrfs_b_@Y@m@d@H</cyclestr></jobname>
+     <join><cyclestr offset="-75600">&RRFS_B_LOG_DIR;/get_rrfs_b_@Y@m@d@H.out</cyclestr></join>
+
+     &LITE_OPTS;
+     &YMDH75600;
+
+     <envar>
+        <name>SCRIPT_DIR</name>
+        <value>&SCRIPT_DIR;</value>
+     </envar>
+     <envar>
+        <name>FCSTLEADS</name>
+        <value><cyclestr offset="-75600">00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 24 30 36 48</cyclestr></value>
+     </envar>
+     <envar>
+        <name>OUT_DIR</name>
+        <value>&RRFS_B_REALTIME_DIR;</value>
+     </envar>
+     <envar>
+        <name>DATA_DIR</name>
+        <value>&RRFS_B_DIR;</value>
+     </envar>
+     <envar>
+        <name>RRFS_TYPE</name>
+        <value>RRFS_B</value>
+     </envar>
+
+     <dependency>
+        <datadep><cyclestr offset="-75600">&RRFS_B_DIR;/RRFS_conus_3km.@Y@m@d/@H/RRFS_CONUS.t@Hz.bgsfcf000.tm00.grib2</cyclestr></datadep>
+     </dependency>
+
+  </task>
+
+</workflow>

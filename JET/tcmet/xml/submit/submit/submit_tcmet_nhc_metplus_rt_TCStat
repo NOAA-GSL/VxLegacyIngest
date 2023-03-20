@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto/1.3.3
+
+rocotorun -w /whome/amb-verif/tcmet/xml/metplus_tcmet_nhc_rt_TCStat.xml -d /whome/amb-verif/tcmet/xml/db/metplus_tcmet_nhc_rt_TCStat.db

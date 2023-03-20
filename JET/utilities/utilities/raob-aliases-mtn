@@ -1,0 +1,4 @@
+alias getraob	'/home/mtn1/govett/raobs/getraob /data/raob/archive/ /home/mtn1/govett/raobs/ 20'
+alias cdraob  '/home/mtn1/govett/raobs/getraob /cdrom/raobs/ /home/mtn1/govett/raobs/ 20'
+alias mountCD	'/usr/local/bin/mount-hsfs-cdrom'
+alias umountCD	'/usr/local/bin/umount-cdrom'

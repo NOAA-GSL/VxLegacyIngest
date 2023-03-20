@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/VERIF/bin">
+    <!ENTITY EXEC_DIR "/home/amb-verif/VERIF/exec">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/VERIF/verif/precip">
+    <!ENTITY WEB_DIR "/home/amb-verif/VERIF/verif/web">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/StageIV/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/amb-verif/VERIF/verif/precip/StageIV/log">
+    <!ENTITY OBS_DIR "/public/data/precip/stage4/6hr/netcdf">
+    
+    <!ENTITY HRRR_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRR/realtime">
+    <!ENTITY HRRR_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRR/log">
+    <!ENTITY HRRR_DIR "/home/rtrr/hrrr">
+    <!ENTITY HRRR_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRRvStageIV/realtime">
+    <!ENTITY HRRR_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRRvStageIV/log">
+    
+    <!ENTITY RAP_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RAP/realtime">
+    <!ENTITY RAP_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RAP/log">
+    <!ENTITY RAP_DIR "/home/rtrr/rr">
+    <!ENTITY RAP_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RAPvStageIV/realtime">
+    <!ENTITY RAP_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RAPvStageIV/log">
+    
+    <!ENTITY RUC_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RUC/realtime">
+    <!ENTITY RUC_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RUC/log">
+    <!ENTITY RUC_DIR "/home/rtruc/ruc_backup/ruc_presm">
+    <!ENTITY RUC_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/RUCvStageIV/realtime">
+    <!ENTITY RUC_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/RUCvStageIV/log">
+
+    <!ENTITY HRRR_DEV3_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRR_dev3/realtime">
+    <!ENTITY HRRR_DEV3_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRR_dev3/log">
+    <!ENTITY HRRR_DEV3_DIR "/home/rtrr/hrrr_dev3">
+    <!ENTITY HRRR_DEV3_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/HRRR_dev3vStageIV/realtime">
+    <!ENTITY HRRR_DEV3_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/HRRR_dev3vStageIV/log">
+    
+    <!ENTITY PCP_MASK "/home/amb-verif/VERIF/static/stageIV_pcp_mask.nc">
+
+    <!ENTITY CYCDEFS1 "24hr">
+    <!ENTITY CYCDEFS2 "6hr,24hr">
+    <!ENTITY TDIFF1 "60">
+    <!ENTITY TDIFF2 "900">
+
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "batch">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "00:40:00">
+    <!ENTITY SERVICE_WALL_LIMIT "00:40:00">
+    <!ENTITY DEADLINE "14400">
+    <!ENTITY WAIT "10800">
+    
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<native>-l partition=tjet:ujet:sjet:vjet:xjet -W umask=022</native>'>
+	<!--<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>-->
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE_SERVICE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<native>-l partition=service -W umask=022</native>'>
+	<!--<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>-->
+	
+    <!ENTITY YMDH10800
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-10800">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-10800">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-10800">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-10800">@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH86400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-86400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-86400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-86400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-86400">@H</cyclestr></value>
+	</envar>'>
+
+]>
+
+<workflow realtime="F" scheduler="moabtorque" cyclethrottle="12" cyclelifespan="0:03:00:00">
+
+  <cycledef group="6hr">201808210000 201809150000 06:00:00</cycledef>
+  <cycledef group="24hr">201808210000 201809150000 24:00:00</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="precip_db" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_db</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip_db_backfill_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/pop_precip_sql_tables.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>34</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>HRRRvStageIV/realtime HRRR_dev3vStageIV/realtime RAPvStageIV/realtime RUCvStageIV/realtime</value>
+    </envar>
+    <envar>
+      <name>SQLMODELS</name>
+      <value>HRRR HRRR_dev3 RAP RUC</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+
+<!--    <dependency>
+      <timedep><cyclestr offset="&WAIT;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>-->
+
+  </task>
+
+  <task name="precip2_db" cycledefs="6hr,24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip2_db</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip2_db_backfill_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/pop_precip2_sql_tables.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>26</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>HRRRvStageIV/realtime HRRR_dev3vStageIV/realtime RAPvStageIV/realtime RUCvStageIV/realtime</value>
+    </envar>
+    <envar>
+      <name>SQLMODELS</name>
+      <value>HRRR HRRR_dev3 RAP RUC</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+    
+<!--    <dependency>
+      <timedep><cyclestr offset="&WAIT;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>-->
+
+  </task>
+
+</workflow>

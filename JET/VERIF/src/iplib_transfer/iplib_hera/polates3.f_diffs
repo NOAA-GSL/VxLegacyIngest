@@ -1,0 +1,194 @@
+11,13c11
+< C           IT MAY BE RUN FOR A WHOLE (KGDSO(1)>=0) OR A SUBSECTION 
+< C           OF AN OUTPUT GRID (SUBTRACT KGDSO(1) FROM 255 AND
+< C           PASS IN THE LAT/LONS OF EACH POINT).
+---
+> C           IT REQUIRES A GRID FOR THE OUTPUT FIELDS (KGDSO(1)>=0).
+23,38c21
+< C           WHICH DEFAULTS TO ALL 1 (IF IPOPT(1)=-1 OR IPOPT(2)=-1).
+< C           A SPECIAL INTERPOLATION IS DONE IF IPOPT(2)=-2.
+< C           IN THIS CASE, THE BOXES STRETCH NEARLY ALL THE WAY TO
+< C           EACH OF THE NEIGHBORING GRID POINTS AND THE WEIGHTS
+< C           ARE THE ADJOINT OF THE BILINEAR INTERPOLATION WEIGHTS.
+< C           THIS CASE GIVES QUASI-SECOND-ORDER BUDGET INTERPOLATION.
+< C           ANOTHER OPTION IS THE MINIMUM PERCENTAGE FOR MASK,
+< C           I.E. PERCENT VALID INPUT DATA REQUIRED TO MAKE OUTPUT DATA,
+< C           (IPOPT(3+IPOPT(1)) WHICH DEFAULTS TO 50 (IF -1).
+< C           IN CASES WHERE THERE IS NO OR INSUFFICIENT VALID INPUT DATA,
+< C           THE USER MAY CHOOSE TO SEARCH FOR THE NEAREST VALID DATA. 
+< C           THIS IS INVOKED BY SETTING IPOPT(20) TO THE WIDTH OF 
+< C           THE SEARCH SQUARE. THE DEFAULT IS 1 (NO SEARCH).  SQUARES ARE
+< C           SEARCHED FOR VALID DATA IN A SPIRAL PATTERN
+< C           STARTING FROM THE CENTER.  NO SEARCHING IS DONE WHERE
+< C           THE OUTPUT GRID IS OUTSIDE THE INPUT GRID.
+---
+> C           WHICH DEFAULTS TO ALL 1 (IF IPOPT(2)=-1.).
+50,54c33,36
+< C           AS AN ADDED BONUS (KGDSO(1)>=0) THE NUMBER OF OUTPUT
+< C           GRID POINTS AND THEIR LATITUDES AND LONGITUDES 
+< C           ARE ALSO RETURNED.  INPUT BITMAPS WILL BE INTERPOLATED
+< C           TO OUTPUT BITMAPS. OUTPUT BITMAPS WILL ALSO BE
+< C           CREATED WHEN THE OUTPUT GRID
+---
+> C           AS AN ADDED BONUS THE NUMBER OF OUTPUT GRID POINTS
+> C           AND THEIR LATITUDES AND LONGITUDES ARE ALSO RETURNED.
+> C           INPUT BITMAPS WILL BE INTERPOLATED TO OUTPUT BITMAPS.
+> C           OUTPUT BITMAPS WILL ALSO BE CREATED WHEN THE OUTPUT GRID
+60,64d41
+< C 1999-04-08  IREDELL  SPLIT IJKGDS INTO TWO PIECES
+< C 1999-04-08  IREDELL  ADDED BILINEAR OPTION IPOPT(2)=-2
+< C 2001-06-18  IREDELL  INCLUDE MINIMUM MASK PERCENTAGE OPTION
+< C 2006-01-04  GAYNO    ADDED OPTION TO DO SUBSECTION OF OUTPUT GRID.
+< C                      ADDED SPIRAL SEARCH OPTION.
+74,76c51
+< C                (DEFAULTS TO ALL 1 IF IPOPT(1)=-1 OR IPOPT(2)=-1).
+< C                IPOPT(3+IPOPT(1)) IS MINIMUM PERCENTAGE FOR MASK
+< C                (DEFAULTS TO 50 IF IPOPT(3+IPOPT(1)=-1)
+---
+> C                (DEFAULTS TO ALL 1 IF IPOPT(2)=-1).
+98a74
+> C                31   INVALID UNDEFINED OUTPUT GRID
+103,104c79
+< C   IJKGDS0      SET UP PARAMETERS FOR IJKGDS1
+< C   (IJKGDS1)    RETURN FIELD POSITION FOR A GIVEN GRID POINT
+---
+> C   (IJKGDS)     RETURN FIELD POSITION FOR A GIVEN GRID POINT
+111c86
+< CFPP$ EXPAND(IJKGDS1)
+---
+> CFPP$ EXPAND(IJKGDS)
+123d97
+<       INTEGER IJKGDSA(20)
+127d100
+< C  DO SUBSECTION OF GRID IF KGDSO(1) IS SUBTRACTED FROM 255.
+133,135c106
+<         KGDSO(1)=255+KGDSO(1)
+<         CALL GDSWIZ(KGDSO,-1,MO,FILL,XPTS,YPTS,RLON,RLAT,NO,0,DUM,DUM)
+<         IF(NO.EQ.0) IRET=3
+---
+>         IRET=31
+139,140d109
+<       IF(IPOPT(1).GT.16) IRET=32  
+<       MSPIRAL=MAX(IPOPT(20),1)
+143,151c112,113
+<       IF(IRET.EQ.0.AND.NB1.LT.0) IRET=32
+<       LSW=1
+<       IF(IPOPT(2).EQ.-2) LSW=2
+<       IF(IPOPT(1).EQ.-1.OR.IPOPT(2).EQ.-1) LSW=0
+<       IF(IRET.EQ.0.AND.LSW.EQ.1.AND.NB1.GT.15) IRET=32
+<       MP=IPOPT(3+IPOPT(1))
+<       IF(MP.EQ.-1.OR.MP.EQ.0) MP=50
+<       IF(MP.LT.0.OR.MP.GT.100) IRET=32
+<       PMP=MP*0.01
+---
+>       IF(IRET.EQ.0.AND.NB1.LT.0.) IRET=32
+>       IF(IRET.EQ.0.AND.NB1.GE.20.AND.IPOPT(2).NE.-1) IRET=32
+154d115
+<         RB2=1./NB2
+157,160c118
+<         IF(LSW.EQ.2) THEN
+<           RB2=1./(NB1+1)
+<           NB4=(NB1+1)**4
+<         ELSEIF(LSW.EQ.1) THEN
+---
+>         IF(IPOPT(2).NE.-1) THEN
+166a125
+>         NB2=0
+168c127
+<         NB4=1
+---
+>         NB4=0
+179d137
+<       CALL IJKGDS0(KGDSI,IJKGDSA)
+186,190c144
+<         IF(LSW.EQ.2) THEN
+<           WB=(NB1+1-ABS(IB))*(NB1+1-ABS(JB))
+<         ELSEIF(LSW.EQ.1) THEN
+<           WB=IPOPT(2+LB)
+<         ENDIF
+---
+>         IF(IPOPT(2).NE.-1) WB=IPOPT(2+LB)
+193,194c147,148
+<             XPTB(N)=XPTS(N)+IB*RB2
+<             YPTB(N)=YPTS(N)+JB*RB2
+---
+>             XPTB(N)=XPTS(N)+IB/REAL(NB2)
+>             YPTB(N)=YPTS(N)+JB/REAL(NB2)
+209,212c163,166
+<               N11(N)=IJKGDS1(I1,J1,IJKGDSA)
+<               N21(N)=IJKGDS1(I2,J1,IJKGDSA)
+<               N12(N)=IJKGDS1(I1,J2,IJKGDSA)
+<               N22(N)=IJKGDS1(I2,J2,IJKGDSA)
+---
+>               N11(N)=IJKGDS(I1,J1,KGDSI)
+>               N21(N)=IJKGDS(I2,J1,KGDSI)
+>               N12(N)=IJKGDS(I1,J2,KGDSI)
+>               N22(N)=IJKGDS(I2,J2,KGDSI)
+264c218
+<       ENDDO   ! sub-grid points
+---
+>       ENDDO
+268c222
+<       KM_LOOP : DO K=1,KM
+---
+>       DO K=1,KM
+270,271c224,225
+<         N_LOOP : DO N=1,NO
+<           LO(N,K)=WO(N,K).GE.PMP*NB4
+---
+>         DO N=1,NO
+>           LO(N,K)=WO(N,K).GE.0.5*NB4
+274,314c228
+<           ELSEIF (MSPIRAL.GT.1) THEN
+<             CALL GDSWIZ(KGDSI,-1,1,FILL,XX,YY,RLON(N),RLAT(N),NV,0,
+<      &                  DUM,DUM)
+<             IF (NV.EQ.1)THEN
+<               I1=NINT(XX)
+<               J1=NINT(YY)
+<               IXS=SIGN(1.,XX-I1)
+<               JXS=SIGN(1.,YY-J1)
+<               SPIRAL_LOOP : DO MX=2,MSPIRAL**2
+<                 KXS=SQRT(4*MX-2.5)
+<                 KXT=MX-(KXS**2/4+1)
+<                 SELECT CASE(MOD(KXS,4))
+<                 CASE(1)
+<                   IX=I1-IXS*(KXS/4-KXT)
+<                   JX=J1-JXS*KXS/4
+<                 CASE(2)
+<                   IX=I1+IXS*(1+KXS/4)
+<                   JX=J1-JXS*(KXS/4-KXT)
+<                 CASE(3)
+<                   IX=I1+IXS*(1+KXS/4-KXT)
+<                   JX=J1+JXS*(1+KXS/4)
+<                 CASE DEFAULT
+<                   IX=I1-IXS*KXS/4
+<                   JX=J1+JXS*(KXS/4-KXT)
+<                 END SELECT
+<                 NX=IJKGDS1(IX,JX,IJKGDSA)
+<                 IF(NX.GT.0.)THEN
+<                   IF(LI(NX,K).OR.IBI(K).EQ.0) THEN
+<                     GO(N,K)=GI(NX,K)
+<                     LO(N,K)=.TRUE.
+<                     CYCLE N_LOOP
+<                   ENDIF
+<                 ENDIF
+<               ENDDO SPIRAL_LOOP
+<               IBO(K)=1
+<               GO(N,K)=0.
+<             ELSE
+<               IBO(K)=1
+<               GO(N,K)=0.
+<             ENDIF
+<           ELSE  ! no spiral search option
+---
+>           ELSE
+316c230
+<             GO(N,K)=0.
+---
+>             GO(N,K)=FILL
+318,319c232,233
+<         ENDDO N_LOOP
+<       ENDDO KM_LOOP
+---
+>         ENDDO
+>       ENDDO

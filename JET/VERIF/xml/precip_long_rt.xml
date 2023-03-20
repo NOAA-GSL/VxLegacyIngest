@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/VERIF/bin">
+    <!ENTITY EXEC_DIR "/home/amb-verif/VERIF/exec">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/VERIF/verif/precip">
+    <!ENTITY WEB_DIR "/home/amb-verif/VERIF/verif/web">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/StageIV/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/amb-verif/VERIF/verif/precip/StageIV/log">
+    <!ENTITY OBS_DIR "/public/data/precip/stage4/6hr/netcdf">
+    
+    <!ENTITY FIM8_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/FIM8/realtime">
+    <!ENTITY FIM8_LOG_DIR "/home/amb-verif/VERIF/verif/precip/FIM8/log">
+    <!ENTITY FIM8_DIR "/home/rtfim/FIM/FIMrun">
+    <!ENTITY FIM8_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/FIM8vStageIV/realtime">
+    <!ENTITY FIM8_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/FIM8vStageIV/log">
+
+    <!ENTITY FIM9_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/FIM9/realtime">
+    <!ENTITY FIM9_LOG_DIR "/home/amb-verif/VERIF/verif/precip/FIM9/log">
+    <!ENTITY FIM9_DIR "/home/rtfim/FIM9/FIMrun">
+    <!ENTITY FIM9_VERIF_REALTIME_DIR "/home/amb-verif/VERIF/verif/precip/FIM9vStageIV/realtime">
+    <!ENTITY FIM9_VERIF_LOG_DIR "/home/amb-verif/VERIF/verif/precip/FIM9vStageIV/log">
+
+    <!ENTITY PCP_MASK "/home/amb-verif/VERIF/static/stageIV_pcp_mask.nc">
+
+    <!ENTITY CYCDEFS1 "24hr">
+    <!ENTITY CYCDEFS2 "6hr,12hr,24hr">
+    <!ENTITY TDIFF1 "60">
+    <!ENTITY TDIFF2 "900">
+
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "tjet:ujet:sjet:xjet">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "00:20:00">
+    <!ENTITY SERVICE_WALL_LIMIT "00:20:00">
+    <!ENTITY DEADLINE "5400">
+    <!ENTITY WAIT "3600">
+    
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+	
+    <!ENTITY YMDH64800
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-64800">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-64800">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-64800">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-64800">@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH86400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-86400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-86400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-86400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-86400">@H</cyclestr></value>
+	</envar>'>
+
+]>
+
+<workflow realtime="T" scheduler="slurm" cyclethrottle="6" cyclelifespan="0:03:00:00">
+
+  <cycledef group="6hr">0 6,18 * * 2023-2029 *</cycledef>
+  <cycledef group="12hr">0 0 * * 2023-2029 *</cycledef>
+  <cycledef group="24hr">0 12 * * 2023-2029 *</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/workflow_long_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="FIM8_precip_init" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>FIM8_precip_init</jobname>
+    <join><cyclestr offset="-64800">&FIM8_LOG_DIR;/FIM8_precip_init@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH64800;
+    
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/FIM_init_precip_verif.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&FIM8_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&FIM8_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>EXECDIR</name>
+      <value>&EXEC_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>fim</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 150 156 162 168 174 180 186 192 198 204 210 216 222 228 234 240 246 252 258 264 270 276 282 288 294 300 306 312 318 324 330 336</value>
+    </envar>
+    
+    <dependency>
+      <datadep age="120"><cyclestr offset="-64800">&FIM8_DIR;/@Y@m@d@H/post_C/130/NAT/grib2/@y@j@H000024</cyclestr></datadep>
+    </dependency>
+    
+  </task>
+  
+  <metatask>
+    <var name="tname">precip1 precip2</var>
+    <var name="cmd">&SCRIPT_DIR;/24h_precip_verif.py &SCRIPT_DIR;/sub24h_precip_verif.py</var>
+    <var name="cdefs">&CYCDEFS1; &CYCDEFS2;</var>
+    <var name="tdiff">&TDIFF1; &TDIFF2;</var>
+  
+    <metatask>
+      <var name="taskname">FIM8_#tname#_13km FIM8_#tname#_20km FIM8_#tname#_40km FIM8_#tname#_80km</var>
+      <var name="interpgrid">13kmLC 20kmLC 40kmLC 80kmLC</var>
+      <var name="statfile">verif_13km verif_20km verif_40km verif_80km</var>
+      <var name="ipopt">2 2 2 4</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/wrapper.ksh</command>
+	<jobname>#taskname#</jobname>
+	<join><cyclestr offset="-86400">&FIM8_VERIF_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+	&PE_OPTS;
+	&YMDH86400;
+	
+	<envar>
+          <name>SCRIPT</name>
+          <value>#cmd#</value>
+        </envar>
+	<envar>
+	  <name>EXECDIR</name>
+	  <value>&EXEC_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&FIM8_VERIF_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+	  <name>SCRIPTDIR</name>
+	  <value>&SCRIPT_DIR;</value>
+	</envar>
+	<envar>
+	  <name>OBSDIR</name>
+	  <value>&OBS_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>MODELDIR</name>
+	  <value>&FIM8_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>MODELGRID</name>
+	  <value>13kmLC</value>
+	</envar>
+	<envar>
+	  <name>INTERPGRID</name>
+	  <value>#interpgrid#</value>
+	</envar>
+	<envar>
+	  <name>MODEL</name>
+	  <value>fim</value>
+	</envar>
+	<envar>
+	  <name>NCLMODEL</name>
+	  <value>FIM</value>
+	</envar>
+	<envar>
+	  <name>STATF</name>
+	  <value>#statfile#</value>
+	</envar>
+	<envar>
+	  <name>IPOPTS</name>
+	  <value>#ipopt# -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+	</envar>
+
+	<dependency>
+          <timedep><cyclestr offset="#tdiff#">@Y@m@d@H@M@S</cyclestr></timedep>
+        </dependency>
+    
+      </task>
+    </metatask>
+  </metatask>
+
+  <task name="FIM9_precip_init" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>FIM9_precip_init</jobname>
+    <join><cyclestr offset="-64800">&FIM9_LOG_DIR;/FIM9_precip_init@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH64800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/FIM_init_precip_verif.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&FIM9_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&FIM9_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>EXECDIR</name>
+      <value>&EXEC_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>fim</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 150 156 162 168 174 180 1    86 192 198 204 210 216 222 228 234 240 246 252 258 264 270 276 282 288 294 300 306 312 318 324 330 336</value>
+    </envar>
+    
+    <dependency>
+      <datadep age="120"><cyclestr offset="-64800">&FIM9_DIR;/@Y@m@d@H/post_C/130/NAT/grib2/@y@j@H000024</cyclestr></datadep>
+    </dependency>
+    
+  </task>
+  
+  <metatask>
+    <var name="tname">precip1 precip2</var>
+    <var name="cmd">&SCRIPT_DIR;/24h_precip_verif.py &SCRIPT_DIR;/sub24h_precip_verif.py</var>
+    <var name="cdefs">&CYCDEFS1; &CYCDEFS2;</var>
+    <var name="tdiff">&TDIFF1; &TDIFF2;</var>
+  
+    <metatask>
+      <var name="taskname">FIM9_#tname#_13km FIM9_#tname#_20km FIM9_#tname#_40km FIM9_#tname#_80km</var>
+      <var name="interpgrid">13kmLC 20kmLC 40kmLC 80kmLC</var>
+      <var name="statfile">verif_13km verif_20km verif_40km verif_80km</var>
+      <var name="ipopt">2 2 2 4</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/wrapper.ksh</command>
+	<jobname>#taskname#</jobname>
+	<join><cyclestr offset="-86400">&FIM9_VERIF_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+	&PE_OPTS;
+	&YMDH86400;
+	
+	<envar>
+          <name>SCRIPT</name>
+          <value>#cmd#</value>
+        </envar>
+	<envar>
+	  <name>EXECDIR</name>
+	  <value>&EXEC_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&FIM9_VERIF_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+	  <name>SCRIPTDIR</name>
+	  <value>&SCRIPT_DIR;</value>
+	</envar>
+	<envar>
+	  <name>OBSDIR</name>
+	  <value>&OBS_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>MODELDIR</name>
+	  <value>&FIM9_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>MODELGRID</name>
+	  <value>13kmLC</value>
+	</envar>
+	<envar>
+	  <name>INTERPGRID</name>
+	  <value>#interpgrid#</value>
+	</envar>
+	<envar>
+	  <name>MODEL</name>
+	  <value>fim</value>
+	</envar>
+	<envar>
+	  <name>NCLMODEL</name>
+	  <value>FIM</value>
+	</envar>
+	<envar>
+	  <name>STATF</name>
+	  <value>#statfile#</value>
+	</envar>
+	<envar>
+	  <name>IPOPTS</name>
+	  <value>#ipopt# -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+	</envar>
+
+	<dependency>
+          <timedep><cyclestr offset="#tdiff#">@Y@m@d@H@M@S</cyclestr></timedep>
+        </dependency>
+    
+      </task>
+    </metatask>
+  </metatask>
+
+  <task name="precip_web" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_web</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip_web@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/precip_web_stage.py</value>
+    </envar>
+    <envar>
+      <name>MAINDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;</value>
+    </envar>
+    <envar>
+      <name>SRCMODELS</name>
+      <value>FIM8vStageIV FIM9vStageIV</value>
+    </envar>
+    <envar>
+      <name>SRCGRIDS</name>
+      <value>13kmLC 20kmLC 40kmLC 80kmLC</value>
+    </envar>
+    <envar>
+      <name>DIRMODELS</name>
+      <value>fim8 fim9</value>
+    </envar>
+    <envar>
+      <name>WEBMODELS</name>
+      <value>fim8 fim9</value>
+    </envar>
+    <envar>
+      <name>WEBGRIDS</name>
+      <value>13km 20km 40km 80km</value>
+    </envar>
+    
+    <dependency>
+      <and>
+        <taskdep task="FIM8_precip2_13km"/>
+	<taskdep task="FIM9_precip2_13km"/>
+      </and>
+    </dependency>
+
+  </task>
+
+<!--  <task name="precip_cp" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_cp</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip_cp@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/cp_verif_to_gsd.py</value>
+    </envar>
+    <envar>
+      <name>MAINDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;</value>
+    </envar>
+    <envar>
+      <name>VAR</name>
+      <value>precip</value>
+    </envar>
+    <envar>
+      <name>WEBMODELS</name>
+      <value>fim8 fim9</value>
+    </envar>
+    <envar>
+      <name>WEBGRIDS</name>
+      <value>13km 20km 40km 80km</value>
+    </envar>
+    
+    <dependency>
+      <taskdep task="precip_web"/>
+    </dependency>
+    
+  </task>
+  -->
+  <task name="precip_db" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_db</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/pop_precip_sql_tables.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>34</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>FIM8vStageIV/realtime FIM9vStageIV/realtime</value>
+    </envar>
+    <envar>
+      <name>SQLMODELS</name>
+      <value>FIM8 FIM9</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>13km 20km 40km 80km</value>
+    </envar>
+
+    <dependency>
+      <timedep><cyclestr offset="&WAIT;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>
+
+  </task>
+
+  <task name="precip2_db" cycledefs="6hr,12hr,24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip2_db</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip2_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;    
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/pop_precip2_sql_tables.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>26</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>FIM8vStageIV/realtime FIM9vStageIV/realtime</value>
+    </envar>
+    <envar>
+      <name>SQLMODELS</name>
+      <value>FIM8 FIM9</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>13km 20km 40km 80km</value>
+    </envar>
+    
+    <dependency>
+      <timedep><cyclestr offset="&WAIT;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>
+
+  </task>
+
+</workflow>

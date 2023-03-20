@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/misc/whome/wrfruc/HRRRE/bin/UPP'
+let g:netrw_dirhist_2='/mnt/lfs1/BMC/amb-verif/verif/src/iplib_test'
+let g:netrw_dirhist_3='/mnt/lfs1/BMC/amb-verif/realtime/precip/RRFS_DEV1'
+let g:netrw_dirhist_4='/misc/whome/amb-verif/ruc_madis_surface/RR_retro'
+let g:netrw_dirhist_5='/misc/whome/amb-verif/tcmet/xml'
+let g:netrw_dirhist_6='/mnt/lfs1/BMC/amb-verif/global_g2g_verif/g2g/CCPP_FVS_gfsv16_gf/realtime/stage/home/amb-verif/GSL_verif-global/verif/g2g/CCPP_FVS_gfsv16_gf/realtime/20210807-12z'
+let g:netrw_dirhist_7='/misc/whome/amb-verif/tcmet/xml/submit'

@@ -1,0 +1,117 @@
+#! /bin/sh
+## @(#)pn       1.3 94/05/25 17:19:22
+##
+##      pn--greps for arguments in phonebook files
+##          and highlights matched strings if output is tty and TERM is set
+##          all metacharacters escaped except *, which is converted to '.*' 
+##          for egrep
+##          multiple arguments may be used to search for multiple strings
+##          simultaneously
+##      also used for tla, nodes
+##   usage--pn [-f] str...
+##  author--I. Duplisse
+##    date--August 6, 1993
+##
+
+PATH=${PATH}:/usr/5bin ; export PATH # make sure /usr/5bin is in the path
+
+case `basename $0` in
+        ian_pn)
+               files="/home/mab/moninger/utilities/phone.names"
+                ;;
+       *)
+                exit 1
+                ;;
+esac
+
+more="more -f"
+attr_off=""
+bold_on=""
+
+
+#
+# see if term is set or redirecting output
+#
+force_bold=0
+# use dash in test so it doesn't barf on metacharacters
+if [ "-$1" = "--f" ]; then
+        force_bold=1
+        shift
+fi
+if [ \( -t -o ${force_bold} -ne 0 \)  -a  ! -z "${TERM}" ]; then
+        #eval `nawk -f /usr/local/bin/termcap.nawk term=$TERM /etc/termcap`
+        attr_off=`tput sgr0`
+        bold_on=`tput bold`
+fi
+#
+# if no args, show whole file
+#
+if [ $# -eq 0 ]; then
+        if [ -t ]; then
+                cat ${files}|$more
+        else
+                cat ${files}
+        fi
+        exit 0
+fi
+unset search
+###unset sedstr
+#
+# build egrep pattern and sed file to add formatting
+# (alternate on each argument)
+#
+scount=0
+for arg in "$@"
+do
+        # use dash in test so it doesn't barf on metacharacters
+        if [ "-$arg" = "-" ]; then
+                continue
+        fi
+        scount=`expr $scount + 1`
+        if [ ! -z "$search" ]; then
+                search=${search}\|
+        fi
+        clean_arg=`echo "$arg" | sed -e 's/\([][.^$\+?|]\)/\\\\\1/g' \
+                                     -e 's/\([()]\)/[\1]/g' \
+                                     -e 's/\*/.*/g'`
+        search=$search"($clean_arg)"
+        # since sed is case sensitive, we must construct a proper search string
+        ucase=`echo "$clean_arg"| tr '[a-z]' '[A-Z]'`
+        lcase=`echo "$clean_arg"| tr '[A-Z]' '[a-z]' `
+        sarg=`nawk -f - \
+                str1="$ucase" str2="$lcase" /dev/null <<EOF
+#
+# sedstr.nawk -- this nawk script will create a case-insensitive string
+# for sed, e.g. "cat" ==> "[Cc][Aa][Tt]"
+# usage: nawk -f sedstr.nawk str1="SEARCH" str2="search" /dev/null
+# author: I. Duplisse 8-10-93
+#
+END { 
+        for (i=1;i<=length(str1); i++) { 
+                letter = substr(str1,i,1) 
+                if (letter >= "A" && letter <= "Z") { 
+                        out = out "[" letter substr(str2,i,1) "]" 
+                } else {
+                        out = out letter
+                }
+        } 
+        print out
+}
+EOF
+`
+
+    sedstr=${sedstr}" s/\($sarg\)/${attr_off}${bold_on}\1${attr_off}/g"
+done
+if [ $scount -eq 0 ]; then
+        echo The arguments you supplied are invalid.
+        exit 1
+fi
+#
+# now do the search/apply the formatting
+#
+if [ -t ]; then
+        egrep -hi "$search" ${files} |  sed ${sedstr} | $more
+else
+        egrep -hi "$search" ${files} |  sed ${sedstr} 
+fi
+exit 0

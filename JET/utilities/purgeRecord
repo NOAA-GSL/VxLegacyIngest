@@ -1,0 +1,8 @@
+To: moninger
+From: utilities/purgeHybdata.s
+Subject: deleted most 1+ day old files in /scratch/maps/moninger/hybdata
+run via crontab on 971350910 (Thu May 15 09:10:02 GMT 1997)
+(this should not delete *bin files)
+these files are 1 or more days old, and are being deleted:
+
+these \*.bin files are 20 days old, and are being deleted

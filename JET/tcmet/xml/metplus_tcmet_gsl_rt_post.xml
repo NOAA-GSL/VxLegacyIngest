@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/tcmet/bin">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/tcmet/verif/output/logs">
+    <!ENTITY MAIN_DIR "/home/amb-verif/tcmet/verif">
+    <!ENTITY CONFIG_DIR "/home/amb-verif/tcmet/config">
+    <!ENTITY OUTPUT_DIR "/home/amb-verif/tcmet/verif/output/tc_pairs_post/gsl">
+    <!ENTITY PYTHON_PATH "/lfs1/BMC/amb-verif/anaconda3/bin/python3">
+    <!ENTITY MVLOAD_PATH "/home/amb-verif/tcmet/bin/met_db_load.py">
+
+    <!ENTITY MET_DIR "/contrib/met/10.1.1/met-10.1.1">
+    <!ENTITY MET_BASE "/contrib/met/10.1.1/share/met">
+
+    <!ENTITY METPLUS_PATH "/contrib/met/METplus/METplus-4.1.1">
+
+    <!ENTITY A_DECK "/home/rtfim/GFSv17p8_HFIP/tracks">
+    <!ENTITY MODEL_LOG_DIR "/home/amb-verif/tcmet/verif/output/logs/gsl">
+
+    <!ENTITY B_DECK "/public/data/nhc/btk">
+    <!ENTITY B_DECK_LOG_DIR "/home/amb-verif/tcmet/verif/output/bdeck/log">
+
+    <!ENTITY E_DECK "/public/data/nhc/e-decks">
+    <!ENTITY E_DECK_LOG_DIR "/home/amb-verif/tcmet/verif/output/edeck/log">
+
+    <!ENTITY CYCDEFS "6hr">
+
+    <!ENTITY PROJECT "amb-verif">
+<!--
+    <!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+    <!ENTITY PE_SERVICE "service">
+-->
+    <!ENTITY PE "ppa">
+    <!ENTITY PE_SERVICE "ppa-service">
+    <!ENTITY PE_WALL_LIMIT "02:40:00">
+    <!ENTITY SERVICE_WALL_LIMIT "02:40:00">
+    <!ENTITY DEADLINE "43200">
+    <!ENTITY WAIT "2100">
+    <!ENTITY WAIT1 "2400">
+
+    <!ENTITY PE_OPTS
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+        <deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY SERVICE_OPTS
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>6G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+        <deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY YMDH86400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-86400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-86400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-86400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-86400">@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr offset="-86400">@Y@m@d@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH_LONG</name>
+	  <value><cyclestr offset="-86400">@Y@m@d_@H0000</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH_LONG_LAG</name>
+	  <value><cyclestr offset="-108000">@Y@m@d_@H0000</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH_START</name>
+	  <value><cyclestr offset="-691200">@Y@m@d@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH108000
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-108000">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-108000">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-108000">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-108000">@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr offset="-108000">@Y@m@d@H</cyclestr></value>
+	</envar>'>
+]>
+
+<workflow realtime="T" scheduler="slurm" cyclethrottle="6" cyclelifespan="0:06:00:00">
+
+  <cycledef group="6hr">0 0,6,12,18 * * 2020-2029 *</cycledef>
+
+  <log><cyclestr offset="-86400">&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <metatask>
+    <var name="tname">tcmet_post_GFP8 tcmet_post_MYP8</var>
+    <var name="model">GFP8 MYP8</var>
+    <var name="model_lowercase">gfp8 myp8</var>
+
+    <metatask>
+      <var name="taskname">GSL_#tname#</var>
+      <var name="cfg">&CONFIG_DIR;/metplus/</var>
+      <var name="cdefs">&CYCDEFS;</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/metplus_wrapper_rt.sh</command>
+	<jobname>#taskname#</jobname>
+	<join><cyclestr offset="-86400">&MODEL_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+	&PE_OPTS;
+	&YMDH86400;
+
+	<envar>
+	  <name>MET_DIR</name>
+	  <value>&MET_DIR;</value>
+        </envar>
+	<envar>
+	  <name>MET_BIN_DIR_ROOT</name>
+	  <value>&MET_DIR;/src/tools/tc_utils</value>
+        </envar>
+	<envar>
+	  <name>MET_BIN_DIR</name>
+	  <value>&MET_DIR;/src/tools/tc_utils/tc_pairs</value>
+        </envar>
+	<envar>
+	  <name>MET_BASE</name>
+	  <value>&MET_BASE;</value>
+        </envar>
+	<envar>
+	  <name>METPLUS_PATH</name>
+	  <value>&METPLUS_PATH;</value>
+        </envar>
+	<envar>
+	  <name>MAIN_DIR</name>
+	  <value>&MAIN_DIR;</value>
+	</envar>
+        <envar>
+          <name>OUTPUT_DIR</name>
+          <value>&OUTPUT_DIR;</value>
+        </envar>
+	<envar>
+	  <name>ADECK_DIR</name>
+	  <value>&A_DECK;</value>
+	</envar>
+	<envar>
+	  <name>BDECK_DIR</name>
+	  <value>&B_DECK;</value>
+	</envar>
+	<envar>
+	  <name>EDECK_DIR</name>
+	  <value>&E_DECK;</value>
+	</envar>
+	<envar>
+	  <name>METPLUS_CFG1</name>
+	  <value>&CONFIG_DIR;/metplus/my_user_config.conf</value>
+	</envar>
+	<envar>
+	  <name>METPLUS_CFG2</name>
+	  <value>&CONFIG_DIR;/metplus/TCPairs_gsl_jet_rt_post.conf</value>
+	</envar>
+	<envar>
+	  <name>CFGDIR</name>
+	  <value>&CONFIG_DIR;</value>
+	</envar>
+	<envar>
+	  <name>MODEL</name>
+	  <value>#model#</value>
+	</envar>
+	<envar>
+	  <name>MODEL_LOWERCASE</name>
+	  <value>#model_lowercase#</value>
+	</envar>
+
+      </task>
+    </metatask>
+  </metatask>
+
+  <task name="tcmet_gsl_post_db" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>tcmet_gsl_post_db</jobname>
+    <join><cyclestr offset="-108000">&WF_LOG_DIR;/tcmet_gsl_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH108000;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/mvcopier.py</value>
+    </envar>
+    <envar>
+      <name>MAIN_DIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>PYTHON_PATH</name>
+      <value>&PYTHON_PATH;</value>
+    </envar>
+    <envar>
+      <name>MVLOAD_PATH</name>
+      <value>&MVLOAD_PATH;</value>
+    </envar>
+    <envar>
+      <name>CFG_DIR</name>
+      <value>&CONFIG_DIR;</value>
+    </envar>
+    <envar>
+      <name>CFG_XML</name>
+      <value>mv_load_gsl_post.xml</value>
+    </envar>
+    <envar>
+      <name>MODEL_LIST</name>
+      <value>GFP8 MYP8</value>
+    </envar>
+    <envar>
+      <name>DATA_TYPES</name>
+      <value>tc_pairs</value>
+    </envar>
+
+    <dependency>
+      <timedep><cyclestr offset="&WAIT;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>
+
+  </task> 
+
+</workflow>
+

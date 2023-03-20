@@ -1,0 +1,287 @@
+11,13c11
+< C           OPTIONS ALLOW VARYING THE MINIMUM PERCENTAGE FOR MASK,
+< C           I.E. PERCENT VALID INPUT DATA REQUIRED TO MAKE OUTPUT DATA,
+< C           (IPOPT(1)) WHICH DEFAULTS TO 50 (IF IPOPT(1)=-1).
+---
+> C           NO OPTIONS ARE ALLOWED.
+15,17d12
+< C           IF NO INPUT DATA IS FOUND NEAR THE OUTPUT POINT, A SPIRAL
+< C           SEARCH MAY BE INVOKED BY SETTING IPOPT(2)> 0.
+< C           NO SEARCHING IS DONE IF OUTPUT POINT IS OUTSIDE THE INPUT GRID.
+40,44d34
+< C 1999-04-08  IREDELL  SPLIT IJKGDS INTO TWO PIECES
+< C 2001-06-18  IREDELL  INCLUDE MINIMUM MASK PERCENTAGE OPTION
+< C 2007-05-22  IREDELL  EXTRAPOLATE UP TO HALF A GRID CELL
+< C 2008-06-04  GAYNO    ADDED SPIRAL SEARCH OPTION
+< C 2009-10-19  IREDELL  SAVE WEIGHTS AND THREAD FOR PERFORMANCE
+50,54c40
+< C     IPOPT    - INTEGER (20) INTERPOLATION OPTIONS
+< C                IPOPT(1) IS MINIMUM PERCENTAGE FOR MASK
+< C                (DEFAULTS TO 50 IF IPOPT(1)=-1)
+< C                IPOPT(2) IS WIDTH OF SQUARE TO EXAMINE IN SPIRAL SEARCH
+< C                (DEFAULTS TO NO SEARCH IF IPOPT(2)=-1)
+---
+> C     IPOPT    - INTEGER (20) INTERPOLATION OPTIONS (NO OPTIONS)
+84,85c70
+< C   IJKGDS0      SET UP PARAMETERS FOR IJKGDS1
+< C   (IJKGDS1)    RETURN FIELD POSITION FOR A GIVEN GRID POINT
+---
+> C   (IJKGDS)     RETURN FIELD POSITION FOR A GIVEN GRID POINT
+92,102c77,83
+<       IMPLICIT NONE
+<       INTEGER,INTENT(IN):: IPOPT(20),KGDSI(200),KGDSO(200),MI,MO,KM
+<       INTEGER,INTENT(IN):: IBI(KM)
+<       LOGICAL*1,INTENT(IN):: LI(MI,KM)
+<       REAL,INTENT(IN):: GI(MI,KM)
+<       INTEGER,INTENT(INOUT):: NO
+<       REAL,INTENT(INOUT):: RLAT(MO),RLON(MO)
+<       INTEGER,INTENT(OUT):: IBO(KM)
+<       LOGICAL*1,INTENT(OUT):: LO(MO,KM)
+<       REAL,INTENT(OUT):: GO(MO,KM)
+<       INTEGER,INTENT(OUT):: IRET
+---
+> CFPP$ EXPAND(IJKGDS)
+>       INTEGER IPOPT(20)
+>       INTEGER KGDSI(200),KGDSO(200)
+>       INTEGER IBI(KM),IBO(KM)
+>       LOGICAL*1 LI(MI,KM),LO(MO,KM)
+>       REAL GI(MI,KM),GO(MO,KM)
+>       REAL RLAT(MO),RLON(MO)
+104,125c85,88
+<       INTEGER IJX(2),IJY(2)
+<       REAL WX(2),WY(2)
+<       INTEGER IJKGDSA(20)
+<       REAL,PARAMETER:: FILL=-9999.
+<       INTEGER MP,N,I,J,K,NK,NV,IJKGDS1
+<       INTEGER MSPIRAL,I1,J1,IXS,JXS,MX,KXS,KXT,IX,JX,NX
+<       REAL PMP,XIJ,YIJ,XF,YF,G,W,DUM
+<       INTEGER,SAVE:: KGDSIX(200)=-1,KGDSOX(200)=-1,NOX=-1,IRETX=-1
+<       INTEGER,ALLOCATABLE,SAVE:: NXY(:,:,:)
+<       REAL,ALLOCATABLE,SAVE:: RLATX(:),RLONX(:),WXY(:,:,:)
+< C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+< C  SET PARAMETERS
+<       IRET=0
+<       MP=IPOPT(1)
+<       IF(MP.EQ.-1.OR.MP.EQ.0) MP=50
+<       IF(MP.LT.0.OR.MP.GT.100) IRET=32
+<       PMP=MP*0.01
+<       MSPIRAL=MAX(IPOPT(2),0)
+< C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+< C  SAVE OR SKIP WEIGHT COMPUTATION
+<       IF(IRET.EQ.0.AND.(KGDSO(1).LT.0.OR.
+<      &    ANY(KGDSI.NE.KGDSIX).OR.ANY(KGDSO.NE.KGDSOX))) THEN
+---
+>       REAL WO(MO)
+>       INTEGER N11(MO),N21(MO),N12(MO),N22(MO)
+>       REAL W11(MO),W21(MO),W12(MO),W22(MO)
+>       PARAMETER(FILL=-9999.)
+128,135c91,95
+<         IF(KGDSO(1).GE.0) THEN
+<           CALL GDSWIZ(KGDSO, 0,MO,FILL,XPTS,YPTS,RLON,RLAT,NO,0,DUM,DUM)
+<           IF(NO.EQ.0) IRET=3
+<         ENDIF
+< C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+< C  LOCATE INPUT POINTS
+<         CALL GDSWIZ(KGDSI,-1,NO,FILL,XPTS,YPTS,RLON,RLAT,NV,0,DUM,DUM)
+<         IF(IRET.EQ.0.AND.NV.EQ.0) IRET=2
+---
+>       IRET=0
+>       IF(KGDSO(1).GE.0) THEN
+>         CALL GDSWIZ(KGDSO, 0,MO,FILL,XPTS,YPTS,RLON,RLAT,NO,0,DUM,DUM)
+>         IF(NO.EQ.0) IRET=3
+>       ENDIF
+137,143c97,129
+< C  ALLOCATE AND SAVE GRID DATA
+<         KGDSIX=KGDSI
+<         KGDSOX=KGDSO
+<         IF(NOX.NE.NO) THEN
+<           IF(NOX.GE.0) DEALLOCATE(RLATX,RLONX,NXY,WXY)
+<           ALLOCATE(RLATX(NO),RLONX(NO),NXY(2,2,NO),WXY(2,2,NO))
+<           NOX=NO
+---
+> C  LOCATE INPUT POINTS AND COMPUTE THEIR WEIGHTS
+>       CALL GDSWIZ(KGDSI,-1,NO,FILL,XPTS,YPTS,RLON,RLAT,NV,0,DUM,DUM)
+>       IF(IRET.EQ.0.AND.NV.EQ.0) IRET=2
+>       DO N=1,NO
+>         XI=XPTS(N)
+>         YI=YPTS(N)
+>         IF(XI.NE.FILL.AND.YI.NE.FILL) THEN
+>           I1=XI
+>           I2=I1+1
+>           J1=YI
+>           J2=J1+1
+>           XF=XI-I1
+>           YF=YI-J1
+>           N11(N)=IJKGDS(I1,J1,KGDSI)
+>           N21(N)=IJKGDS(I2,J1,KGDSI)
+>           N12(N)=IJKGDS(I1,J2,KGDSI)
+>           N22(N)=IJKGDS(I2,J2,KGDSI)
+>           IF(MIN(N11(N),N21(N),N12(N),N22(N)).GT.0) THEN
+>             W11(N)=(1-XF)*(1-YF)
+>             W21(N)=XF*(1-YF)
+>             W12(N)=(1-XF)*YF
+>             W22(N)=XF*YF
+>           ELSE
+>             N11(N)=0
+>             N21(N)=0
+>             N12(N)=0
+>             N22(N)=0
+>           ENDIF
+>         ELSE
+>           N11(N)=0
+>           N21(N)=0
+>           N12(N)=0
+>           N22(N)=0
+145c131
+<         IRETX=IRET
+---
+>       ENDDO
+147,171c133,143
+< C  COMPUTE WEIGHTS
+<         IF(IRET.EQ.0) THEN
+<           CALL IJKGDS0(KGDSI,IJKGDSA)
+< C$OMP PARALLEL DO
+< C$OMP&PRIVATE(N,XIJ,YIJ,IJX,IJY,XF,YF,J,I,WX,WY)
+<           DO N=1,NO
+<             RLONX(N)=RLON(N)
+<             RLATX(N)=RLAT(N)
+<             XIJ=XPTS(N)
+<             YIJ=YPTS(N)
+<             IF(XIJ.NE.FILL.AND.YIJ.NE.FILL) THEN
+<               IJX(1:2)=FLOOR(XIJ)+(/0,1/)
+<               IJY(1:2)=FLOOR(YIJ)+(/0,1/)
+<               XF=XIJ-IJX(1)
+<               YF=YIJ-IJY(1)
+<               WX(1)=(1-XF)
+<               WX(2)=XF
+<               WY(1)=(1-YF)
+<               WY(2)=YF
+<               DO J=1,2
+<                 DO I=1,2
+<                   NXY(I,J,N)=IJKGDS1(IJX(I),IJY(J),IJKGDSA)
+<                   WXY(I,J,N)=WX(I)*WY(J)
+<                 ENDDO
+<               ENDDO
+---
+> C  INTERPOLATE WITH OR WITHOUT BITMAPS
+> CMIC$ DO ALL AUTOSCOPE PRIVATE(WO)
+>       DO K=1,KM
+>         DO N=1,NO
+>           GO(N,K)=0.
+>           WO(N)=0.
+>           IF(N11(N).GT.0) THEN
+>             IF(IBI(K).EQ.0) THEN
+>               GO(N,K)=W11(N)*GI(N11(N),K)+W21(N)*GI(N21(N),K)
+>      &               +W12(N)*GI(N12(N),K)+W22(N)*GI(N22(N),K)
+>               WO(N)=1
+173,201c145,147
+<               NXY(:,:,N)=0
+<             ENDIF
+<           ENDDO
+<         ENDIF
+<       ENDIF
+< C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+< C  INTERPOLATE OVER ALL FIELDS
+<       IF(IRET.EQ.0.AND.IRETX.EQ.0) THEN
+<         IF(KGDSO(1).GE.0) THEN
+<           NO=NOX
+<           DO N=1,NO
+<             RLON(N)=RLONX(N)
+<             RLAT(N)=RLATX(N)
+<           ENDDO
+<         ENDIF
+< C$OMP PARALLEL DO
+< C$OMP&PRIVATE(NK,K,N,G,W,J,I)
+< C$OMP&PRIVATE(I1,J1,IXS,JXS,MX,KXS,KXT,IX,JX,NX)
+<         DO NK=1,NO*KM
+<           K=(NK-1)/NO+1
+<           N=NK-NO*(K-1)
+<           G=0
+<           W=0
+<           DO J=1,2
+<             DO I=1,2
+<               IF(NXY(I,J,N).GT.0.AND.
+<      &           (IBI(K).EQ.0.OR.LI(NXY(I,J,N),K))) THEN
+<                 G=G+WXY(I,J,N)*GI(NXY(I,J,N),K)
+<                 W=W+WXY(I,J,N)
+---
+>               IF(LI(N11(N),K)) THEN
+>                 GO(N,K)=GO(N,K)+W11(N)*GI(N11(N),K)
+>                 WO(N)=WO(N)+W11(N)
+203,237c149,159
+<             ENDDO
+<           ENDDO
+<           LO(N,K)=W.GE.PMP
+<           IF(LO(N,K)) THEN
+<             GO(N,K)=G/W
+<           ELSEIF(MSPIRAL.GT.0.AND.XPTS(N).NE.FILL.AND.
+<      &                            YPTS(N).NE.FILL) THEN
+<             I1=NINT(XPTS(N))
+<             J1=NINT(YPTS(N))
+<             IXS=SIGN(1.,XPTS(N)-I1)
+<             JXS=SIGN(1.,YPTS(N)-J1)
+<             SPIRAL : DO MX=1,MSPIRAL**2
+<               KXS=SQRT(4*MX-2.5)
+<               KXT=MX-(KXS**2/4+1)
+<               SELECT CASE(MOD(KXS,4))
+<               CASE(1)
+<                 IX=I1-IXS*(KXS/4-KXT)
+<                 JX=J1-JXS*KXS/4
+<               CASE(2)
+<                 IX=I1+IXS*(1+KXS/4)
+<                 JX=J1-JXS*(KXS/4-KXT)
+<               CASE(3)
+<                 IX=I1+IXS*(1+KXS/4-KXT)
+<                 JX=J1+JXS*(1+KXS/4)
+<               CASE DEFAULT
+<                 IX=I1-IXS*KXS/4
+<                 JX=J1+JXS*(KXS/4-KXT)
+<               END SELECT
+<               NX=IJKGDS1(IX,JX,IJKGDSA)
+<               IF(NX.GT.0.)THEN
+<                 IF(LI(NX,K).OR.IBI(K).EQ.0)THEN
+<                   GO(N,K)=GI(NX,K)
+<                   LO(N,K)=.TRUE.
+<                   EXIT SPIRAL
+<                 ENDIF
+---
+>               IF(LI(N21(N),K)) THEN
+>                 GO(N,K)=GO(N,K)+W21(N)*GI(N21(N),K)
+>                 WO(N)=WO(N)+W21(N)
+>               ENDIF
+>               IF(LI(N12(N),K)) THEN
+>                 GO(N,K)=GO(N,K)+W12(N)*GI(N12(N),K)
+>                 WO(N)=WO(N)+W12(N)
+>               ENDIF
+>               IF(LI(N22(N),K)) THEN
+>                 GO(N,K)=GO(N,K)+W22(N)*GI(N22(N),K)
+>                 WO(N)=WO(N)+W22(N)
+239,242d160
+<             ENDDO SPIRAL
+<             IF(.NOT.LO(N,K))THEN
+<               IBO(K)=1
+<               GO(N,K)=0.
+243a162,168
+>           ENDIF
+>         ENDDO
+>         IBO(K)=IBI(K)
+>         DO N=1,NO
+>           LO(N,K)=WO(N).GE.0.5
+>           IF(LO(N,K)) THEN
+>             GO(N,K)=GO(N,K)/WO(N)
+244a170
+>             IBO(K)=1
+248,257c174,175
+<         DO K=1,KM
+<           IBO(K)=IBI(K)
+<           IF(.NOT.ALL(LO(1:NO,K))) IBO(K)=1
+<         ENDDO
+<         IF(KGDSO(1).EQ.0) CALL POLFIXS(NO,MO,KM,RLAT,RLON,IBO,LO,GO)
+< C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<       ELSE
+<         IF(IRET.EQ.0) IRET=IRETX
+<         IF(KGDSO(1).GE.0) NO=0
+<       ENDIF
+---
+>       ENDDO
+>       IF(KGDSO(1).EQ.0) CALL POLFIXS(NO,MO,KM,RLAT,RLON,IBO,LO,GO)

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/ensemble/bin">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/ensemble/verif/precip/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/ensemble/verif/precip">
+    <!ENTITY WEB_DIR "/home/amb-verif/ensemble/verif/web">
+    <!ENTITY CONFIG_DIR "/home/amb-verif/ensemble/config">
+    <!ENTITY MET_DIR "/contrib/met/9.1/">
+    <!ENTITY MET_BASE "/contrib/met/9.1/share/met/">
+    <!ENTITY METPLUS_DIR "/lfs1/BMC/amb-verif/METplus_ensemble/METplus-3.0-beta1">
+    <!ENTITY METVIEWER_DIR "/home/amb-verif/metviewer/v2.11_int/metviewer">
+    <!ENTITY MVLOADER_DIR "/home/amb-verif/metviewer/mvloader">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/StageIV/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/amb-verif/ensemble/verif/precip/StageIV/log">
+    <!ENTITY OBS_DIR "/public/data/precip/stage4/grib2">   
+ 
+    <!ENTITY PCP_MASK "/home/amb-verif/ensemble/static/CONUS_mask.nc">
+
+    <!ENTITY CYCDEFS "6hr">
+    <!ENTITY TDIFF "3600">
+
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "01:40:00">
+    <!ENTITY SERVICE_WALL_LIMIT "01:40:00">
+    <!ENTITY DEADLINE "21600">
+    <!ENTITY WAIT "3600">
+    
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>6G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>'>
+	
+    <!ENTITY YMDH
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr>@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr>@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr>@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr>@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr>@Y@m@d@H</cyclestr></value>
+	</envar>'>
+
+]>
+
+<workflow realtime="F" scheduler="slurm" cyclethrottle="6" cyclelifespan="0:06:00:00">
+
+  <cycledef group="6hr">201902020000 201902030000 6:00:00</cycledef>
+  <cycledef group="24hr">201902020000 201902030000 24:00:00</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="StageIV_hpss_pull" cycledefs="24hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.sh</command>
+    <jobname>StageIV_hpss_pull</jobname>
+    <join><cyclestr>&OBS_LOG_DIR;/StageIV_hpss_pull_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/stageiv_hpss_pull.ksh</value>
+    </envar>
+    <envar>
+      <name>STAGEIV_DIR</name>
+      <value>&OBS_REALTIME_DIR;/stage</value>
+    </envar>
+    <envar>
+      <name>OBS_REALTIME_DIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+
+  </task>
+
+  <task name="StageIV_regrid_init" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/metplus_wrapper.sh</command>
+    <jobname>StageIV_regrid_init</jobname>
+    <join><cyclestr>&OBS_LOG_DIR;/StageIV_regrid_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>MET_DIR</name>
+      <value>&MET_DIR;</value>
+    </envar>
+    <envar>
+      <name>MET_BASE</name>
+      <value>&MET_BASE;</value>
+    </envar>
+    <envar>
+      <name>METPLUS_PATH</name>
+      <value>&METPLUS_DIR;</value>
+    </envar>
+    <envar>
+      <name>METPLUS_CFG</name>
+      <value>&CONFIG_DIR;/metplus/stageiv_regrid_retro.conf</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>OBSDIR</name>
+      <value>&OBS_DIR;</value>
+    </envar>
+    <envar>
+      <name>CFGDIR</name>
+      <value>&CONFIG_DIR;</value>
+    </envar>
+
+  </task>  
+  <metatask>
+    <var name="tname">precip_06 precip_12 precip_18 precip_24</var>
+    <var name="fcst_len">06 12 18 24</var>
+  
+    <metatask>
+      <var name="taskname">StageIV_#tname#</var>
+      <var name="cfg">&CONFIG_DIR;/metplus/pcp_combine_stageiv.conf</var>
+      <var name="region">conus</var>
+      <var name="cdefs">&CYCDEFS;</var>
+      <var name="tdiff">&TDIFF;</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/metplus_wrapper.sh</command>
+	<jobname>#taskname#</jobname>
+	<join><cyclestr>&OBS_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+	&PE_OPTS;    
+	&YMDH;
+	
+	<envar>
+	  <name>MET_DIR</name>
+	  <value>&MET_DIR;</value>
+        </envar>
+	<envar>
+	  <name>MET_BASE</name>
+	  <value>&MET_BASE;</value>
+        </envar>
+	<envar>
+	  <name>METPLUS_PATH</name>
+	  <value>&METPLUS_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&OBS_REALTIME_DIR;</value>
+        </envar>
+	<envar>
+	  <name>METPLUS_CFG</name>
+	  <value>#cfg#</value>
+	</envar>
+	<envar>
+	  <name>CFGDIR</name>
+	  <value>&CONFIG_DIR;</value>
+	</envar>
+	<envar>
+	  <name>FCSTLEN</name>
+	  <value>#fcst_len#</value>
+	</envar>
+	<envar>
+	  <name>REGION</name>
+	  <value>#region#</value>
+	</envar>
+	<envar>
+	  <name>OBS</name>
+	  <value>STAGEIV</value>
+	</envar>
+
+	<dependency>
+	   <taskdep task="StageIV_regrid_init"/>
+        </dependency>
+      </task>
+
+    </metatask>
+
+    <metatask>
+      <var name="taskname">StageIV_#tname#_gaussian_25</var>
+      <var name="cdefs">&CYCDEFS;</var>
+      <var name="gaussian_dx">3</var>
+      <var name="gaussian_radius">25</var>
+      <var name="neighborhood">729</var> <!-- neighborhood radius squared-->
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/wrapper.ksh</command>
+        <jobname>#taskname#</jobname>
+        <join><cyclestr>&OBS_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+        &PE_OPTS;
+        &YMDH;
+
+        <envar>
+          <name>SCRIPT</name>
+          <value>&SCRIPT_DIR;/gaussian_regrid.py</value>
+        </envar>
+        <envar>
+          <name>MET_DIR</name>
+          <value>&MET_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&OBS_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>FCSTLEN</name>
+          <value>#fcst_len#</value>
+        </envar>
+        <envar>
+          <name>VAR</name>
+          <value>APCP</value>
+        </envar>
+        <envar>
+          <name>LEVEL</name>
+          <value>A</value>
+        </envar>
+        <envar>
+          <name>DX</name>
+          <value>#gaussian_dx#</value>
+        </envar>
+        <envar>
+          <name>RADIUS</name>
+          <value>#gaussian_radius#</value>
+        </envar>
+        <envar>
+          <name>NEIGHBORHOOD</name>
+          <value>#neighborhood#</value>
+        </envar>
+
+        <dependency>
+          <taskdep task="StageIV_#tname#"/>
+        </dependency>
+ 
+      </task>
+    </metatask>
+ 
+ </metatask>
+
+</workflow>

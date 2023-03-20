@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/rtrr/VERIF/bin">
+    <!ENTITY EXEC_DIR "/home/rtrr/VERIF/exec">
+    <!ENTITY WF_LOG_DIR "/home/rtrr/verif/cref/log">
+    
+    <!ENTITY MAIN_DIR "/home/rtrr/verif/cref">
+    <!ENTITY WEB_DIR "/home/rtrr/verif/web">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/rtrr/verif/cref/NSSL/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/rtrr/verif/cref/NSSL/log">
+    <!ENTITY OBS_DIR "/public/data/radar/nssl/mrms_binary">
+    
+    <!ENTITY HRRR_REALTIME_DIR "/home/rtrr/verif/cref/HRRR/realtime">
+    <!ENTITY HRRR_LOG_DIR "/home/rtrr/verif/cref/HRRR/log">
+    <!ENTITY HRRR_DIR "/home/rtrr/hrrr">
+    
+    <!ENTITY RAP_REALTIME_DIR "/home/rtrr/verif/cref/RAP/realtime">
+    <!ENTITY RAP_LOG_DIR "/home/rtrr/verif/cref/RAP/log">
+    <!ENTITY RAP_DIR "/home/rtrr/rr">
+    
+    <!ENTITY RUC_REALTIME_DIR "/home/rtrr/verif/cref/RUC/realtime">
+    <!ENTITY RUC_LOG_DIR "/home/rtrr/verif/cref/RUC/log">
+    <!ENTITY RUC_DIR "/home/rtruc/ruc_backup/ruc_presm">
+    
+    <!ENTITY HRRR_MASK "/home/rtrr/VERIF/static/hrrr_hgt_mask.nc">
+    <!ENTITY NSSL_MASK "/home/rtrr/VERIF/static/nssl_hgt_mask.nc">
+    
+    <!ENTITY PROJECT "nrtrr">
+    <!ENTITY PE "batch">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "00:20:00">
+    <!ENTITY SERVICE_WALL_LIMIT "00:20:00">
+    <!ENTITY DEADLINE "5400">
+    <!ENTITY WAIT "3600">
+
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<native>-l partition=vjet -W umask=022</native>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE_SERVICE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<native>-l partition=service -W umask=022</native>'>
+	
+    <!ENTITY YMDH
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-7200">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-7200">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-7200">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-7200">@H</cyclestr></value>
+	</envar>'>
+]>
+
+<workflow realtime="F" scheduler="moabtorque" cyclethrottle="50" cyclelifespan="1:00:00:00">
+
+  <cycledef group="1hr">0 * 16-17 10 2013 *</cycledef>
+
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="cref_db" cycledefs="1hr" maxtries="2">    
+    <command>&SCRIPT_DIR;/pop_cref_sql_tables.py</command>
+    <jobname>cref_db</jobname>
+    <join><cyclestr>&WF_LOG_DIR;/cref_db_@Y@m@d@H.log</cyclestr></join>
+        
+    &SERVICE_OPTS;
+    &YMDH;
+        
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>114</value>
+    </envar>
+    <envar>
+      <name>MODELDIRS</name>
+      <value>HRRR/realtime RAP/realtime RUC/realtime</value>
+    </envar>
+    <envar>
+      <name>MODELNAMES</name>
+      <value>HRRR RAP RUC</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+  
+  </task>
+
+</workflow>

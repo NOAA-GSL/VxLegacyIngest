@@ -1,0 +1,12 @@
+42d41
+< C 2001-06-18  IREDELL  IMPROVE DETECTION OF SPECIAL FAST TRANSFORM
+197,198c196,197
+<             RLAT1=KGDSO(4)*1.E-3
+<             RLAT2=KGDSO(7)*1.E-3
+---
+>             RLAT1=KGDSI(4)*1.E-3
+>             RLAT2=KGDSI(7)*1.E-3
+204c203
+<             JGO=KGDSO(10)*2
+---
+>             JGO=KGDSI(10)*2

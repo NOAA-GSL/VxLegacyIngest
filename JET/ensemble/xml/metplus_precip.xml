@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/ensemble/bin">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/ensemble/verif/precip/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/ensemble/verif/precip">
+    <!ENTITY WEB_DIR "/home/amb-verif/ensemble/verif/web">
+    <!ENTITY CONFIG_DIR "/home/amb-verif/ensemble/config">
+    <!ENTITY MET_DIR "/contrib/met/9.0/">
+    <!ENTITY MET_BASE "/contrib/met/9.0/share/met/">
+    <!ENTITY METPLUS_DIR "/lfs1/BMC/amb-verif/METplus_ensemble/METplus-3.0-beta1">
+    <!ENTITY METVIEWER_DIR "/home/amb-verif/metviewer/v2.10_int/metviewer">
+    <!ENTITY MVLOADER_DIR "/home/amb-verif/metviewer/mvloader">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/StageIV/realtime">
+    
+    <!ENTITY HRRRE_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/HRRRE/realtime">
+    <!ENTITY HRRRE_LOG_DIR "/home/amb-verif/ensemble/verif/precip/HRRRE/log">
+    
+    <!ENTITY HREF_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/HREF/realtime">
+    <!ENTITY HREF_LOG_DIR "/home/amb-verif/ensemble/verif/precip/HREF/log">
+   
+    <!ENTITY CYCDEFS "6hr">
+ 
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "02:40:00">
+    <!ENTITY SERVICE_WALL_LIMIT "02:40:00">
+    <!ENTITY DEADLINE "43200">
+    <!ENTITY WAIT "3600">
+    
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+        <deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>6G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+        <deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+	
+    <!ENTITY YMDH21600
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-21600">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-21600">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-21600">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-21600">@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr offset="-21600">@Y@m@d@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH86400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-86400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-86400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-86400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-86400">@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr offset="-86400">@Y@m@d@H</cyclestr></value>
+	</envar>'>
+
+]>
+
+<workflow realtime="T" scheduler="slurm" cyclethrottle="4" cyclelifespan="0:06:00:00">
+
+  <cycledef group="6hr">0 0,6,12,18 * * 2023-2029 *</cycledef>
+  
+  <log><cyclestr offset="-21600">&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <metatask>
+    <var name="tname">precip_06 precip_12 precip_18 precip_24</var>
+    <var name="fcst_len">06 12 18 24</var>
+    <var name="acum_len">6 12 18 24</var>
+    <metatask>
+      <var name="taskname">HRRRE_#tname#_ensemble_stat</var>
+      <var name="cfg">&CONFIG_DIR;/metplus/ensemble_precip_hrrre_test.conf</var>
+      <var name="region">conus</var>
+      <var name="cdefs">&CYCDEFS;</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/metplus_wrapper.sh</command>
+	<jobname>#taskname#</jobname>
+	<join><cyclestr offset="-21600">&HRRRE_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+	&PE_OPTS;    
+	&YMDH21600;
+	
+	<envar>
+	  <name>MET_DIR</name>
+	  <value>&MET_DIR;</value>
+        </envar>
+	<envar>
+	  <name>MET_BASE</name>
+	  <value>&MET_BASE;</value>
+        </envar>
+	<envar>
+	  <name>METPLUS_PATH</name>
+	  <value>&METPLUS_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&HRRRE_REALTIME_DIR;</value>
+        </envar>
+	<envar>
+	  <name>OBSDIR</name>
+	  <value>&OBS_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>MODELDIR</name>
+	  <value>&HRRRE_REALTIME_DIR;</value>
+	</envar>
+	<envar>
+	  <name>METPLUS_CFG</name>
+	  <value>#cfg#</value>
+	</envar>
+	<envar>
+	  <name>CFGDIR</name>
+	  <value>&CONFIG_DIR;</value>
+	</envar>
+	<envar>
+	  <name>FCSTLEN</name>
+	  <value>#fcst_len#</value>
+	</envar>
+	<envar>
+	  <name>REGION</name>
+	  <value>#region#</value>
+	</envar>
+	<envar>
+	  <name>MODEL</name>
+	  <value>HRRRE</value>
+	</envar>
+	<envar>
+	  <name>OBS</name>
+	  <value>STAGEIV</value>
+	</envar>
+	<envar>
+	  <name>NUM_MEMBERS</name>
+	  <value>9</value>
+	</envar>
+
+	<dependency>
+          <datadep age="600"><cyclestr offset="-21600">&OBS_REALTIME_DIR;/@Y@m@d-@Hz/stageIV_06hr_precip.nc</cyclestr></datadep>
+        </dependency>
+    
+      </task>
+    </metatask>
+    <metatask>
+      <var name="taskname">HRRRE_#tname#_grid_stat</var>
+      <var name="cfg">&CONFIG_DIR;/metplus/ensemble_precip_grid_hrrre.conf</var>
+      <var name="region">conus</var>
+      <var name="cdefs">&CYCDEFS;</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/metplus_wrapper.sh</command>
+        <jobname>#taskname#</jobname>
+        <join><cyclestr offset="-21600">&HRRRE_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+        &PE_OPTS;
+        &YMDH21600;
+
+        <envar>
+          <name>MET_DIR</name>
+          <value>&MET_DIR;</value>
+        </envar>
+        <envar>
+          <name>MET_BASE</name>
+          <value>&MET_BASE;</value>
+        </envar>
+        <envar>
+          <name>METPLUS_PATH</name>
+          <value>&METPLUS_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&HRRRE_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>OBSDIR</name>
+          <value>&OBS_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>MODELDIR</name>
+          <value>&HRRRE_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>METPLUS_CFG</name>
+          <value>#cfg#</value>
+        </envar>
+        <envar>
+          <name>CFGDIR</name>
+          <value>&CONFIG_DIR;</value>
+        </envar>
+        <envar>
+          <name>FCSTLEN</name>
+          <value>#fcst_len#</value>
+        </envar>
+        <envar>
+          <name>ACUMLEN</name>
+          <value>#acum_len#</value>
+        </envar>
+        <envar>
+          <name>REGION</name>
+          <value>#region#</value>
+        </envar>
+        <envar>
+          <name>MODEL</name>
+          <value>HRRRE</value>
+        </envar>
+        <envar>
+          <name>OBS</name>
+          <value>STAGEIV</value>
+        </envar>
+        <envar>
+          <name>NUM_MEMBERS</name>
+          <value>9</value>
+        </envar>
+
+        <dependency>
+          <and>
+            <datadep age="600"><cyclestr offset="-21600">&OBS_REALTIME_DIR;/@Y@m@d-@Hz/stageIV_#fcst_len#hr_precip.nc</cyclestr></datadep>
+            <taskdep task="HRRRE_#tname#_ensemble_stat"/>
+          </and>
+        </dependency>
+
+      </task>
+    </metatask>
+  </metatask>
+
+  <metatask>
+    <var name="tname">precip_06 precip_12 precip_18 precip_24</var>
+    <var name="fcst_len">06 12 18 24</var>
+    <var name="acum_len">6 12 18 24</var>
+
+    <metatask>
+      <var name="taskname">HREF_#tname#_ensemble_stat</var>
+      <var name="cfg">&CONFIG_DIR;/metplus/ensemble_precip_href_test.conf</var>
+      <var name="region">conus</var>
+      <var name="cdefs">&CYCDEFS;</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/metplus_wrapper.sh</command>
+        <jobname>#taskname#</jobname>
+        <join><cyclestr offset="-21600">&HREF_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+        &PE_OPTS;
+        &YMDH21600;
+
+        <envar>
+          <name>MET_DIR</name>
+          <value>&MET_DIR;</value>
+        </envar>
+        <envar>
+          <name>MET_BASE</name>
+          <value>&MET_BASE;</value>
+        </envar>
+        <envar>
+          <name>METPLUS_PATH</name>
+          <value>&METPLUS_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&HREF_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>OBSDIR</name>
+          <value>&OBS_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>MODELDIR</name>
+          <value>&HREF_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>METPLUS_CFG</name>
+          <value>#cfg#</value>
+        </envar>
+        <envar>
+          <name>CFGDIR</name>
+          <value>&CONFIG_DIR;</value>
+        </envar>
+        <envar>
+          <name>FCSTLEN</name>
+          <value>#fcst_len#</value>
+        </envar>
+        <envar>
+          <name>REGION</name>
+          <value>#region#</value>
+        </envar>
+        <envar>
+          <name>MODEL</name>
+          <value>HREFv2_1</value>
+        </envar>
+        <envar>
+          <name>OBS</name>
+          <value>STAGEIV</value>
+        </envar>
+        <envar>
+          <name>NUM_MEMBERS</name>
+          <value>10</value>
+        </envar>
+
+        <dependency>
+          <datadep age="600"><cyclestr offset="-21600">&OBS_REALTIME_DIR;/@Y@m@d-@Hz/stageIV_6hr_precip.grib2</cyclestr></datadep>
+        </dependency>
+
+      </task>
+    </metatask>
+    <metatask>
+      <var name="taskname">HREF_#tname#_grid_stat</var>
+      <var name="cfg">&CONFIG_DIR;/metplus/ensemble_precip_grid_href.conf</var>
+      <var name="region">conus</var>
+      <var name="cdefs">&CYCDEFS;</var>
+
+      <task name="#taskname#" cycledefs="#cdefs#" maxtries="2">
+        <command>&SCRIPT_DIR;/metplus_wrapper.sh</command>
+        <jobname>#taskname#</jobname>
+        <join><cyclestr offset="-21600">&HREF_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+        &PE_OPTS;
+        &YMDH21600;
+
+        <envar>
+          <name>MET_DIR</name>
+          <value>&MET_DIR;</value>
+        </envar>
+        <envar>
+          <name>MET_BASE</name>
+          <value>&MET_BASE;</value>
+        </envar>
+        <envar>
+          <name>METPLUS_PATH</name>
+          <value>&METPLUS_DIR;</value>
+        </envar>
+        <envar>
+          <name>REALTIMEDIR</name>
+          <value>&HREF_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>OBSDIR</name>
+          <value>&OBS_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>MODELDIR</name>
+          <value>&HREF_REALTIME_DIR;</value>
+        </envar>
+        <envar>
+          <name>METPLUS_CFG</name>
+          <value>#cfg#</value>
+        </envar>
+        <envar>
+          <name>CFGDIR</name>
+          <value>&CONFIG_DIR;</value>
+        </envar>
+        <envar>
+          <name>FCSTLEN</name>
+          <value>#fcst_len#</value>
+        </envar>
+        <envar>
+          <name>ACUMLEN</name>
+          <value>#acum_len#</value>
+        </envar>
+        <envar>
+          <name>REGION</name>
+          <value>#region#</value>
+        </envar>
+        <envar>
+          <name>MODEL</name>
+          <value>HREFv2_1</value>
+        </envar>
+        <envar>
+          <name>OBS</name>
+          <value>STAGEIV</value>
+        </envar>
+        <envar>
+          <name>NUM_MEMBERS</name>
+          <value>10</value>
+        </envar>
+
+        <dependency>
+          <and>
+            <datadep age="600"><cyclestr offset="-21600">&OBS_REALTIME_DIR;/@Y@m@d-@Hz/stageIV_#fcst_len#hr_precip.nc</cyclestr></datadep>
+            <taskdep task="HREF_#tname#_ensemble_stat"/>
+          </and>
+        </dependency>
+
+      </task>
+    </metatask>
+  </metatask>
+<!--
+  <task name="precip_ensemble_vxt_db" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_ensemble_vxt_db</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip_ensemble_vxt_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/mvprocessing.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>MVLOADER_DIR</name>
+      <value>&MVLOADER_DIR;</value>
+    </envar>
+    <envar>
+      <name>METVIEWER_DIR</name>
+      <value>&METVIEWER_DIR;</value>
+    </envar>
+    <envar>
+      <name>DATA_DIRS</name>
+      <value>HRRRE/realtime HREF/realtime</value>
+    </envar>
+    <envar>
+      <name>DATA_TYPE</name>
+      <value>ensemble_stat</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>HRRRE HREF</value>
+    </envar>
+    <envar>
+      <name>CFG_DIR</name>
+      <value>&CONFIG_DIR;</value>
+    </envar>
+    <envar>
+      <name>CFG_XML</name>
+      <value>mv_load_gsd_modelvxtest.xml</value>
+    </envar>
+
+  </task> 
+
+  <task name="precip_ensemble_gsd_db" cycledefs="6hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>precip_ensemble_gsd_db</jobname>
+    <join><cyclestr offset="-86400">&WF_LOG_DIR;/precip_ensemble_gsd_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH86400;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/mvprocessing.py</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>MVLOADER_DIR</name>
+      <value>&MVLOADER_DIR;</value>
+    </envar>
+    <envar>
+      <name>METVIEWER_DIR</name>
+      <value>&METVIEWER_DIR;</value>
+    </envar>
+    <envar>
+      <name>DATA_DIRS</name>
+      <value>HRRRE/realtime HREF/realtime</value>
+    </envar>
+    <envar>
+      <name>DATA_TYPE</name>
+      <value>ensemble_stat</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>HRRRE HREF</value>
+    </envar>
+    <envar>
+      <name>CFG_DIR</name>
+      <value>&CONFIG_DIR;</value>
+    </envar>
+    <envar>
+      <name>CFG_XML</name>
+      <value>mv_load_gsd.xml</value>
+    </envar>
+
+
+  </task>
+-->
+</workflow>

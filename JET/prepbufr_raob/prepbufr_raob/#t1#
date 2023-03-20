@@ -1,0 +1,6 @@
+create table t1
+select site,s,time from soundings_pb.RAOB_raob_soundings
+where 1=1
+and fcst_len =0
+and time > date_sub(now(), interval 30 day)
+order by time;

@@ -1,0 +1,3 @@
+DATE , EPOCH , STATION , CEILING (FT)
+########################################
+2017-10-29 11:53 , 1509277980 , KDEN , NO CLOUD CEILING

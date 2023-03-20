@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/ensemble/xml/hrrre_precip_init_backfill.xml -d /whome/amb-verif/ensemble/xml/db/hrrre_precip_init_backfill.db

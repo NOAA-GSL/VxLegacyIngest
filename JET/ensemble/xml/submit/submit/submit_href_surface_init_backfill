@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/ensemble/xml/href_surface_init_backfill.xml -d /whome/amb-verif/ensemble/xml/db/href_surface_init_backfill.db

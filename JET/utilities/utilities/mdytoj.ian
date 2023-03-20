@@ -1,0 +1,25 @@
+/*#
+# returns a string form of julian day based on str, in "mm/dd/yy" form
+# from Ian Duplisse.
+#
+*/
+char *mdytoj(str)
+char *str;
+{
+	static char buffer[40];
+	struct tm tm;
+#ifdef SunOS
+	struct tm *ptm;
+	time_t clock;
+#endif SunOS
+
+	sprintf(buffer,"%s 00:00:00",str);
+	strptime(buffer,"%D %T",&tm);
+#ifdef SunOS
+	clock=timegm(&tm);
+	ptm=gmtime(&clock);
+	tm=*ptm;
+#endif SunOS
+	strftime(buffer,40,"%y%j",tm);
+	return buffer;
+}

@@ -1,0 +1,10 @@
+#define MAPPROJ           "CylindricalEquidistant"
+#define NLAT              918
+#define NLON              1830
+#define SW_CORNER_LAT     20.01797
+#define SW_CORNER_LON    -129.9809
+#define NE_CORNER_LAT     52.968531
+#define NE_CORNER_LON    -60.041769
+#define LAT_GRID_SPACING  0.035933
+#define LON_GRID_SPACING  0.038239
+#define MISSING_VALUE    -999.

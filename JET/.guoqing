@@ -1,0 +1,16 @@
+source /home/rtrr/PARM_EXEC/modulefiles/modulefile.jet.GSI_UPP_WRF
+module use /home/Guoqing.Ge/handytools
+module load rgit srocoto hpcs
+alias nrtrr1 'cd /lfs1/BMC/nrtrr'
+alias nrtrr 'cd /lfs4/BMC/nrtrr'
+alias rtrr 'cd ~rtrr'
+alias ls ls -F --color=auto
+alias h history
+alias rm rm -i
+alias mv mv -i
+alias pwd pwd -L
+alias cp cp -i
+alias mll module list
+alias workflow 'cd /lfs1/BMC/nrtrr/workflow'
+alias resource 'source ~/.rtrr'
+alias grap 'cd /lfs1/BMC/wrfruc/grap'

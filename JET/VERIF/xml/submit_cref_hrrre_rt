@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/VERIF/xml/cref_hrrre_rt.xml -d /whome/amb-verif/VERIF/xml/cref_hrrre_rt.db

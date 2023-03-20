@@ -1,0 +1,101 @@
+ifort -check all -g -debug all -traceback -c gausslat.f
+ifort -check all -g -debug all -traceback -c gcdist.f
+ifort -check all -g -debug all -traceback -c gdsawt.f
+ifort -check all -g -debug all -traceback -c gdswiz.f
+ifort -check all -g -debug all -traceback -c gdswiz00.f
+ifort -check all -g -debug all -traceback -c gdswiz01.f
+ifort -check all -g -debug all -traceback -c gdswiz03.f
+ifort -check all -g -debug all -traceback -c gdswiz04.f
+ifort -check all -g -debug all -traceback -c gdswiz05.f
+ifort -check all -g -debug all -traceback -c gdswizc9.f
+ifort -check all -g -debug all -traceback -c gdswizca.f
+ifort -check all -g -debug all -traceback -c gdswizcb.f
+ifort -check all -g -debug all -traceback -c gdswizcd.f
+ifort -check all -g -debug all -traceback -c gdswzd.f
+ifort -check all -g -debug all -traceback -c gdswzd00.f
+ifort -check all -g -debug all -traceback -c gdswzd01.f
+ifort -check all -g -debug all -traceback -c gdswzd03.f
+ifort -check all -g -debug all -traceback -c gdswzd04.f
+ifort -check all -g -debug all -traceback -c gdswzd05.f
+ifort -check all -g -debug all -traceback -c gdswzdc9.f
+ifort -check all -g -debug all -traceback -c gdswzdca.f
+ifort -check all -g -debug all -traceback -c gdswzdcb.f
+ifort -check all -g -debug all -traceback -c gdswzdcd.f
+ifort -check all -g -debug all -traceback -c ijkgds0.f
+ifort -check all -g -debug all -traceback -c ijkgds1.f
+ifort -check all -g -debug all -traceback -c ipolates.f
+ifort -check all -g -debug all -traceback -c ipolatev.f
+ifort -check all -g -debug all -traceback -c ipxetas.f
+ifort -check all -g -debug all -traceback -c ipxwafs.f
+ifort -check all -g -debug all -traceback -c ipxwafs2.f
+ifort -check all -g -debug all -traceback -c makgds.f
+ifort -check all -g -debug all -traceback -c movect.f 
+ifort -check all -g -debug all -traceback -c polateg0.f
+ifort -check all -g -debug all -traceback -c polateg1.f
+ifort -check all -g -debug all -traceback -c polateg4.f
+ifort -check all -g -debug all -traceback -c polates0.f
+ifort -check all -g -debug all -traceback -c polates1.f
+ifort -check all -g -debug all -traceback -c polates2.f
+ifort -check all -g -debug all -traceback -c polates3.f
+ifort -check all -g -debug all -traceback -c polates4.f
+ifort -check all -g -debug all -traceback -c polates6.f
+ifort -check all -g -debug all -traceback -c polatev0.f
+ifort -check all -g -debug all -traceback -c polatev1.f
+ifort -check all -g -debug all -traceback -c polatev2.f
+ifort -check all -g -debug all -traceback -c polatev3.f
+ifort -check all -g -debug all -traceback -c polatev4.f
+ifort -check all -g -debug all -traceback -c polatev6.f
+ifort -check all -g -debug all -traceback -c polfixs.f
+ifort -check all -g -debug all -traceback -c polfixv.f
+
+
+ar -crv libip.a \
+gausslat.o \
+gcdist.o \
+gdsawt.o \
+gdswiz.o \
+gdswiz00.o \
+gdswiz01.o \
+gdswiz03.o \
+gdswiz04.o \
+gdswiz05.o \
+gdswizc9.o \
+gdswizca.o \
+gdswizcb.o \
+gdswizcd.o \
+gdswzd.o \
+gdswzd00.o \
+gdswzd01.o \
+gdswzd03.o \
+gdswzd04.o \
+gdswzd05.o \
+gdswzdc9.o \
+gdswzdca.o \
+gdswzdcb.o \
+gdswzdcd.o \
+ijkgds0.o \
+ijkgds1.o \
+ipolates.o \
+ipolatev.o \
+ipxetas.o \
+ipxwafs.o \
+ipxwafs2.o \
+makgds.o \
+movect.o \
+polateg0.o \
+polateg1.o \
+polateg4.o \
+polates0.o \
+polates1.o \
+polates2.o \
+polates3.o \
+polates4.o \
+polates6.o \
+polatev0.o \
+polatev1.o \
+polatev2.o \
+polatev3.o \
+polatev4.o \
+polatev6.o \
+polfixs.o \
+polfixv.o 

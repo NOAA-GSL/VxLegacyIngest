@@ -1,0 +1,2289 @@
+Bill,
+
+  Hi.  In response to your request to Loeta Hendrickson, here's the station table
+  used in NIMBUS for SAOs and RAOBs.
+  
+  The fields are:
+  1) WMO #
+  2) call letters
+  3) latitude
+  4) longitude
+  5) elevation (meters)
+  6) site name
+  7) country (not completely accurate, but only used for determining units, so
+              it meets our needs)
+  8) data type:  SAO or RAOB
+  
+Dave Osburn
+
+  * * * * *
+  
+0000010001      HNL     21.33   -157.93     2   HONOLULU, HI            US      SAO
+0000010002      ITO     19.72   -155.07    11   HILO, HI                US      SAO
+0000010003      OGG     20.90   -156.43    15   KAHULUI, HI             US      SAO
+0000010004      KOA     19.75   -156.05    16   KAILUA-KONA, HI         US      SAO
+0000010005      LNY     20.80   -156.95   396   LANAI CITY, HI          US      SAO
+0000010006      LIH     21.98   -159.35    31   LIHUE, HI               US      SAO
+0000010007      MKK     21.15   -157.10   137   KAUNAKAKIA, HI          US      SAO
+0000070026      BRW     71.30   -156.78     4   BARROW/PST RGRS, AK     US      SAO
+0000070174      BTT     66.92   -151.52   196   BETTLES, AK             US      SAO
+0000070194      FYU     66.57   -145.27   431   FORT YUKON, AK          US      SAO
+0000070218      5NV     60.00   -166.00    15   NUNIVAK ISLAND, AK      US      SAO
+0000070219      BET     60.78   -161.80    46   BETHEL, AK              US      SAO
+0000070231      MCG     62.97   -155.62   103   MCGRATH, AK             US      SAO
+0000070246      MHM     63.90   -152.16   214   MINCHUMINA, AK          US      SAO
+0000070251      TKA     62.30   -150.10   109   TALKEETNA, AK           US      SAO
+0000070259      ENA     60.57   -151.25    29   KENAI, AK               US      SAO
+0000070261      FAI     64.82   -147.87   138   FAIRBANKS INTL, AK      US      SAO
+0000070267      BIG     64.00   -145.73   388   BIG DELTA, AK           US      SAO
+0000070273      ANC     61.17   -150.02    40   ANCHORAGE INTL, AK      US      SAO
+0000070277      5WD     60.12   -149.45    18   SEWARD, AK              US      SAO
+0000070279      5HN     60.23   -146.65    56   CAPE HINCHINBROK, AK    US      SAO
+0000070296      CDV     60.50   -145.50    13   CORDOVA, AK             US      SAO
+0000070298      CYT     60.08   -142.50    11   YAKATAGA, AK            US      SAO
+0000070308      SNP     57.15   -170.22     9   SAINT PAUL IS, AK       US      SAO
+0000070316      CDB     55.20   -162.72    31   COLD BAY, AK            US      SAO
+0000070321      DLG     59.05   -158.52    29   DILLINGHAM, AK          US      SAO
+0000070333      PTH     56.95   -158.62    29   PORT HEIDEN, AK         US      SAO
+0000070340      ILI     59.75   -154.92    49   ILIAMNA, AK             US      SAO
+0000070341      HOM     59.63   -151.50    22   HOMER, AK               US      SAO
+0000070343      MDO     59.43   -146.33    14   MIDDLETON IS, AK        US      SAO
+0000070350      ADQ     57.75   -152.50    34   KODIAK, AK              US      SAO
+0000070357      SKJ     56.55   -154.13    17   SITKINAK, AK            US      SAO
+0000070360      5CE     59.80   -144.60    18   CAPE SAINT ELIAS, AK    US      SAO
+0000070361      YAK     59.52   -139.67     9   YAKUTAT, AK             US      SAO
+0000070362      SGY     59.47   -135.32     5   SKAGWAY, AK             US      SAO
+0000070364      ERO     58.97   -135.22    17   ELDER ROCK, AK          US      SAO
+0000070365      CSP     58.20   -136.63    25   CAPE SPENCER, AK        US      SAO
+0000070367      GST     58.42   -135.73     9   GUSTAVUS, AK            US      SAO
+0000070371      SIT     57.07   -135.35    20   SITKA, AK               US      SAO
+0000070381      JNU     58.37   -134.58     7   JUNEAU, AK              US      SAO
+0000070383      AGN     57.50   -134.58    11   ANGOON, AK              US      SAO
+0000070385      FIV     57.27   -133.62    11   FIVE FINGER IS, AK      US      SAO
+0000070386      PSG     56.82   -132.97    15   PETERSBURG, AK          US      SAO
+0000070387      WRG     56.48   -132.36    13   WRANGLER, AK            US      SAO
+0000070388      CDE     56.00   -134.13    12   CAPE DECISION, AK       US      SAO
+0000070392      CGA     55.48   -133.15     4   CRAIG SEAPLANE, AK      US      SAO
+0000070395      KTN     55.35   -131.70    29   KETCHIKAN, AK           US      SAO
+0000070398      ANN     55.03   -131.57    34   ANNETTE ISLAND, AK      US      SAO
+0000070409      ATU     52.83   -173.18    21   ATTU/CASCO COVE, AK     US      SAO
+0000070454      ADK     51.88   -176.65     4   ADAK/MITCHELL, AK       US      SAO
+0000070482      IKO     52.95   -168.85    22   NIKOLSKI, AK            US      SAO
+0000070489      DUT     53.88   -166.53     4   DUTCH HARBOR, AK        US      SAO
+0000071043      YVQ     65.28   -126.80    73   NORMAN WELLS, NW        CN      SAO
+0000071045      YZW     60.17   -132.75   705   TESLIN, YK              CN      SAO
+0000071050      WPU     52.12   -124.13   910   PUNTZI MOUNTAIN, BC     CN      SAO
+0000071066      YOJ     58.62   -117.17   337   HIGH LEVEL, AB          CN      SAO
+0000071068      YPE     56.23   -117.45   569   PEACE RIVER, AB         CN      SAO
+0000071069      YZH     55.30   -114.28   581   SLAVE LAKE, AB          CN      SAO
+0000071072      YMD     76.23   -119.32    20   MOULD BAY/P IS, NW      CN      SAO
+0000071075      WKC     58.18   -103.68   492   COLLINS BAY, SK         CN      SAO
+0000071076      YBE     59.57   -108.48   312   URANIUM CITY, SK        CN      SAO
+0000071077      WVT     55.83   -108.43   431   BUFFALO NARROWS, SK     CN      SAO
+0000071078      YYL     56.87   -101.08   354   LYNN LAKE, MB           CN      SAO
+0000071079      YTH     55.80    -97.87   218   THOMPSON, MB            CN      SAO
+0000071098      WPB     44.80    -79.80    56   BEAUSOLIEL ISLAND,QB    CN      SAO
+0000071100      WTI     54.30   -130.88    21   TRIPLE ISLAND, BC       CN      SAO
+0000071101      YZP     53.25   -131.82     1   SANDSPIT, BC            CN      SAO
+0000071102      WTC     53.05   -129.68     1   ETHELDA BAY, BC         CN      SAO
+0000071103      YQZ     53.03   -122.52   545   QUESNAL, BC             CN      SAO
+0000071104      YWL     52.18   -122.05   941   WILLIAMS LAKE, BC       CN      SAO
+0000071105      WPI     50.33   -127.97     4   LAWN POINT, BC          CN      SAO
+0000071106      YAZ     49.08   -125.77    20   TOFINO, BC              CN      SAO
+0000071107      WZV     51.93   -131.02    89   CAPE SAINT JAMES, BC    CN      SAO
+0000071108      YXX     49.03   -122.37    61   ABBOTSFORD, BC          CN      SAO
+0000071109      YZT     50.68   -127.37    22   PORT HARDY, BC          CN      SAO
+0000071110      WAQ     50.58   -126.93    52   ALERT BAY, BC           CN      SAO
+0000071111      WES     50.78   -128.43    72   CAPE SCOTT, BC          CN      SAO
+0000071112      WAN     48.92   -125.55    27   AMPHITRITE PT, BC       CN      SAO
+0000071113      WAE     50.12   -122.95   671   ALTA LAKE, BC           CN      SAO
+0000071114      YHE     49.37   -121.48    38   HOPE, BC                CN      SAO
+0000071115      WVK     50.23   -119.28   555   VERNON BRIDGE, BC       CN      SAO
+0000071120      YOD     54.42   -110.28   544   COLD LAKE, AB           CN      SAO
+0000071121      YED     53.68   -113.47   699   EDMONTON/NAMAO, AB      CN      SAO
+0000071122      WBA     51.18   -115.57  1397   BANFF, AB               CN      SAO
+0000071123      YEG     53.32   -113.58   719   EDMONTON INTL, AB       CN      SAO
+0000071124      WIQ     54.75   -110.05   702   PRIMROSE LAKE, AB       CN      SAO
+0000071125      YLJ     54.13   -108.52   480   MEADOW LAKE, SK         CN      SAO
+0000071126      WBP     50.55   -111.90   755   BROOKS, AB              CN      SAO
+0000071127      WHN     54.92   -109.97   636   JIMMY LAKE, SK          CN      SAO
+0000071128      YSD     50.27   -111.18   775   SUFFIELD, AB            CN      SAO
+0000071129      WKY     51.47   -109.17   683   KINDERSLEY, SK          CN      SAO
+0000071130      YBU     53.33   -104.00   372   NIPAWIN, SK             CN      SAO
+0000071131      WEH     49.43   -108.98  1080   EAST END CYPRESS, SK    CN      SAO
+0000071135      WKO     49.17   -105.98   917   ROCKGLEN, SK            CN      SAO
+0000071138      YQV     51.27   -102.47   504   YORKTON, SK             CN      SAO
+0000071140      YBR     49.92    -99.95   408   BRANDON, MB             CN      SAO
+0000071141      YNE     53.95    -97.85   224   NORWAY HOUSE, MB        CN      SAO
+0000071143      WBJ     51.03    -95.67   258   BISSET, MB              CN      SAO
+0000071145      WGB     53.87    -94.67   239   ISLAND LAKE, MB         CN      SAO
+0000071148      WPO     49.20    -98.90   475   PILOT MOUND, MB         CN      SAO
+0000071153      WFB     49.12   -113.17  1136   CARDSTON, AB            CN      SAO
+0000071182      ZUM     53.55    -64.10   435   CHURCHILL FALLS, NF     CN      SAO
+0000071185      WDH     50.23    -57.58    20   DANIELS HABOUR, NF      CN      SAO
+0000071187      YBC     49.13    -68.20    22   BAIE COMEAU, QB         CN      SAO
+0000071188      YGP     48.77    -64.48    33   GASPE, QB               CN      SAO
+0000071189      WFQ     49.02    -64.40    39   RIVIERE AU RNARD, QB    CN      SAO
+0000071193      WHW     49.27    -54.88    99   COMFORT COVE, NF        CN      SAO
+0000071194      WBD     47.62    -57.62     1   BURGEO, NF              CN      SAO
+0000071195      WLG     47.87    -55.85     1   SAINT ALBANS, NF        CN      SAO
+0000071196      WVA     48.67    -53.12    27   BONAVISTA, NF           CN      SAO
+0000071197      WZB     47.57    -59.17     8   PORT AUX BASQUES, NF    CN      SAO
+0000071200      WVG     48.42   -123.32    69   VCTORIA/GONZALES, BC    CN      SAO
+0000071201      WHC     49.30   -123.13     1   VANCOUVER HRBOUR, BC    CN      SAO
+0000071202      WIR     48.37   -123.75    32   VICTORIA MARINE, BC     CN      SAO
+0000071204      WMR     49.47   -123.90     6   MERRY ISLAND, BC        CN      SAO
+0000071206      YBD     52.38   -126.58    35   BELLA COOLA, ON         CN      SAO
+0000071207      YSE     49.78   -123.17    52   SQUAMISH ARPT, BC       CN      SAO
+0000071261      WGD     43.77    -81.72   213   GODERICH, ON            CN      SAO
+0000071265      YTZ     43.63    -79.40    77   TORONTO ISLAND, ON      CN      SAO
+0000071395      YHZ     44.88    -63.52   145   HALIFAX INTL, NS        CN      SAO
+0000071397      YZX     44.98    -64.92    25   GREENWOOD, NS           CN      SAO
+0000071398      WTQ     45.37    -63.27    40   TRURO, NS               CN      SAO
+0000071399      WOS     43.72    -65.25    30   SHELBORNE, NS           CN      SAO
+0000071400      WDI     48.97    -56.07   105   BADGER, NF              CN      SAO
+0000071410      WAH     45.85    -64.27    23   AMHERST, NS             CN      SAO
+0000071411      WWE     43.98    -64.67     9   WESTERN HEAD, NS        CN      SAO
+0000071412      WEP     46.45    -61.97    13   EAST POINT, PE          CN      SAO
+0000071413      WVE     46.23    -61.30    39   INVERNESS, NS           CN      SAO
+0000071415      WBK     45.77    -62.68     2   CARIBOU POINT, NS       CN      SAO
+0000071417      WDA     44.60    -63.53    17   MCNABS ISLAND, NS       CN      SAO
+0000071421      WEO     51.85    -63.57   593   LAC EON, QB             CN      SAO
+0000071422      WXF     45.15    -72.58   237   SUTTON JUNCTION, QB     CN      SAO
+0000071423      WHP     49.08    -61.70     7   HEATH POINT, QB         CN      SAO
+0000071426      WAF     48.07    -69.55     6   ILE ROUGE, QB           CN      SAO
+0000071430      WQP     43.83    -77.15    78   POINT PETRE, ON         CN      SAO
+0000071431      WNC     43.95    -78.17    77   COBOURG, ON             CN      SAO
+0000071432      WWZ     43.23    -79.22    79   PORT WELLER, ON         CN      SAO
+0000071433      WCI     47.33    -85.83   187   CARIBOU ISLAND, ON      CN      SAO
+0000071434      WWN     55.23    -85.12    10   WINISK, ON              CN      SAO
+0000071435      WDV     49.03    -90.47   489   UPSALA, ON              CN      SAO
+0000071436      WCU     44.38    -79.78   295   BARRIE, ON              CN      SAO
+0000071438      WMZ     45.03    -80.36   191   WESTERN ISLAND, ON      CN      SAO
+0000071440      WHL     51.17    -96.63   230   HECLA ISLAND, MB        CN      SAO
+0000071441      WGN     49.03    -97.57   253   GRETNA, MB              CN      SAO
+0000071445      WWS     52.80    -97.63   226   GEORGE ISLAND, MB       CN      SAO
+0000071450      WOK     51.13   -106.58   595   ELBOW, SK               CN      SAO
+0000071461      WAB     48.30    -88.87   218   TROWBRIDGE, ON          CN      SAO
+0000071462      WNL     45.63    -82.97   183   GREAT DUCK IS, ON       CN      SAO
+0000071470      YZL     59.40   -126.15   141   LIARD RIVER, BC         CN      SAO
+0000071472      WQS     53.32   -132.77    14   KINDAKUN POINT, BC      CN      SAO
+0000071473      WEZ     48.78   -123.05     7   SATURNA ISLAND, BC      CN      SAO
+0000071474      WCL     51.15   -121.50  1057   CLINTON, BC             CN      SAO
+0000071475      WQC     49.25   -124.83     2   PORT ALBERNI, BC        CN      SAO
+0000071478      WFG     50.82   -128.90   101   SARTINE ISLAND, BC      CN      SAO
+0000071479      WRU     50.12   -127.93    88   SOLANDER ISLNDER, BC    CN      SAO
+0000071482      WME     52.18   -127.47    25   CATHEDRAL POINT, BC     CN      SAO
+0000071485      WLP     50.93   -127.63    17   HERBERT ISLAND, BC      CN      SAO
+0000071523      WEE     49.17    -73.21   305   CHAMOUCHOUANE, QB       CN      SAO
+0000071527      WMK     42.85    -80.27   241   SIMCOE, ON              CN      SAO
+0000071538      YQG     42.27    -82.97   194   WINDSOR, ON             CN      SAO
+0000071600      WSA     43.93    -60.02     4   SABLE ISLAND, NS        CN      SAO
+0000071601      YAW     44.63    -63.50    51   HALIFAX, NS             CN      SAO
+0000071603      YQI     43.83    -66.08    41   YARMOUTH, NS            CN      SAO
+0000071604      WOQ     45.52    -61.25    66   EDDY POINT, NS          CN      SAO
+0000071607      WSS     45.20    -67.25    28   SAINT STEPHEN, NB       CN      SAO
+0000071609      YSJ     45.32    -65.88   107   SAINT JOHN, NB          CN      SAO
+0000071610      YSC     45.43    -71.68   238   SHERBROOKE, QB          CN      SAO
+0000071620      YGK     44.22    -76.60    90   KINGSTON, ON            CN      SAO
+0000071621      YTR     44.12    -77.53    81   TRENTON, ON             CN      SAO
+0000071623      YXU     43.03    -81.15   278   LONDON, ON              CN      SAO
+0000071624      YYZ     43.68    -79.63   176   TORONTO INTL, ON        CN      SAO
+0000071625      YWA     45.95    -77.31   130   PETAWAWA, ON            CN      SAO
+0000071627      YUL     45.47    -73.75    30   MONTREAL/DORVAL, QB     CN      SAO
+0000071628      YOW     45.32    -75.67   126   OTTAWA INTL, ON         CN      SAO
+0000071629      YPQ     44.23    -78.37   191   PETERBOROUGH, ON        CN      SAO
+0000071630      YQA     44.97    -79.30   282   MUSKOKA, ON             CN      SAO
+0000071631      WMN     43.98    -80.75   415   MOUNT FOREST, ON        CN      SAO
+0000071632      WBI     45.80    -80.53   190   BRITT, ON               CN      SAO
+0000071633      YVV     44.75    -81.10   219   WIARTON, ON             CN      SAO
+0000071700      YFC     45.87    -66.53    23   FREDERICTON, NB         CN      SAO
+0000071701      YCX     45.83    -66.43    51   GAGETOWN, NB            CN      SAO
+0000071702      YSU     46.43    -63.83    24   SUMMERSIDE, PE          CN      SAO
+0000071705      YQM     46.12    -64.68    71   MONCTON, NB             CN      SAO
+0000071706      YYG     46.28    -63.13    55   CHARLOTTETOWN, PE       CN      SAO
+0000071707      YQY     46.17    -60.05    62   SYDNEY, NS              CN      SAO
+0000071709      WGR     47.38    -61.87    60   GRINDSTOWN IS, QB       CN      SAO
+0000071711      YCL     47.98    -66.33    38   CHARLO, NB              CN      SAO
+0000071714      YQB     46.80    -71.40    73   QUEBEC, QB              CN      SAO
+0000071715      WNH     47.80    -69.55   148   RVRE-DU-LOUPAUT, QB     CN      SAO
+0000071716      YOY     46.90    -71.50   168   VAL CARTIER, QB         CN      SAO
+0000071717      YCH     47.02    -65.45    34   CHATHAM, NB             CN      SAO
+0000071718      YYY     48.62    -68.22    52   MONT JOLI, QB           CN      SAO
+0000071719      WMI     48.02    -64.50     5   MISCOU ISLAND, NB       CN      SAO
+0000071720      WOH     46.05    -74.28   395   AGATHE DES MONTS, QB    CN      SAO
+0000071722      WMW     46.38    -75.96   170   MANIWAKI, QB            CN      SAO
+0000071725      YVO     48.05    -77.78   337   VAL D'OR, QB            CN      SAO
+0000071726      WPK     47.92    -74.62   442   PARENT, QB              CN      SAO
+0000071727      YBG     48.33    -71.00   159   BAGOTVILLE, QB          CN      SAO
+0000071728      YRJ     48.52    -72.27   179   ROBERVAL, QB            CN      SAO
+0000071730      YSB     46.63    -80.80   348   SUDBURY, ON             CN      SAO
+0000071731      YYB     46.37    -79.42   371   NORTH BAY, ON           CN      SAO
+0000071733      YZE     45.88    -82.57   193   GORE BAY/MANITLN, ON    CN      SAO
+0000071735      YXR     47.70    -79.85   243   EARLTON, ON             CN      SAO
+0000071738      YXZ     47.97    -84.78   287   WAWA, ON                CN      SAO
+0000071739      YTS     48.57    -81.38   295   TIMMINS, ON             CN      SAO
+0000071748      WIB     48.75    -91.62   395   ATIKOKAN, ON            CN      SAO
+0000071749      YQT     48.37    -89.32   199   THUNDER BAY, ON         CN      SAO
+0000071799      YYJ     48.65   -123.43    19   VICTORIA INTL, BC       CN      SAO
+0000071800      WRA     46.65    -53.07    28   CAPE RACE, NF           CN      SAO
+0000071801      YYT     47.62    -52.75   140   ST. JOHNS/TORBAY, NF    CN      SAO
+0000071802      WDS     46.92    -55.38    49   SAINT LAWRENCE, NF      CN      SAO
+0000071803      YQX     48.95    -54.57   151   GANDER INTL, NF         CN      SAO
+0000071805      FSP     46.77    -56.17     3   ST.PIERRE-MIQUEL, ON    CN      SAO
+0000071808      YBX     51.45    -57.18    36   BLANC SABLON, QB        CN      SAO
+0000071809      YDF     49.22    -57.40    22   DEER LAKE, NF           CN      SAO
+0000071810      YPN     49.83    -64.28    41   PORT MENIER, QB         CN      SAO
+0000071811      YZV     50.22    -66.27    55   SEPT ILES, QB           CN      SAO
+0000071813      WYI     50.18    -61.82     7   NATASHQUAN, QB          CN      SAO
+0000071814      WDM     50.47    -59.63     9   CHEVERY, QB             CN      SAO
+0000071815      YJT     48.53    -58.55    26   STEPHENVILLE, NF        CN      SAO
+0000071816      YYR     53.32    -60.42    49   GOOSE BAY, NF           CN      SAO
+0000071817      WMH     52.30    -55.83     9   MARY'S HABOUR, NF       CN      SAO
+0000071818      WCA     53.70    -57.03    14   CARTWRIGHT, NF          CN      SAO
+0000071819      WAX     51.37    -55.63   111   SAINT ANTHONY, NF       CN      SAO
+0000071821      YNM     49.77    -77.80   281   MATAGAMI, QB            CN      SAO
+0000071822      YMT     49.77    -74.53   387   CHIBOUGAMAU-CHPS, QB    CN      SAO
+0000071825      YWK     52.93    -66.87   551   WABUSH/LBRDR CTY, NF    CN      SAO
+0000071826      WNI     53.20    -70.90   536   NITCHEQUON, QB          CN      SAO
+0000071827      YGL     53.63    -77.70   195   LAGRANDE RIVIERE, QB    CN      SAO
+0000071828      YKL     54.80    -66.80   522   SCHEFFERVILLE, QB       CN      SAO
+0000071831      YYU     49.42    -82.47   227   KAPUSKASING, ON         CN      SAO
+0000071832      WNZ     49.75    -84.17   263   NAGAGAMI, ON            CN      SAO
+0000071834      YGQ     49.78    -86.93   351   GERALDTON, ON           CN      SAO
+0000071836      WZC     51.27    -80.65    10   MOOSONEE, ON            CN      SAO
+0000071841      WYW     50.28    -88.03   351   ARMSTRONG, ON           CN      SAO
+0000071842      YXL     50.12    -91.90   390   SIOUX LOOKOUT, ON       CN      SAO
+0000071845      WPL     51.47    -90.20   369   PICKLE LAKE, ON         CN      SAO
+0000071846      WLH     52.23    -87.88   256   LANSDOWNE HOUSE, ON     CN      SAO
+0000071848      WTL     53.83    -89.87   220   BIG TROUT LAKE, ON      CN      SAO
+0000071850      YQK     49.78    -94.37   411   KENORA, ON              CN      SAO
+0000071851      YPG     49.90    -98.27   270   PORTAGELAPRAIRIE, MB    CN      SAO
+0000071852      YWG     49.92    -97.23   239   WINNEPEG, MB            CN      SAO
+0000071853      WLO     49.78    -99.65   373   SHILO, MB               CN      SAO
+0000071854      YRL     51.07    -93.80   383   RED LAKE, ON            CN      SAO
+0000071855      YDN     51.10   -100.05   305   DAUPHIN, MB             CN      SAO
+0000071856      WGM     50.62    -96.98   222   GIMMLI, MB              CN      SAO
+0000071858      WJD     53.18    -99.27   226   GRAND RAPIDS, MB        CN      SAO
+0000071861      WIK     50.38   -102.68   602   BROADVIEW, SK           CN      SAO
+0000071862      YEN     49.07   -103.00   572   ESTEVAN, SK             CN      SAO
+0000071863      YQR     50.43   -104.67   577   REGINA, SK              CN      SAO
+0000071864      YMJ     50.33   -105.55   577   MOOSE JAW, SK           CN      SAO
+0000071865      WOY     51.50   -104.10   561   WYNYARD, SK             CN      SAO
+0000071866      YXE     52.17   -106.70   504   SASKATOON, SK           CN      SAO
+0000071867      YQD     53.97   -101.10   271   THE PAS, MB             CN      SAO
+0000071868      YHB     52.82   -102.32   358   HUDSON BAY, SK          CN      SAO
+0000071869      YPA     53.22   -105.67   428   PRINCE ALBERT, SK       CN      SAO
+0000071870      YYN     50.30   -107.68   818   SWIFT CURRENT, SK       CN      SAO
+0000071871      YLL     53.32   -110.07   669   LLOYDMINSTER, SK        CN      SAO
+0000071872      YXH     50.02   -110.72   717   MEDICINE HAT, AB        CN      SAO
+0000071873      WCT     52.00   -111.30   791   CORONATION, AB          CN      SAO
+0000071874      YQL     49.63   -112.80   929   LETHBRIDGE, AB          CN      SAO
+0000071875      WPC     49.52   -114.00  1190   PORT COLBOURNE, AB      CN      SAO
+0000071876      YQW     52.77   -108.25   548   NORTH BATTLEFORD, SK    CN      SAO
+0000071877      YYC     51.12   -114.02  1084   CALGARY INTL, AB        CN      SAO
+0000071878      YQF     52.18   -113.90   905   RED DEER, AB            CN      SAO
+0000071879      YXD     53.57   -113.52   671   EDMONTON, AB            CN      SAO
+0000071880      YXC     49.62   -115.78   939   CRANBROOK, BC           CN      SAO
+0000071881      YET     53.58   -116.45   925   EDSON, AB               CN      SAO
+0000071882      YRV     50.97   -118.18   443   REVELSTOKE, BC          CN      SAO
+0000071883      YCP     52.12   -119.28   683   BLUE RIVER, BC          CN      SAO
+0000071884      YCG     49.30   -117.63   495   CASTLEGAR, BC           CN      SAO
+0000071887      YKA     50.70   -120.45   346   KAMLOOPS, BC            CN      SAO
+0000071888      WJA     52.88   -118.07  1061   JASPER, AB              CN      SAO
+0000071889      YYF     49.47   -119.60   344   PENTICTON, BC           CN      SAO
+0000071890      YCD     49.05   -123.87    30   NANAIMO, BC             CN      SAO
+0000071891      WLY     50.23   -121.58   258   LYTTON, BC              CN      SAO
+0000071892      YVR     49.18   -123.18     2   VANCOUVER INTL, BC      CN      SAO
+0000071893      YQQ     49.72   -124.90    24   COMOX, BC               CN      SAO
+0000071894      WEB     49.38   -126.55     7   ESTEVAN POINT, BC       CN      SAO
+0000071895      WBH     50.92   -127.95    14   BULL HARBOUR, BC        CN      SAO
+0000071896      YXS     53.88   -122.68   691   PRINCE GEORGE, BC       CN      SAO
+0000071897      WMS     52.27   -128.72    23   MCINNES ISLAND, BC      CN      SAO
+0000071898      YPR     54.30   -130.45    34   PRINCE RUPERT, BC       CN      SAO
+0000071899      WLA     54.25   -130.05    35   LANGARA, BC             CN      SAO
+0000071900      WHO     55.45    -60.23    12   HOPELAND, NF            CN      SAO
+0000071901      WTB     55.33    -63.22   465   BORDER, QB              CN      SAO
+0000071902      YDP     56.55    -61.68     7   NAIN, NF                CN      SAO
+0000071905      YGW     55.35    -77.77    18   KUUJJUARAPIK, QB        CN      SAO
+0000071906      YVP     58.10    -68.42    36   KUUJJUAQ, QB            CN      SAO
+0000071907      YPH     58.45    -78.12     8   INUKJUAK, QB            CN      SAO
+0000071911      YUS     68.80    -93.42    42   SHEPHERD BAY, NW        CN      SAO
+0000071912      YGX     56.37    -94.70   145   GILLAM, MB              CN      SAO
+0000071913      YYQ     58.73    -94.07    29   CHURCHILL, MB           CN      SAO
+0000071917      WEU     80.00    -85.93    10   EUREKA, NW              CN      SAO
+0000071920      WFN     57.35   -107.13   499   CREE LAKE, SK           CN      SAO
+0000071922      YVC     55.15   -105.27   378   LA RONGE, SK            CN      SAO
+0000071924      YRB     74.72    -94.95    67   RESOLUTE, NW            CN      SAO
+0000071925      YCB     69.10   -105.10    27   CAMBRIDGE BAY, NW       CN      SAO
+0000071926      YBK     64.30    -96.00    49   BAKER LAKE, NW          CN      SAO
+0000071927      YUR     68.67    -97.80    14   GLADMAN POINT, NW       CN      SAO
+0000071928      YRM     52.43   -114.92   988   ROCKY MTN. HOUSE, AB    CN      SAO
+0000071929      YUK     68.75   -109.07    92   BYRON BAY, NW           CN      SAO
+0000071930      YZU     54.15   -115.78   782   WHITE COURT, AB         CN      SAO
+0000071931      WLB     54.77   -112.02   566   LAC LA BICHE, AB        CN      SAO
+0000071932      YMM     56.65   -111.12   369   FORT MCMURRAY, AB       CN      SAO
+0000071933      YPY     58.77   -111.12   232   FORT CHIPEWYAN, AB      CN      SAO
+0000071934      YSM     60.00   -112.00   203   FORT SMITH, NW          CN      SAO
+0000071935      YHY     60.83   -115.78   166   HAY RIVER, NW           CN      SAO
+0000071936      YZF     62.50   -114.50   205   YELLOW KNIFE, NW        CN      SAO
+0000071938      YCO     67.80   -115.20    22   COPPERMINE, NW          CN      SAO
+0000071939      YUI     68.93   -116.93    16   CAPE YOUNG, NW          CN      SAO
+0000071940      YQU     55.18   -118.88   669   GRAND PRAIRIE, AB       CN      SAO
+0000071943      YXJ     56.23   -120.73   695   FORT SAINT JOHN, BC     CN      SAO
+0000071944      YZY     55.30   -123.13   700   MACKENZIE, BC           CN      SAO
+0000071945      YYE     58.83   -122.60   382   FORT NELSON, BC         CN      SAO
+0000071946      YFS     61.80   -121.20   177   FORT SIMPSON, NW        CN      SAO
+0000071948      ZUE     70.17   -124.70    17   CAPE PARRY, NW          CN      SAO
+0000071950      YYD     54.82   -127.18   523   SMITHERS, BC            CN      SAO
+0000071951      YXT     54.47   -128.58   217   TERRACE, BC             CN      SAO
+0000071952      WPZ     54.23   -125.77   704   BURNS LAKE, BC          CN      SAO
+0000071953      YQH     60.12   -128.82   690   WATSON LAKE, YK         CN      SAO
+0000071955      ZST     55.93   -129.98     7   STEWART, BC             CN      SAO
+0000071957      YEV     68.30   -133.50    68   INUVIK, NW              CN      SAO
+0000071958      WDL     58.42   -130.00   816   DEASE LAKE, BC          CN      SAO
+0000071964      YXY     60.72   -135.07   703   WHITE HORSE, YK         CN      SAO
+0000071966      YDA     64.05   -139.13   369   DAWSON, YK              CN      SAO
+0000071967      YDB     61.37   -139.05   806   BURWASH, YK             CN      SAO
+0000071968      YUA     68.93   -137.23    37   SHINGLE POINT, YK       CN      SAO
+0000071969      YCQ     55.70   -121.63   629   CHETWYND ARPT, BC       CN      SAO
+0000071970      WWQ     58.92   -125.46   840   MUNCHO LAKE, BC         CN      SAO
+0000071971      YXQ     62.42   -140.87   649   BEAVER CREEK, YK        CN      SAO
+0000071972      WGK     44.22    -76.60    93   KINGSTON, ON            CN      SAO
+0000071973      WLS     43.98    -80.75   415   MOUNT FOREST, ON        CN      SAO
+0000071974      YEL     46.35    -82.58   329   ELLIOT LAKE, ON         CN      SAO
+0000072201      EYW     24.55    -81.75     6   KEY WEST INTL, FL       US      SAO
+0000072202      MIA     25.82    -80.28     4   MIAMI INTL, FL          US      SAO
+0000072203      PBI     26.48    -80.12     6   WEST PALM BEACH, FL     US      SAO
+0000072204      MLB     28.10    -80.63    10   MELBOURNE, FL           US      SAO
+0000072205      MCO     28.43    -81.32    32   ORLANDO JETPORT, FL     US      SAO
+0000072206      JAX     30.50    -81.70     9   JACKSONVILLE, FL        US      SAO
+0000072207      SAV     32.13    -81.20    15   SAVANNAH, GA            US      SAO
+0000072208      CHS     32.90    -80.03    15   CHARLESTON AFB, SC      US      SAO
+0000072209      LHW     31.88    -81.57    14   FORT STEWART, GA        US      SAO
+0000072210      TBW     27.70    -82.40    13   TAMPA BAY AREA, FL      US      SAO
+0000072211      TPA     27.97    -82.53     3   TAMPA, FL               US      SAO
+0000072212      CTY     29.62    -83.10    13   CROSS CITY, FL          US      SAO
+0000072213      AYS     31.25    -82.40    46   WAYCROSS, GA            US      SAO
+0000072214      TLH     30.38    -84.37    21   TALLAHASSEE, FL         US      SAO
+0000072216      ABY     31.53    -84.18    59   ALBANY, GA              US      SAO
+0000072217      MCN     32.70    -83.65   110   MACON, GA               US      SAO
+0000072218      AGS     33.37    -81.97    45   AUGUSTA, GA             US      SAO
+0000072219      ATL     33.65    -84.42   315   ATLANTA, GA             US      SAO
+0000072220      AQQ     29.73    -85.03     6   APALACHICOLA, FL        US      SAO
+0000072221      VPS     30.48    -86.53    26   VALPARAISO, FL          US      SAO
+0000072222      PNS     30.47    -87.20    36   PENSACOLA, FL           US      SAO
+0000072223      MOB     30.68    -88.25    67   MOBILE/BATES, AL        US      SAO
+0000072225      LSF     32.33    -85.00   130   FORT BENNING, GA        US      SAO
+0000072226      MGM     32.30    -86.40    62   MONTGOMERY, AL          US      SAO
+0000072227      MGE     33.92    -84.52   326   DOBBINS AFB, GA         US      SAO
+0000072228      BHM     33.57    -86.75   196   BIRMINGHAM, AL          US      SAO
+0000072229      CKL     32.90    -87.25   140   CENTREVILLE, AL         US      SAO
+0000072231      MSY     29.98    -90.25     9   NEW ORLEANS INTL, LA    US      SAO
+0000072232      BVE     29.33    -89.40     1   BOOTHVILLE, LA          US      SAO
+0000072234      MEI     32.33    -88.75    94   MERIDIAN KEY FLD, MS    US      SAO
+0000072235      JAN     32.32    -90.08   101   JACKSON/THOMPSON, MS    US      SAO
+0000072239      POE     31.05    -93.18   101   FORT POLK, LA           US      SAO
+0000072240      LCH     30.12    -93.22    10   LAKE CHARLES, LA        US      SAO
+0000072241      BPT     29.95    -94.02     7   BEAUMNT/PRT ATHR, TX    US      SAO
+0000072243      IAH     29.97    -95.35    33   HOUSTON INTL, TX        US      SAO
+0000072248      SHV     32.47    -93.82    79   SHREVEPORT RGNL, LA     US      SAO
+0000072250      BRO     25.90    -97.43     6   BROWNSVILLE, TX         US      SAO
+0000072251      CRP     27.77    -97.50    13   CORPUS CHRISTI, TX      US      SAO
+0000072252      LRD     27.53    -99.47   156   LAREDO INTL, TX         US      SAO
+0000072253      SAT     29.53    -98.47   242   SAN ANTONIO INTL, TX    US      SAO
+0000072254      AUS     30.30    -97.70   189   AUSTIN/MUELLER, TX      US      SAO
+0000072255      VCT     28.85    -96.92    36   VICTORIA, TX            US      SAO
+0000072256      ACT     31.62    -97.22   155   WACO/MDSN COOPER, TX    US      SAO
+0000072257      HLR     31.15    -97.72   286   FORT HOOD/KILLEN, TX    US      SAO
+0000072258      DAL     32.85    -96.85   149   DALLAS/LOVE, TX         US      SAO
+0000072259      DFW     32.90    -97.03   182   DALLAS/FORTWORTH, TX    US      SAO
+0000072260      SEP     32.22    -98.18   398   STEPHENVILLE, TX        US      SAO
+0000072261      DRT     29.37   -100.92   313   DEL RIO, TX             US      SAO
+0000072262      GDP     31.83   -104.80  1664   GUADALUPE PASS, TX      US      SAO
+0000072263      SJT     31.37   -100.50   582   SAN ANGELO, TX          US      SAO
+0000072264      MRF     30.37   -104.02  1481   MARFA, TX               US      SAO
+0000072265      MAF     31.95   -102.18   872   MIDLAND, TX             US      SAO
+0000072266      ABI     32.42    -99.68   546   ABILENE, TX             US      SAO
+0000072267      LBB     33.65   -101.82   988   LUBBOCK, TX             US      SAO
+0000072268      ROW     33.30   -104.53  1118   ROSWELL INDUSTRL, NM    US      SAO
+0000072270      ELP     31.80   -106.40  1194   EL PASO, TX             US      SAO
+0000072271      TCS     33.23   -107.27  1481   TRUTHORCONSEQUEN, NM    US      SAO
+0000072272      SVC     32.63   -108.17  1659   SILVER CITY, NM         US      SAO
+0000072273      FHU     31.58   -110.33  1422   FORT HUACHUCA, AZ       US      SAO
+0000072274      TUS     32.12   -110.93   779   TUCSON, AZ              US      SAO
+0000072278      PHX     33.43   -112.02   337   PHOENIX/SKY HRBR, AZ    US      SAO
+0000072280      YUM     32.65   -114.60    63   YUMA, AZ                US      SAO
+0000072281      NJK     32.82   -115.68   -13   EL CENTRO, CA           US      SAO
+0000072286      RIV     33.88   -117.27   469   MARCH AFB, CA           US      SAO
+0000072288      BUR     34.20   -118.37   236   BURBANK, CA             US      SAO
+0000072289      MWS     34.23   -118.07  1739   MOUNT WILSON, CA        US      SAO
+0000072290      SAN     32.73   -117.17     9   SN DIEGO/LNDBRGH, CA    US      SAO
+0000072291      NSI     33.25   -119.45   174   SAN NICOLAS IS., CA     US      SAO
+0000072292      AVX     33.40   -118.42   482   SNTA CATALINA IS, CA    US      SAO
+0000072295      LAX     33.93   -118.40    32   LOS ANGELES INTL, CA    US      SAO
+0000072297      LGB     33.82   -118.15    12   LONG BEACH, CA          US      SAO
+0000072301      ILM     34.27    -77.92     9   WILMINGTON, NC          US      SAO
+0000072303      POB     35.17    -79.02    66   POPE AFB, NC            US      SAO
+0000072304      HAT     35.27    -75.55     3   HATTERAS, NC            US      SAO
+0000072306      RDU     35.87    -78.78   134   RALEIGH-DURHAM, NC      US      SAO
+0000072308      ORF     36.90    -76.20     9   NORFOLK REGIONAL, VA    US      SAO
+0000072309      NKT     34.85    -76.88    13   CHERRY PT MCAS, NC      US      SAO
+0000072310      CAE     33.95    -81.12    69   COLUMBIA METRO, SC      US      SAO
+0000072311      AHN     33.95    -83.32   246   ATHENS, GA              US      SAO
+0000072312      GSP     34.90    -82.22   296   GRNVILE-SPRTNBRG, SC    US      SAO
+0000072314      CLT     35.22    -80.93   234   CHARLOTTE/DOUGLS, NC    US      SAO
+0000072315      AVL     35.43    -82.55   661   ASHEVILLE RGNL, NC      US      SAO
+0000072317      GSO     36.08    -79.95   270   GREENSBORO/HI PT, NC    US      SAO
+0000072318      TRI     36.48    -82.40   463   TRI-CITY/BRISTOL, TN    US      SAO
+0000072319      INT     36.13    -80.23   298   WINSTON SALEM, NC       US      SAO
+0000072320      RMG     34.35    -85.17   196   ROME/RUSSELL, GA        US      SAO
+0000072323      HSV     34.65    -86.77   196   HUNTSVILLE, AL          US      SAO
+0000072324      CHA     35.03    -85.20   210   CHATTANOOGA/LVLL, TN    US      SAO
+0000072326      TYS     35.82    -83.98   299   KNOXVILLE, TN           US      SAO
+0000072327      BNA     36.12    -86.68   180   NASHVILLE METRO, TN     US      SAO
+0000072329      LOZ     37.08    -84.04   369   LONDON, KY              US      SAO
+0000072330      P02     36.77    -90.47   146   POPLAR BLUFF, MO        US      SAO
+0000072334      MEM     35.05    -90.00    87   MEMPHIS INTL, TN        US      SAO
+0000072340      LZK     34.83    -92.25   165   N LITTLE ROCK, AR       US      SAO
+0000072341      PGO     34.68    -94.62   883   PAGE, OK                US      SAO
+0000072344      FSM     35.33    -94.37   141   FORT SMITH, AR          US      SAO
+0000072349      UMN     36.88    -93.90   437   MONETT, MO              US      SAO
+0000072351      SPS     33.97    -98.48   314   SHEPPARD AFB, TX        US      SAO
+0000072352      LTS     34.67    -99.27   420   ALTUS AFB, OK           US      SAO
+0000072353      OKC     35.40    -97.60   397   OK CTY/WILL RGRS, OK    US      SAO
+0000072354      TIK     35.42    -97.38   394   TINKER AFB, OK          US      SAO
+0000072355      FSI     34.65    -98.40   362   FORT SILL, OK           US      SAO
+0000072356      TUL     36.20    -95.90   206   TULSA, OK               US      SAO
+0000072360      CAO     36.45   -103.15  1515   CLAYTON AIRPORT, NM     US      SAO
+0000072362      ONM     34.07   -106.90  1462   SOCORRO, NM             US      SAO
+0000072363      AMA     35.23   -101.70  1099   AMARILLO, TX            US      SAO
+0000072365      ABQ     35.05   -106.62  1620   ALBUQUERQ/KRTLND, NM    US      SAO
+0000072370      IGM     35.27   -113.95  1033   KINGMAN, AZ             US      SAO
+0000072371      PGA     36.93   -111.45  1304   PAGE, AZ                US      SAO
+0000072374      INW     35.02   -110.73  1488   WINSLOW, AZ             US      SAO
+0000072381      EDW     34.90   -117.87   705   EDWARDS AFB, CA         US      SAO
+0000072382      PMD     34.63   -118.08   774   PALMDALE, CA            US      SAO
+0000072383      SDB     34.75   -118.73  1379   SANDBERG, CA            US      SAO
+0000072384      BFL     35.42   -119.05   150   BAKERSFIELD/MDWS, CA    US      SAO
+0000072385      UCC     36.95   -116.05  1195   YUCCA FLAT, NV          US      SAO
+0000072386      LAS     36.08   -115.17   664   LAS VEGAS/MCCRRN, NV    US      SAO
+0000072387      DRA     36.62   -116.02  1009   DESERT RK/MRCRY, NV     US      SAO
+0000072389      FAT     36.77   -119.72   100   FRESNO, CA              US      SAO
+0000072390      87Q     35.67   -121.28    21   PUNTA PIEDRAS, CA       US      SAO
+0000072391      NTD     34.12   -119.12     4   POINT MUGU NAS, CA      US      SAO
+0000072393      VBG     34.73   -120.55   112   VANDENBERG AFB, CA      US      SAO
+0000072394      SMX     34.90   -120.45    73   SANTA MARIA, CA         US      SAO
+0000072401      RIC     37.50    -77.33    54   RICHMOND/BYRD, VA       US      SAO
+0000072402      WAL     37.93    -75.47    15   WALLOPS IS STN, VA      US      SAO
+0000072403      IAD     38.95    -77.45    98   DULLES INTL, VA         US      SAO
+0000072404      NHK     38.28    -76.40    14   PATUXENT RIVER, MD      US      SAO
+0000072405      DCA     38.85    -77.03    20   WASH. NAT'L ARPT, VA    US      SAO
+0000072406      BWI     39.18    -76.67    47   BALTIMORE INTL, MD      US      SAO
+0000072407      ACY     39.45    -74.57    20   ATLANTIC CITY, NJ       US      SAO
+0000072408      PHL     39.88    -75.25     9   PHILADELPHIA INT, PA    US      SAO
+0000072409      NEL     40.03    -74.32    24   LAKEHURST NAS, NJ       US      SAO
+0000072410      LYH     37.33    -79.20   286   LYNCHBURG/P GLNN, VA    US      SAO
+0000072411      ROA     37.32    -79.97   358   ROANOKE, VA             US      SAO
+0000072412      BKW     37.78    -81.12   766   BECKLEY, WV             US      SAO
+0000072414      CRW     38.37    -81.60   301   CHARLESTON/KNWHA, WV    US      SAO
+0000072417      EKN     38.88    -79.85   609   ELKINS, WV              US      SAO
+0000072421      CVG     39.05    -84.67   267   CINCINNATI/GRTR, OH     US      SAO
+0000072422      LEX     38.05    -84.60   301   LEXINGTON/BGF, KY       US      SAO
+0000072423      SDF     38.18    -85.73   151   STANDIFO/LSVILLE, KY    US      SAO
+0000072424      FTK     37.90    -85.97   230   FT KNOX/GODMAN, KY      US      SAO
+0000072425      HTS     38.37    -82.55   255   HNTNGTN/TRI STAT, WV    US      SAO
+0000072427      PKB     39.35    -81.43   263   PARKERSBURG, WV         US      SAO
+0000072428      CMH     40.00    -82.88   249   COLUMBUS, OH            US      SAO
+0000072429      DAY     39.90    -84.20   306   DAYTON/JAMES COX, OH    US      SAO
+0000072432      EVV     38.05    -87.53   118   EVANSVILLE/DRESS, IN    US      SAO
+0000072433      SLO     38.65    -88.97   177   SALEM-LECKRONE, IL      US      SAO
+0000072434      STL     38.75    -90.37   172   ST LOUIS/LAMBERT, MO    US      SAO
+0000072436      BAK     39.25    -85.88   201   COLUMBUS, IN            US      SAO
+0000072437      HUF     39.45    -87.30   181   HULMAN FLD/TR HT, IN    US      SAO
+0000072438      IND     39.73    -86.27   246   INDIANAPOLIS, IN        US      SAO
+0000072439      SPI     39.85    -89.67   187   SPRINGFIELD/CPTL, IL    US      SAO
+0000072440      SGF     37.23    -93.38   387   SPRINGFIELD, MO         US      SAO
+0000072445      COU     38.82    -92.22   274   COLUMBIA, MO            US      SAO
+0000072446      MCI     39.32    -94.72   312   KANSAS CITY INTL, MO    US      SAO
+0000072449      STJ     39.77    -94.92   249   ST JOSEPH/RSCRNS, MO    US      SAO
+0000072450      ICT     37.65    -97.43   408   WICHITA/MID CONT, KS    US      SAO
+0000072451      DDC     37.77    -99.97   790   DODGE CITY, KS          US      SAO
+0000072452      P28     37.30    -98.58   468   MEDICINE LODGE, KS      US      SAO
+0000072455      FRI     39.05    -96.77   325   FT RILEY/MARSHLL, KS    US      SAO
+0000072456      TOP     39.07    -95.62   270   TOPEKA/BILLARD, KS      US      SAO
+0000072458      CNK     39.55    -97.65   452   CONCORDIA/BLOSSR, KS    US      SAO
+0000072460      EHA     37.00   -101.88  1102   ELKHART, KS             US      SAO
+0000072462      ALS     37.45   -105.87  2299   ALAMOSA, CO             US      SAO
+0000072463      4LJ     38.12   -102.60  1103   LAMAR, CO               US      SAO
+0000072464      PUB     38.28   -104.52  1439   PUEBLO, CO              US      SAO
+0000072465      GLD     39.37   -101.70  1124   GOODLAND/RENNER, KS     US      SAO
+0000072466      COS     38.82   -104.72  1881   COLORADO SPRINGS, CO    US      SAO
+0000072467      LXV     39.25   -106.30  3096   LEADVILLE, CO           US      SAO
+0000072468      FCS     38.68   -104.77  1789   FT CARSON/BUTTS, CO     US      SAO
+0000072469      DEN     39.75   -104.87  1625   DENVER STPLTN, CO       US      SAO
+0000072470      PUC     39.62   -110.75  1799   PRICE/CARBON, UT        US      SAO
+0000072472      4BL     37.62   -109.47  1840   BLANDING, UT            US      SAO
+0000072476      GJT     39.12   -108.53  1475   GRAND JUNCTION, CO      US      SAO
+0000072480      BIH     37.37   -119.37  1263   BISHOP, CA              US      SAO
+0000072481      MER     37.38   -120.57    57   CASTLE AFB, CA          US      SAO
+0000072483      SAC     38.52   -121.50     8   SACRAMENTO/EXEC, CA     US      SAO
+0000072486      ELY     39.28   -114.85  1909   ELY/YELLAND FLD, NV     US      SAO
+0000072487      P38     37.62   -114.52  1335   CALIENTE, NV            US      SAO
+0000072488      RNO     39.50   -119.78  1341   RENO/CANNON INTL, NV    US      SAO
+0000072491      NSU     36.60   -121.85    46   MONTEREY, CA            US      SAO
+0000072492      SCK     37.90   -121.25     8   STOCKTON, CA            US      SAO
+0000072493      OAK     37.73   -122.22     3   OAKLAND, CA             US      SAO
+0000072494      SFO     37.62   -122.38     5   SN FRANCISCO INT, CA    US      SAO
+0000072495      50Q     37.70   -123.00    12   FARALLON ISLANDS, CA    US      SAO
+0000072502      EWR     40.70    -74.17     9   NEWARK INTL, NJ         US      SAO
+0000072503      LGA     40.77    -73.90     9   LA GUARDIA/NY, NY       US      SAO
+0000072504      BDR     41.17    -73.13     5   BRIDGEPORT/SKRSK, CT    US      SAO
+0000072506      ACK     41.25    -70.07     4   NANTUCKET, MA           US      SAO
+0000072507      PVD     41.73    -71.43    19   PROVIDENCE/GREEN, RI    US      SAO
+0000072508      BDL     41.93    -72.68    55   BRADLEY/HARTFORD, CT    US      SAO
+0000072509      BOS     42.37    -71.03     9   BOSTON/LOGAN INT, MA    US      SAO
+0000072511      CXY     40.22    -76.85   107   HARRISBURG/CPTL, PA     US      SAO
+0000072512      PSB     40.88    -78.08   583   PHILIPSBURG, PA         US      SAO
+0000072513      AVP     41.33    -75.73   289   WILKES-BARRE-SCR, PA    US      SAO
+0000072514      IPT     41.25    -76.92   160   WILLIAMSPORT, PA        US      SAO
+0000072515      BGM     42.22    -75.98   497   BINGHAMTON, NY          US      SAO
+0000072516      5B5     42.88    -73.25   250   BENNINGTON, VT          US      SAO
+0000072517      ABE     40.65    -75.43   117   ALLENTOWN/BTHLHM, PA    US      SAO
+0000072518      ALB     42.75    -73.80    89   ALBANY, NY              US      SAO
+0000072519      SYR     43.12    -76.12   124   SYRACUSE/HANCOCK, NY    US      SAO
+0000072520      PIT     40.50    -80.22   373   PITTSBURGH, PA          US      SAO
+0000072521      CAK     40.92    -81.43   377   CANTON/AKRON, OH        US      SAO
+0000072523      DSV     42.57    -77.72   209   DANSVILLE, NY           US      SAO
+0000072524      CLE     41.42    -81.87   245   CLEVELAND/HOPKNS, OH    US      SAO
+0000072525      YNG     41.27    -80.67   361   YOUNGSTOWN MUNI, OH     US      SAO
+0000072526      ERI     42.08    -80.18   225   ERIE, PA                US      SAO
+0000072528      BUF     42.93    -78.73   215   BUFFALO, NY             US      SAO
+0000072529      ROC     43.12    -77.67   169   ROCHESTER/MONROE, NY    US      SAO
+0000072530      ORD     41.98    -87.90   205   CHICAGO/OHARE, IL       US      SAO
+0000072532      PIA     40.67    -89.68   202   PEORIA, IL              US      SAO
+0000072533      FWA     41.00    -85.20   252   FORT WAYNE, IN          US      SAO
+0000072534      MDW     41.78    -87.75   190   CHICAGO/MIDWAY, IL      US      SAO
+0000072535      SBN     41.70    -86.32   236   SOUTH BEND, IN          US      SAO
+0000072536      TOL     41.60    -83.80   211   TOLEDO/EXPRESS, OH      US      SAO
+0000072537      DTW     42.23    -83.33   202   DETROIT METRO, MI       US      SAO
+0000072539      LAN     42.77    -84.60   266   LANSING, MI             US      SAO
+0000072540      P35     40.25    -93.72   270   SPICKARD, MO            US      SAO
+0000072543      RFD     42.20    -89.10   226   ROCKFORD, IL            US      SAO
+0000072544      MLI     41.45    -90.52   181   MOLINE/QUAD CITY, IL    US      SAO
+0000072545      CID     41.88    -91.70   265   CEDAR RAPIDS, IA        US      SAO
+0000072546      DSM     41.53    -93.65   294   DES MOINES, IA          US      SAO
+0000072547      DBQ     42.40    -90.70   329   DUBUQUE, IA             US      SAO
+0000072548      ALO     42.55    -92.40   268   WATERLOO, IA            US      SAO
+0000072549      FOD     42.55    -94.18   355   FORT DODGE, IA          US      SAO
+0000072550      OMA     41.30    -95.90   299   OMAHA/EPPLEY, NE        US      SAO
+0000072551      LNK     40.85    -96.75   362   LINCOLN, NE             US      SAO
+0000072552      GRI     40.97    -98.32   566   GRAND ISLAND, NE        US      SAO
+0000072553      OVN     41.37    -96.02   400   NORTH OMAHA, NE         US      SAO
+0000072554      OFF     41.12    -95.92   319   OFFUTT AFB, NE          US      SAO
+0000072556      OFK     41.98    -97.43   473   NORFOLK/STFN FLD, NE    US      SAO
+0000072557      SUX     42.40    -96.38   336   SIOUX CITY MUNI, IA     US      SAO
+0000072561      SNY     41.10   -102.98  1312   SIDNEY, NE              US      SAO
+0000072562      LBF     41.13   -100.68   849   N PLATTE/BRD FLD, NE    US      SAO
+0000072564      CYS     41.15   -104.82  1872   CHEYENNE, WY            US      SAO
+0000072566      BFF     41.87   -103.60  1206   SCOTTSBLUFF, NE         US      SAO
+0000072567      VTN     42.87   -100.55   792   VALENTINE/MILLER, NE    US      SAO
+0000072569      CPR     42.92   -106.47  1612   CASPER, WY              US      SAO
+0000072570      CAG     40.50   -107.53  1915   CRAIG, CO               US      SAO
+0000072572      SLC     40.78   -111.97  1288   SALT LAKE CITY, UT      US      SAO
+0000072574      RKS     41.60   -109.07  2056   ROCK SPRINGS, WY        US      SAO
+0000072575      OGD     41.18   -112.02  1358   OGDEN, UT               US      SAO
+0000072576      LND     42.82   -108.73  1694   LANDER/HUNT FLD, WY     US      SAO
+0000072578      PIH     42.92   -112.60  1365   POCATELLO, ID           US      SAO
+0000072581      ENV     40.73   -114.03  1292   WENDOVER, UT            US      SAO
+0000072583      WMC     40.90   -117.80  1312   WINNEMUCCA, NV          US      SAO
+0000072590      O64     39.40   -123.82    19   FORT BRAGG, CA          US      SAO
+0000072591      RBL     40.15   -122.25   108   RED BLUFF, CA           US      SAO
+0000072594      EKA     40.80   -124.17    18   EUREKA, CA              US      SAO
+0000072597      MFR     42.37   -122.87   405   MEDFORD, OR             US      SAO
+0000072605      CON     43.20    -71.50   105   CONCORD, NH             US      SAO
+0000072606      PWM     43.65    -70.32    19   PORTLAND INTL, ME       US      SAO
+0000072613      MWN     44.27    -71.30  1910   MT. WASHINGTON, NH      US      SAO
+0000072614      9B2     44.42    -72.02   217   SAINT JOHNSBURY, VT     US      SAO
+0000072615      8B8     43.60    -71.23   219   WOLFE BORO, NH          US      SAO
+0000072616      BML     44.58    -71.18   353   BERLIN, NH              US      SAO
+0000072617      BTV     44.47    -73.15   104   BURLINGTON INTL, VT     US      SAO
+0000072618      RUM     44.53    -70.53   205   RUMFORD, ME             US      SAO
+0000072632      DTX     42.70    -83.47   329   DETROIT, MI             US      SAO
+0000072635      GRR     42.88    -85.52   245   GRAND RAPIDS, MI        US      SAO
+0000072636      MKG     43.17    -86.27   193   MUSKEGON COUNTY, MI     US      SAO
+0000072637      FNT     42.97    -83.73   236   FLINT/BISHOP, MI        US      SAO
+0000072638      HTL     44.37    -84.68   351   HOUGHTON LAKE, MI       US      SAO
+0000072639      APN     45.07    -83.57   211   ALPENA/PHELPS, MI       US      SAO
+0000072640      MKE     42.95    -87.90   211   MILWAUKEE/MTCHLL, WI    US      SAO
+0000072641      MSN     43.13    -89.33   264   MADISON/DANE, WI        US      SAO
+0000072643      LSE     43.87    -91.25   202   LA CROSSE, WI           US      SAO
+0000072644      RST     43.92    -92.50   402   ROCHESTER, MN           US      SAO
+0000072645      GRB     44.48    -88.13   214   GREEN BAY/STRBL, WI     US      SAO
+0000072646      AUW     44.92    -89.62   367   WAUSAU/ALEXANDER, WI    US      SAO
+0000072648      ESC     45.73    -87.08   185   ESCANABA, MI            US      SAO
+0000072650      3SE     43.17    -95.15   404   SPENCER, IA             US      SAO
+0000072651      FSD     43.57    -96.73   435   SIOUX FALLS/FOSS, SD    US      SAO
+0000072653      9V9     43.80    -99.32   530   CHAMBERLAIN, SD         US      SAO
+0000072654      HON     44.38    -98.22   392   HURON, SD               US      SAO
+0000072655      STC     45.55    -94.07   313   ST CLOUD/WHITNEY, MN    US      SAO
+0000072656      FFM     46.30    -96.07   361   FERGUS FALLS, MN        US      SAO
+0000072658      MSP     44.88    -93.22   256   MINEAPOLIS-ST PL, MN    US      SAO
+0000072659      ABR     45.45    -98.43   397   ABERDEEN, SD            US      SAO
+0000072661      REJ     45.27   -103.53   925   REDIG, SD               US      SAO
+0000072662      RAP     44.05   -103.07   970   RAPID CITY RGNL, SD     US      SAO
+0000072665      GCC     44.35   -105.53  1330   GILLETTE, WY            US      SAO
+0000072666      SHR     44.77   -106.97  1209   SHERIDAN, WY            US      SAO
+0000072670      COD     44.52   -109.02  1553   CODY, WY                US      SAO
+0000072671      BPI     42.57   -110.10  2124   BIG PINEY, WY           US      SAO
+0000072677      BIL     45.80   -108.53  1088   BILLINGS/LOGAN, MT      US      SAO
+0000072681      BOI     43.57   -116.22   871   BOISE ARPT, ID          US      SAO
+0000072683      4BW     43.58   -118.95  1271   BURNS, OR               US      SAO
+0000072688      PDT     45.68   -118.85   455   PENDLETON, OR           US      SAO
+0000072693      EUG     44.12   -123.22   114   EUGENE/SWEET, OR        US      SAO
+0000072694      SLE     44.92   -123.02    61   SALEM/MCNARY, OR        US      SAO
+0000072698      PDX     45.60   -122.60    12   PORTLAND INTL, OR       US      SAO
+0000072712      CAR     46.87    -68.02   146   CARIBOU, ME             US      SAO
+0000072713      PQI     46.68    -68.05   146   PRESQUE ISLE, ME        US      SAO
+0000072734      Y62     46.47    -84.37   220   SAULT STE MARIE, MI     US      SAO
+0000072741      PKF     45.93    -90.45   469   PARK FALLS, WI          US      SAO
+0000072743      MQT     46.53    -87.57   434   MARQUETTE, MI           US      SAO
+0000072744      CMX     47.17    -88.50   333   HOUGHTON/HANCOCK, MI    US      SAO
+0000072745      DLH     46.83    -92.18   436   DULUTH INTL, MN         US      SAO
+0000072747      INL     48.57    -93.38   360   INTL FALLS, MN          US      SAO
+0000072750      P39     46.58    -94.32   390   PEQUOT LAKES, MN        US      SAO
+0000072753      FAR     46.90    -96.80   274   FARGO/HECTOR, ND        US      SAO
+0000072755      BJI     47.50    -94.93   425   BEMIDJI, MN             US      SAO
+0000072756      D45     48.93    -95.35   328   WARROAD, MN             US      SAO
+0000072758      P11     48.10    -98.87   443   DEVIL'S LAKE, ND        US      SAO
+0000072764      BIS     46.77   -100.75   504   BISMARCK, ND            US      SAO
+0000072765      P24     47.75   -101.83   624   ROSEGLEN, ND            US      SAO
+0000072767      ISN     48.18   -103.63   581   WILLISTON/SLLN, ND      US      SAO
+0000072768      GGW     48.22   -106.62   700   GLASGOW, MT             US      SAO
+0000072772      HLN     46.60   -112.00  1183   HELENA, MT              US      SAO
+0000072773      MSO     46.92   -114.08   976   MISSOULA/JOHNSON, MT    US      SAO
+0000072775      GTF     47.48   -111.35  1118   GREAT FALLS, MT         US      SAO
+0000072776      TFX     47.45   -111.38  1130   GREAT FALLS, MT         US      SAO
+0000072777      HVR     48.55   -109.77   789   HAVRE, MT               US      SAO
+0000072779      FCA     48.30   -114.27   905   KALISPELL/GLCR, MT      US      SAO
+0000072781      YKM     46.57   -120.53   330   YAKIMA, WA              US      SAO
+0000072783      LWS     46.38   -117.02   438   LEWISTON, ID            US      SAO
+0000072784      HMS     46.57   -119.58   221   HANFORD, WA             US      SAO
+0000072785      GEG     47.63   -117.53   723   SPOKANE INTL, WA        US      SAO
+0000072787      63S     48.53   -117.88   571   COLVILLE, WA            US      SAO
+0000072788      ALW     46.03   -118.33   302   WALLA WALLA, WA         US      SAO
+0000072789      4OM     48.43   -119.53   374   OMAK, WA                US      SAO
+0000072791      AST     46.15   -123.88     7   ASTORIA, OR             US      SAO
+0000072792      OLM     46.97   -122.90    62   OLYMPIA, WA             US      SAO
+0000072793      SEA     47.45   -122.30   137   SEATTLE-TACOMA, WA      US      SAO
+0000072797      UIL     47.95   -124.55    59   QUILLAYUTE STATE, WA    US      SAO
+0000074206      TCM     47.15   -122.48    98   MCCHORD AFB/TCMA, WA    US      SAO
+0000074207      GRF     47.08   -122.58    92   GRAY/FT LEWIS, WA       US      SAO
+0000074230      MLS     46.43   -105.87   801   MILES CITY, MT          US      SAO
+0000074389      GYX     43.89    -70.25   125   GRAY, MAINE             US      SAO
+0000074392      NHZ     43.88    -69.93    24   BRUNSWICK NAS, ME       US      SAO
+0000074420      U67     40.30   -110.05  1556   ROOSEVELT, UT           US      SAO
+0000074460      MMO     41.37    -88.68   225   MARSEILLES, IL          US      SAO
+0000074486      JFK     40.65    -73.78     7   NEW YORK JFK, NY        US      SAO
+0000074490      BED     42.47    -71.28    41   BEDFRD/HNSCM FLD, MA    US      SAO
+0000074491      CEF     42.20    -72.53    75   WSTVR AFB/CHCPEE, MA    US      SAO
+0000074494      CHH     41.67    -69.97    22   CHATHAM, MA             US      SAO
+0000074506      NGZ     37.78   -122.32     9   ALAMEDA/NIMITZ, CA      US      SAO
+0000074509      NUQ     37.42   -122.05    12   MOFFET/MTN VIEW, CA     US      SAO
+0000074516      SUU     38.27   -121.93    19   TRAVIS AFB, CA          US      SAO
+0000074520      MLF     38.42   -113.02  1533   MILFORD, UT             US      SAO
+0000074531      AFF     38.97   -104.82  2003   AIR FORCE ACADMY, CO    US      SAO
+0000074570      FFO     39.83    -84.05   251   WRIGHT-PATERSON, OH     US      SAO
+0000074594      ADW     38.82    -76.87    86   ANDREWS AFB, MD         US      SAO
+0000074598      LFI     37.08    -76.35     3   LANGLEY AFB/HMTN, VA    US      SAO
+0000074612      NID     35.68   -117.68   696   CHINA LAKE NAF, CA      US      SAO
+0000074671      HOP     36.67    -87.50   174   FT CAMPBELL AAF, KY     US      SAO
+0000074693      FBG     35.13    -78.93    74   FT BRAGG/SIMMONS, NC    US      SAO
+0000074695      2DP     35.68    -75.90     3   DARE CO ONRY/RNG, NC    US      SAO
+0000074702      NLC     36.30   -119.90    72   LEMOORE NAS, CA         US      SAO
+0000074704      EMT     34.08   -118.03   101   EL MONTE, CA            US      SAO
+0000074724      GBN     32.88   -112.72   262   GILA BEND, AZ           US      SAO
+0000074730      P07     30.17   -102.42   865   SANDERSON, TX           US      SAO
+0000074732      HMN     32.85   -106.10  1248   HOLLOMAN AFB, NM        US      SAO
+0000074733      E28     33.90   -106.40  1193   ALAMOGORDO, NM          US      SAO
+0000074734      2C2     32.63   -106.40  1204   WHITE SANDS MISL, NM    US      SAO
+0000074740      JCT     30.50    -99.77   522   JUNCTION, TX            US      SAO
+0000074754      AEX     31.33    -92.55    27   ENGLAND AFB, LA         US      SAO
+0000074755      01R     31.18    -92.63    57   CLAIBORNE, LA           US      SAO
+0000074775      PAM     30.07    -85.58     5   TYNDALL AFB, FL         US      SAO
+0000074777      HRT     30.43    -86.68    12   HURLBURT FIELD, FL      US      SAO
+0000074781      VAD     30.97    -83.20    71   VLDOSTA/MODY AFB, GA    US      SAO
+0000074788      MCF     27.85    -82.52     4   MACDILL AFB, FL         US      SAO
+0000074790      SSC     33.97    -80.47    73   SHAW AFB, SC            US      SAO
+0000074791      MYR     33.68    -78.93     8   MYRTLE BEACH AFB, SC    US      SAO
+0000074794      XMR     28.48    -80.57     3   CAPE CANAVERAL, FL      US      SAO
+0000074795      COF     28.23    -80.60     3   PATRICK AFB, FL         US      SAO
+0000074796      AGR     27.65    -81.33    21   AVON PARK, FL           US      SAO
+0000076001      TIJ     32.53   -116.98   152   TIJUANA, BN             MX      SAO
+0000076005      MXL     32.62   -115.27    22   MEXICALI, BN            MX      SAO
+0000076050      ENS     31.85   -116.63     8   ENSENADA, BN            MX      SAO
+0000076061      PPE     31.30   -113.55    48   PUERTO PENASCO, SO      MX      SAO
+0000076075      CJS     31.63   -106.43  1167   CIUDAD JUAREZ, CH       MX      SAO
+0000076080      NOG     31.23   -110.98  1222   NOGALES, SO             MX      SAO
+0000076122      NCG     30.42   -107.92  1467   NVS CASAS GRNDS, CH     MX      SAO
+0000076130      VAC     30.62   -106.52  1181   VILLA AHUMADA, CH       MX      SAO
+0000076151      ILS     29.17   -118.32     6   ISLA GUADALUPE, BN      MX      SAO
+0000076161      HMO     29.10   -111.05   187   HERMSLLO/LAMANGA, SO    MX      SAO
+0000076220      TEM     28.95   -107.82  1870   TEMOSACHIC, CH          MX      SAO
+0000076225      CUU     28.70   -105.97  1354   CHIHUAHUA INTL, CH      MX      SAO
+0000076255      GYM     27.98   -110.93    27   GUAYMAS/YANEZ, SO       MX      SAO
+0000076258      CEN     27.48   -109.93    38   OBREGON, SO             MX      SAO
+0000076286      NLD     27.43    -99.57   141   NUEVO LAREDO, TM        MX      SAO
+0000076342      MOV     26.90   -101.42   615   MONCLOVA, CH            MX      SAO
+0000076350      REX     26.02    -98.23    39   REYNOSA, TM             MX      SAO
+0000076361      LMM     25.82   -108.98    17   LOS MOCHIS ARPT, SI     MX      SAO
+0000076381      CLO     25.53   -103.52  1140   CIUDAD LERDO, DG        MX      SAO
+0000076382      TRC     25.57   -103.42  1130   TORREON ARPT, CL        MX      SAO
+0000076390      IYO     25.43   -100.98  1790   SALTILLO, CL            MX      SAO
+0000076394      MTY     25.87   -100.23   448   MONTERREY INTL, NL      MX      SAO
+0000076399      MAM     25.77    -97.53     7   MATAMOROS INTL, TM      MX      SAO
+0000076401      PTC     24.47   -111.32     5   PUERTO CORTES, BS       MX      SAO
+0000076405      LAP     24.07   -110.33    14   LA PAZ/DE LEON, BS      MX      SAO
+0000076412      CUL     24.78   -107.43    33   NUEVO CULIACAN, SI      MX      SAO
+0000076423      DGO     24.13   -104.53  1856   DURANGO ARPT, DG        MX      SAO
+0000076459      MZT     23.15   -106.25     5   MAZATLAN/BUELNA, SI     MX      SAO
+0000076491      CVM     23.72    -98.97   235   CIUDAD VICTORIA, TM     MX      SAO
+0000076499      SOT     23.77    -98.20    21   SOTO LA MARINA, TM      MX      SAO
+0000076525      ZCL     22.90   -102.68  2140   ZACATECAS ARPT, ZC      MX      SAO
+0000076539      SLP     22.18   -100.98  1871   SAN LUIS POTOSI, SL     MX      SAO
+0000076541      TMN     22.05    -98.80    50   VILLA TAMUIN, SL        MX      SAO
+0000076549      TAM     22.28    -97.85    24   TAMPICO/MINA, TM        MX      SAO
+0000076551      MRM     21.58   -106.50     5   IS MARIA MADRE, NA      MX      SAO
+0000076556      TEP     21.52   -104.90   922   TEPIC, NA               MX      SAO
+0000076571      AGU     21.88   -102.30  1874   AGUASCALIENTES, AG      MX      SAO
+0000076573      LAJ     21.35   -101.92  1880   LAGOS DE MORENO, JL     MX      SAO
+0000076575      LEO     21.12   -101.68  1809   LEON, GT                MX      SAO
+0000076577      GUJ     21.02   -101.25  1999   GUANAJUATO, GT          MX      SAO
+0000076581      MRVS    21.85   -100.00   990   RIO VERDE, SL           MX      SAO
+0000076593      PGS     21.30    -89.82    14   PROGRESO, YU            MX      SAO
+0000076601      PVR     20.68   -105.25     6   PUERTO VALLARTA, JL     MX      SAO
+0000076613      GDL     20.52   -103.32  1526   GUADLJRA/HIDALGO, JL    MX      SAO
+0000076625      QET     20.60   -100.38  1813   QUERETARO, QT           MX      SAO
+0000076632      PCA     20.13    -98.73  2417   PACHUCA, HG             MX      SAO
+0000076634      TCG     20.08    -98.37  2181   TULANCINGO, HG          MX      SAO
+0000076640      TUX     20.95    -97.38    28   TUXPAN, VC              MX      SAO
+0000076644      MID     20.95    -89.67     9   MERIDA INTL, YU         MX      SAO
+0000076645      MMD     20.93    -89.65     9   MERIDA/CRECENCIO, YU    MX      SAO
+0000076647      VAY     20.68    -88.20    22   VALLADOLID, YU          MX      SAO
+0000076649      CZM     20.52    -86.93     5   COZUMEL, QR             MX      SAO
+0000076654      MZL     19.15   -104.57     5   MANZANILLO INTL, CM     MX      SAO
+0000076658      IMA     19.22   -103.72   457   COLIMA ARPT, CM         MX      SAO
+0000076665      MLM     19.73   -101.22  1899   MORELIA, MC             MX      SAO
+0000076679      MEX     19.43    -99.07  2234   MEXICO INTL, DF         MX      SAO
+0000076687      JAL     19.53    -96.92  1389   JALAPA, VC              MX      SAO
+0000076691      VER     19.20    -96.13    14   VERACRUZ/G JARA, VC     MX      SAO
+0000076696      CPE     19.83    -90.52     9   CAMPECHE ARPT, CE       MX      SAO
+0000076741      MTT     18.15    -94.42    23   COATZACOALCOS, VC       MX      SAO
+0000076744      VSA     18.02    -92.95    33   VILLAHERMOSA, TB        MX      SAO
+0000076749      CME     18.65    -91.78     3   CD DEL CARMEN, CE       MX      SAO
+0000076750      CTM     18.50    -88.30     4   CHETUMAL, QR            MX      SAO
+0000076775      OAX     17.00    -96.73  1528   OAXACA APRT, OX         MX      SAO
+0000076798      TEQ     18.62    -99.25    99   TEQUESQUITENGO, MR      MX      SAO
+0000076805      ACA     16.75    -99.77     5   ACAPULCO, GR            MX      SAO
+0000076830      IZT     16.55    -95.10    61   IXTEPEC, OX             MX      SAO
+0000076833      SCZ     16.17    -95.20     6   SALINAS CRUZ, OX        MX      SAO
+0000076843      TGZ     16.73    -93.12   528   TUXTLA GUTIERREZ, CS    MX      SAO
+0000076904      TAP     14.92    -92.27   182   TAPACHULA ARPT, CS      MX      SAO
+0000078016      XKF     32.37    -64.68     6   KINDLEY FIELD, BE       US      SAO
+0000078061      MYGW    26.68    -78.98     2   WEST END INTL, BA       US      SAO
+0000078062      YGF     26.55    -78.70     7   FREEPORT INTL, BA       US      SAO
+0000078063      YGM     26.62    -78.37     2   GRAND BAHAMA AFB, BA    US      SAO
+0000078070      YBS     25.72    -79.30     4   SOUTH BIMINI IS, BA     US      SAO
+0000078073      YNN     25.05    -77.47     3   NASSAU INTL, BA         US      SAO
+0000078083      YAF     24.70    -77.80     2   ANDROS TOWN, BA         US      SAO
+0000078086      MYAK    24.08    -77.55     4   KEMPS BAY, BA           US      SAO
+0000078089      MYSM    24.07    -74.53     3   SAN SALVADOR, BA        US      SAO
+0000078092      MYEG    23.50    -75.77     2   GEORGE TOWN, BA         US      SAO
+0000078118      KJT     21.45    -71.15    10   TURKS ISLANDS, TI       US      SAO
+0000078121      YIG     20.95    -73.68     2   MATTHEW TOWN, BA        US      SAO
+0000078221      UNG     21.83    -82.78    23   NUEVA GERONA, CU        US      SAO
+0000078224      UHA     22.98    -82.40    75   HAVANA/J MARTI, CU      US      SAO
+0000078229      UVR     23.13    -81.28     3   VARADERO/KAWAMA, CU     US      SAO
+0000078244      UCF     22.15    -80.40    39   CIENFUEGOS, CU          US      SAO
+0000078255      UCM     21.42    -77.85   118   CAMAGUEY/AGRMNTE, CU    US      SAO
+0000078256      UMZ     20.33    -77.12    60   MANZANILLO ARPT, CU     US      SAO
+0000078259      UBY     20.40    -76.62    61   BAYAMO, CU              US      SAO
+0000078262      UHG     20.80    -76.30   110   HOLQUIN, CU             US      SAO
+0000078264      UCU     19.97    -75.85    55   SANTIAGO, CU            US      SAO
+0000078267      UGT     20.08    -75.15     8   GUANTANAMO, CU          US      SAO
+0000078268      UBA     20.35    -74.50     9   BARACOA/ORIENTE, CU     US      SAO
+0000078312      UMH     22.58    -83.95   100   MATAHAMBRE, CU          US      SAO
+0000078315      UPR     22.42    -83.68    51   PINAR DEL RIO, CU       US      SAO
+0000078322      UBO     22.72    -82.28     7   BATABANO, CU            US      SAO
+0000078326      UMT     23.02    -81.52    46   MATANZAS, CU            US      SAO
+0000078332      UCO     22.73    -80.90    50   COLON, CU               US      SAO
+0000078337      UTD     21.80    -79.98    54   TRINIDAD, CU            US      SAO
+0000078339      USC     22.43    -79.90    90   SANTA CLARA, CU         US      SAO
+0000078357      UVT     20.95    -76.95    88   VCTORIA DE TUNAS, CU    US      SAO
+0000078367      UGM     19.90    -75.15    23   GUANTANAMO BAY, CU      US      SAO
+0000078383      KCG     19.28    -81.38     6   GRAND CAYMAN, GC        US      SAO
+0000078384      KCR     19.30    -81.35     2   ROBERTS FIELD, GC       US      SAO
+0000078439      TPP     18.55    -72.35    16   PORT-AU-PRINCE, HA      US      SAO
+0000078457      DPP     19.78    -70.67     5   PUERTO PLATA, DR        US      SAO
+0000078514      JBQ     18.50    -67.13    69   BRINQUEN/AQDLA, PR      US      SAO
+0000078526      JSJ     18.43    -66.00    19   SAN JUAN, PU            PU      SAO
+0000078543      IST     18.33    -64.97    67   ST. THOMAS/KING, VI     US      SAO
+0000078547      ISX     17.70    -64.80    12   ST.CROIX/HAMILTN, VI    US      SAO
+0000000000      YGH     66.30   -128.60    53   FT. GOOD HOPE, NW       CN      SAO
+0000000000      YUB     69.40   -133.00     1   TUKTOYAKTUK, NW         CN      SAO
+0000000000      WLM     48.42   -123.32    70   VICTORIA (MARS), BC     CN      SAO
+0000000000      YPW     49.83   -124.50   130   POWELL RIVER, BC        CN      SAO
+0000000000      WDF     44.73    -81.28   181   OLIPHANT, ON            CN      SAO
+0000000000      WGE     51.30   -116.98   787   GOLDEN, BC              CN      SAO
+0000000000      YDC     49.47   -120.52   700   PRINCETON, BC           CN      SAO
+0000000000      WHJ     50.65   -128.00   617   HOLBERG, BC             CN      SAO
+0000000000      YBW     51.10   -114.37  1200   SPRINGBANK, AB          CN      SAO
+0000000000      WBO     50.55   -111.85   747   BROOKS, AB              CN      SAO
+0000000000      WXA     51.08   -111.07  1326   BOW VALLEY, AB          CN      SAO
+0000000000      WAV     51.78   -114.68  1115   SUNDRE, AB              CN      SAO
+0000000000      WRY     49.13   -112.05  1050   MILK RIVER, AB          CN      SAO
+0000000000      WDK     50.00   -113.63  1012   CLARESHOLM, AB          CN      SAO
+0000000000      WLF     52.23    -87.88   256   LANSDOWNE, ON           CN      SAO
+0000000000      WCH     48.75    -91.62   395   ATIKOKAN, ON            CN      SAO
+0000000000      YPL     51.47    -90.20   373   PICKLE LAKE, ON         CN      SAO
+0000000000      WOE     49.10   -110.50   935   ONEFOUR, AB             CN      SAO
+0000000000      ZPN     49.50   -114.00  1190   PINCHER CREEK, AB       CN      SAO
+0000000000      UGN     42.40    -87.80   222   WAUKEGAN, IL            US      SAO
+0000000000      ARV     45.90    -89.70   496   ARBOR VITAE, WI         US      SAO
+0000000000      UES     43.00    -88.20   278   WAUKESHA, WI            US      SAO
+0000000000      ANB     33.58    -85.85   185   ANNISTON, AL            US      SAO
+0000000000      DHN     31.32    -85.45   122   DOTHAN, AL              US      SAO
+0000000000      BFM     30.63    -88.07     8   MOBILE/BROOKLEY, AL     US      SAO
+0000000000      MSL     34.75    -87.62   168   MUSCLE SHOALS, AL       US      SAO
+0000000000      TCL     33.23    -87.62    51   TUSCALOOSA, AL          US      SAO
+0000000000      DUG     31.45   -109.60  1267   DOUGLAS, AZ             US      SAO
+0000000000      0E4     34.23   -111.33  1498   PAYSON, AZ              US      SAO
+0000000000      E03     34.25   -110.03  1943   SHOW LOW, AZ            US      SAO
+0000000000      PRC     34.65   -112.43  1540   PRESCOTT, AZ            US      SAO
+0000000000      FLG     35.13   -111.67  2137   FLAGSTAFF/PULLIM, AZ    US      SAO
+0000000000      GCN     35.95   -112.15  2125   GRAND CANYON, AZ        US      SAO
+0000000000      P06     35.10   -114.50   547   BULLHEAD CITY, AZ       US      SAO
+0000000000      P65     31.88   -112.82    64   LUKEVILLE, AZ           US      SAO
+0000000000      E74     32.82   -109.68   900   SAFFORD, AZ             US      SAO
+0000000000      CDH     33.52    -92.40    39   CAMDEN/HARRELL, AR      US      SAO
+0000000000      ELD     33.22    -92.80    87   EL DORADO/GDWIN, AR     US      SAO
+0000000000      FYV     36.00    -94.17   381   FAYETTEVILLE, AR        US      SAO
+0000000000      HRO     36.27    -93.15   422   HARRISON, AR            US      SAO
+0000000000      HOT     34.48    -93.10   169   HOT SPRINGS, AR         US      SAO
+0000000000      JBR     35.83    -90.65    84   JONESBORO, AR           US      SAO
+0000000000      PBF     34.17    -91.93    65   PINE BLUFF/GRIDR, AR    US      SAO
+0000000000      LIT     34.73    -92.23    78   LITTLE RK/ADAMS, AR     US      SAO
+0000000000      TXK     33.45    -94.00   122   TEXARKANA MUNI, AR      US      SAO
+0000000000      EED     34.77   -114.62   302   NEEDLES, CA             US      SAO
+0000000000      S11     41.48   -120.53  1339   ALTURAS, CA             US      SAO
+0000000000      ACV     40.98   -124.10    66   ARCATA, CA              US      SAO
+0000000000      BUO     33.93   -116.95   792   BEAUMONT, CA            US      SAO
+0000000000      BLU     39.28   -120.70  1611   BLUE CANYON, CA         US      SAO
+0000000000      BLH     33.62   -114.72   121   BLYTHE, CA              US      SAO
+0000000000      FEW     41.15   -104.80  1876   WARREN AFB/CHYNN, WY    US      SAO
+0000000000      BNY     40.88   -121.67   957   BURNEY, CA              US      SAO
+0000000000      CZZ     32.62   -116.47   802   CAMPO, CA               US      SAO
+0000000000      CRQ     33.13   -117.28   100   CARLSBAD, CA            US      SAO
+0000000000      CIC     39.78   -121.85    72   CHICO, CA               US      SAO
+0000000000      CCR     37.98   -122.05    18   CONCORD/BUCHANAN, CA    US      SAO
+0000000000      CEC     41.78   -124.23    17   CRESCENT CITY, CA       US      SAO
+0000000000      DAG     34.87   -116.78   588   DAGGETT, CA             US      SAO
+0000000000      HIF     41.12   -111.97  1459   HILL AFB/OGDEN, UT      US      SAO
+0000000000      FUL     33.87   -117.97    29   FULLERTON, CA           US      SAO
+0000000000      HHR     33.92   -118.33    19   HAWTHORNE, CA           US      SAO
+0000000000      HWD     37.65   -122.12    15   HAYWARD, CA             US      SAO
+0000000000      IPL     32.83   -115.57    17   IMPERIAL, CA            US      SAO
+0000000000      WJF     34.73   -118.22   728   LANCASTER, CA           US      SAO
+0000000000      LVK     37.70   -121.82   121   LIVERMORE, CA           US      SAO
+0000000000      MYV     39.10   -121.57    19   MARYSVILLE, CA          US      SAO
+0000000000      MRY     36.58   -121.85    67   MONTEREY PNINSLA, CA    US      SAO
+0000000000      MHS     41.32   -122.32  1080   MOUNT SHASTA, CA        US      SAO
+0000000000      APC     38.22   -122.28    10   NAPA, CA                US      SAO
+0000000000      ONT     34.05   -117.62   293   ONTARIO INTL, CA        US      SAO
+0000000000      OXR     34.20   -119.20    13   OXNARD, CA              US      SAO
+0000000000      PSP     33.83   -116.50   146   PALM SPRINGS, CA        US      SAO
+0000000000      PRB     35.67   -120.63   249   PASO ROBLES, CA         US      SAO
+0000000000      RDD     40.50   -122.30   152   REDDING, CA             US      SAO
+0000000000      RAL     33.95   -117.45   248   RIVERSIDE, CA           US      SAO
+0000000000      SMF     38.70   -121.60    10   SACRAMENTO METRO, CA    US      SAO
+0000000000      SNS     36.67   -121.60    23   SALINAS, CA             US      SAO
+0000000000      SEE     32.82   -116.97   117   SN DG/GILLESPIE, CA     US      SAO
+0000000000      SDM     32.57   -116.98   160   SN DG/BROWN FLD, CA     US      SAO
+0000000000      SJC     37.37   -121.92    17   SAN JOSE, CA            US      SAO
+0000000000      SBP     35.23   -120.65    63   SAN LUIS OBISPO, CA     US      SAO
+0000000000      SNA     33.67   -117.88    16   SANTA ANA/JW, CA        US      SAO
+0000000000      SBA     34.43   -119.83     6   SANTA BARBARA, CA       US      SAO
+0000000000      SMO     34.02   -118.45    53   SANTA MONICA MUN, CA    US      SAO
+0000000000      STS     38.52   -122.82    45   SANTA ROSA, CA          US      SAO
+0000000000      O87     40.03   -124.07   123   SHELTER COVE, CA        US      SAO
+0000000000      TVL     38.90   -120.00  1912   SOUTH LAKE TAHOE, CA    US      SAO
+0000000000      SVE     40.38   -120.57  1264   SUSANVILLE, CA          US      SAO
+0000000000      TRM     33.63   -116.17    34   THERMAL, CA             US      SAO
+0000000000      TOA     33.80   -118.33    31   TORRANCE, CA            US      SAO
+0000000000      TRK     39.32   -120.13  1798   TRUCKEE/TAHOE, CA       US      SAO
+0000000000      UKI     39.13   -123.20   189   UKIAH, CA               US      SAO
+0000000000      VNY     34.22   -118.48   244   VAN NUYS, CA            US      SAO
+0000000000      VIS     36.32   -119.40    89   VISALIA, CA             US      SAO
+0000000000      DRO     37.15   -107.75  2037   DUR-LA PLATA ARP, CO    US      SAO
+0000000000      4V5     37.28   -107.86  2012   DURANGO, CO             US      SAO
+0000000000      LHX     38.05   -103.52  1285   LA JUNTA, CO            US      SAO
+0000000000      TAD     37.25   -104.33  1752   TRINIDAD, CO            US      SAO
+0000000000      3V9     39.28   -106.87  2270   ASPEN, CO               US      SAO
+0000000000      EGE     39.65   -106.92  1985   EAGLE, CO               US      SAO
+0000000000      ASE     39.22   -106.87  2565   ASPEN-PITKIN ARP, CO    US      SAO
+0000000000      GUC     38.55   -106.92  2337   GUNNISON ARPT, CO       US      SAO
+0000000000      S29     38.53   -106.05  2282   SALIDA/ALEXANDER, CO    US      SAO
+0000000000      2V9     38.55   -106.93  2349   GUNNISON, CO            US      SAO
+0000000000      FCL     40.58   -105.08  1525   FORT COLLINS, CO        US      SAO
+0000000000      AKO     40.17   -103.22  1431   AKRON, CO               US      SAO
+0000000000      MTJ     38.50   -107.88  1755   MONTROSE ARPT, CO       US      SAO
+0000000000      6V8     38.50   -107.88  1752   MONTROSE, CO            US      SAO
+0000000000      CEZ     37.30   -108.63  1803   CORTEZ, CO              US      SAO
+0000000000      1V1     39.53   -107.80  1646   RIFLE, CO               US      SAO
+0000000000      RCA     44.15   -103.10   999   ELLSWORTH AFB, SD       US      SAO
+0000000000      BNO     43.60   -118.95  1263   BURNS ARPT, OR          US      SAO
+0000000000      HDN     40.50   -107.25  2012   HAYDEN, CO              US      SAO
+0000000000      DXR     41.37    -73.48   139   DANBURY, CT             US      SAO
+0000000000      GON     41.33    -72.05     6   GROTON/TRUMBULL, CT     US      SAO
+0000000000      HFD     41.73    -72.65     6   HARTFRD/BRAINARD, CT    US      SAO
+0000000000      HVN     41.27    -72.88     4   NEW HAVEN/TWEED, CT     US      SAO
+0000000000      ILG     39.67    -75.60    24   WILMINGTON, DE          US      SAO
+0000000000      NXX     40.18    -75.13   112   WILLOW GROVE NAS, PA    US      SAO
+0000000000      BOW     27.95    -81.78    40   BARTOW, FL              US      SAO
+0000000000      CEW     30.78    -86.52    56   CRESTVIEW, FL           US      SAO
+0000000000      DAB     29.18    -81.05    12   DAYTONA BEACH, FL       US      SAO
+0000000000      FLL     26.07    -80.15     3   FT LDRDALE/HLYWD, FL    US      SAO
+0000000000      FMY     26.58    -81.87     4   FORT MYERS, FL          US      SAO
+0000000000      GNV     29.68    -82.27    50   GAINESVILLE, FL         US      SAO
+0000000000      CRG     30.33    -81.52    12   JACKSNVILE-CRAIG, FL    US      SAO
+0000000000      LAL     28.03    -81.95    72   LAKELAND, FL            US      SAO
+0000000000      NZW     42.15    -70.93    49   S WEYMOUTH NAS, MA      US      SAO
+0000000000      ORL     28.55    -81.33    34   ORLANDO-HERNDON, FL     US      SAO
+0000000000      PFN     30.20    -85.68     6   PANAMA CITY, FL         US      SAO
+0000000000      NPA     30.35    -87.32     9   PENSACOLA-SHERMN, FL    US      SAO
+0000000000      SFB     28.78    -81.25     2   SANFORD, FL             US      SAO
+0000000000      SRQ     27.40    -82.55     7   SARASOTA, FL            US      SAO
+0000000000      PIE     27.92    -82.68     3   ST PETRSBURG INT, FL    US      SAO
+0000000000      TIX     28.52    -80.80    11   TITUSVILLE, FL          US      SAO
+0000000000      VRB     27.65    -80.42     7   VERO BEACH, FL          US      SAO
+0000000000      35B     42.82    -70.87     1   MERRIMACK RIVER, MA     US      SAO
+0000000000      AMG     31.53    -82.52    63   ALMA, GA                US      SAO
+0000000000      PDK     33.88    -84.30   305   PEACHTREE-DEKALB, GA    US      SAO
+0000000000      FTY     33.78    -84.52   256   FULTON CNTY/ATLN, GA    US      SAO
+0000000000      SSI     31.15    -81.38     6   BRUNSWICK, GA           US      SAO
+0000000000      CSG     32.52    -84.93   121   COLUMBUS, GA            US      SAO
+0000000000      VLD     30.78    -83.28    68   VALDOSTA, GA            US      SAO
+0000000000      MLD     42.17   -112.32  1373   MALAD CITY, ID          US      SAO
+0000000000      BYI     42.53   -113.77  1265   BURLEY, ID              US      SAO
+0000000000      27U     45.18   -113.90  1224   SALMON, ID              US      SAO
+0000000000      U15     44.52   -114.22  1529   CHALLIS, ID             US      SAO
+0000000000      COE     47.77   -116.82   707   COEUR D ALENE, ID       US      SAO
+0000000000      S80     45.92   -116.13  1023   GRANGEVILLE, ID         US      SAO
+0000000000      SUN     43.50   -114.30  1620   SUN VALLEY/HLY, ID      US      SAO
+0000000000      P69     46.82   -115.43  1249   ELK CITY/LOWELL, ID     US      SAO
+0000000000      MYL     44.88   -116.10  1531   MCCALL, ID              US      SAO
+0000000000      S06     47.47   -115.80  1011   MULLAN, ID              US      SAO
+0000000000      4SV     42.02   -113.25  1612   STREVELL, ID            US      SAO
+0000000000      TWF     42.48   -114.48  1265   TWIN FALLS, ID          US      SAO
+0000000000      IDA     43.52   -112.07  1445   IDAHO FALLS/FANG, ID    US      SAO
+0000000000      MDH     37.78    -89.25   124   SOUTH CARBONDALE, IL    US      SAO
+0000000000      CMI     40.03    -88.28   230   CHAMPAIGN/URBANA, IL    US      SAO
+0000000000      DPA     41.92    -88.25   231   CHICAGO-DUPAGE, IL      US      SAO
+0000000000      CGX     41.87    -87.62   181   CHICAGO-MEIGS, IL       US      SAO
+0000000000      DNV     40.20    -87.60   212   DANVILLE, IL            US      SAO
+0000000000      DEC     39.83    -88.87   207   DECATUR, IL             US      SAO
+0000000000      CPS     38.57    -90.15   126   BI-STATE PARKS, IL      US      SAO
+0000000000      GBG     40.93    -90.43   245   GALESBURG, IL           US      SAO
+0000000000      MWA     37.75    -89.00   144   MARION/WLLIAMSON, IL    US      SAO
+0000000000      MTO     39.48    -88.28   220   MATTOON, IL             US      SAO
+0000000000      MVN     38.32    -88.87   146   MT VERNON/OUTLND, IL    US      SAO
+0000000000      UIN     39.93    -91.20   234   QUINCY/BALWIN, IL       US      SAO
+0000000000      BMG     39.13    -86.62   258   BLOOMINGTON, IN         US      SAO
+0000000000      EKM     41.72    -86.00   237   ELKHART, IN             US      SAO
+0000000000      GYY     41.62    -87.42   180   GARY, IN                US      SAO
+0000000000      MZZ     40.29    -85.41   262   MARION, IN              US      SAO
+0000000000      MIE     40.23    -85.38   286   MUNCIE, IN              US      SAO
+0000000000      LAF     40.42    -86.93   184   LAFAYETTE/PURDUE, IN    US      SAO
+0000000000      BRL     40.78    -91.12   212   BURLINGTON, IA          US      SAO
+0000000000      CKV     36.62    -87.42   168   CLARKSVILLE, TN         US      SAO
+0000000000      3OI     40.62    -93.93   342   LAMONI, IA              US      SAO
+0000000000      MCW     43.15    -93.33   370   MASON CITY, IA          US      SAO
+0000000000      OTM     41.10    -92.45   258   OTTUMWA INDSTRL, IA     US      SAO
+0000000000      SLN     38.80    -97.65   387   SALINA, KS              US      SAO
+0000000000      HUT     38.07    -97.87   470   HUTCHINSON, KS          US      SAO
+0000000000      CNU     37.67    -95.48   304   CHANUTE/MRTN JHN, KS    US      SAO
+0000000000      MHK     39.15    -96.67   322   MANHATTAN, KS           US      SAO
+0000000000      FOE     38.95    -95.67   324   TOPEKA-FORBES, KS       US      SAO
+0000000000      RSL     38.87    -98.82   568   RUSSELL, KS             US      SAO
+0000000000      HLC     39.38    -99.83   677   HILL CITY, KS           US      SAO
+0000000000      GCK     37.93   -100.72   882   GARDEN CITY, KS         US      SAO
+0000000000      EMP     38.33    -96.20   367   EMPORIA, KS             US      SAO
+0000000000      LBL     37.05   -100.97   878   LIBERAL, KS             US      SAO
+0000000000      OJC     38.85    -94.90   334   OLATHE/JNSN CNTY, KS    US      SAO
+0000000000      HYS     38.85    -99.27   609   HAYS, KS                US      SAO
+0000000000      JKL     37.60    -83.32   414   JACKSON, KY             US      SAO
+0000000000      5I3     37.48    -82.52   209   PIKEVILLE, KY           US      SAO
+0000000000      LOU     38.23    -85.67   166   LOUISVILLE/BOWMAN,KY    US      SAO
+0000000000      OWB     37.75    -87.17   124   OWENSBORO, KY           US      SAO
+0000000000      PAH     37.07    -88.77   125   PADUCAH/BARKLEY, KY     US      SAO
+0000000000      ESF     31.38    -92.30    33   ESLER/ALEXANDRIA, LA    US      SAO
+0000000000      BTR     30.53    -91.15    21   BATON ROUGE/RYAN, LA    US      SAO
+0000000000      NYG     38.50    -77.30     4   QUANTICO MCAS, VA       US      SAO
+0000000000      HUM     29.57    -90.65     3   HOUMA, LA               US      SAO
+0000000000      LFT     30.20    -92.00    13   LAFAYETTE, LA           US      SAO
+0000000000      MLU     32.52    -92.05    24   MONROE, LA              US      SAO
+0000000000      NEW     30.03    -90.03     3   NEW ORLEANS/LKFR, LA    US      SAO
+0000000000      DTN     32.52    -93.75    55   DNTN SHREVEPORT, LA     US      SAO
+0000000000      AUG     44.32    -69.80   109   AUGUSTA, ME             US      SAO
+0000000000      BGR     44.80    -68.82    62   BANGOR, ME              US      SAO
+0000000000      BHB     44.45    -68.37    26   BAR HARBOR, ME          US      SAO
+0000000000      27B     43.17    -70.60    12   CAPE NEDDICK, ME        US      SAO
+0000000000      HUL     46.13    -67.78   150   HOULTON, ME             US      SAO
+0000000000      NGU     36.93    -76.28     5   NORFOLK/CHAMBER, VA     US      SAO
+0000000000      RKD     44.07    -69.12    18   ROCKLAND/KNOX, ME       US      SAO
+0000000000      HGR     39.70    -77.72   214   HAGERSTOWN, MD          US      SAO
+0000000000      MTN     39.33    -76.42     7   MARTIN/MDDLE RVR, MD    US      SAO
+0000000000      SBY     38.33    -75.50    16   SALISBURY, MD           US      SAO
+0000000000      NTU     36.82    -76.03     6   OCEANA NAS, VA          US      SAO
+0000000000      BVY     42.58    -70.92    33   BEVERLY, MA             US      SAO
+0000000000      FMH     41.65    -70.52    40   FALMOUTH/OTIS, MA       US      SAO
+0000000000      HYA     41.67    -70.28    16   HYANNIS, MA             US      SAO
+0000000000      MVY     41.40    -70.62    21   MARTHAS VINEYARD, MA    US      SAO
+0000000000      EWB     41.68    -70.97    24   NEW BEDFORD, MA         US      SAO
+0000000000      OWD     42.18    -71.18    15   NORWOOD, MA             US      SAO
+0000000000      PSF     42.43    -73.30   364   PITTSFIELD, MA          US      SAO
+0000000000      BAF     42.17    -72.72    82   BARNES/WESTFIELD, MA    US      SAO
+0000000000      ORH     42.27    -71.87   308   WORCESTER, MA           US      SAO
+0000000000      ARB     42.22    -83.75   256   ANN ARBOR, MI           US      SAO
+0000000000      BTL     42.30    -85.23   287   BATTLE CREEK, MI        US      SAO
+0000000000      BEH     42.13    -86.43   196   BENTON HARBOR, MI       US      SAO
+0000000000      P59     47.47    -87.85   186   COPPER HARBOR, MI       US      SAO
+0000000000      YIP     42.23    -83.53   218   YPSILANTI/WL RUN, MI    US      SAO
+0000000000      IMT     45.82    -88.12   358   IRON MNTN/FORD, MI      US      SAO
+0000000000      IWD     46.53    -90.13   380   IRONWOOD, MI            US      SAO
+0000000000      JXN     42.27    -84.47   305   JACKSON/REYNOLDS, MI    US      SAO
+0000000000      AZO     42.23    -85.55   266   KALAMAZOO, MI           US      SAO
+0000000000      MBL     44.27    -86.25   189   MANISTEE/BLACKER, MI    US      SAO
+0000000000      MNM     45.12    -87.63   189   MENOMINEE, MI           US      SAO
+0000000000      PLN     45.57    -84.80   220   PELLSTON/EMMET, MI      US      SAO
+0000000000      PTK     42.67    -83.42   299   PONTIAC, MI             US      SAO
+0000000000      MBS     43.53    -84.08   204   TRI-CITY/SAGINAW, MI    US      SAO
+0000000000      P75     45.92    -85.92   180   SEUL CHOIX POINT, MI    US      SAO
+0000000000      TVC     44.73    -85.58   190   TRAVERSE CITY, MI       US      SAO
+0000000000      AXN     45.87    -95.38   434   ALEXANDRIA MUNI, MN     US      SAO
+0000000000      BRD     46.40    -94.13   374   BRAINERD/CROW WG, MN    US      SAO
+0000000000      FRM     43.65    -94.42   354   FAIRMONT, MN            US      SAO
+0000000000      P62     47.45    -90.20     0   GRAD MARAIS, MN         US      SAO
+0000000000      HIB     47.38    -92.85   412   HIBBING, MN             US      SAO
+0000000000      MKT     44.22    -93.92   311   MANKATO, MN             US      SAO
+0000000000      RWF     44.55    -95.08   311   REDWOOD FALLS, MN       US      SAO
+0000000000      TVF     48.07    -96.18   340   THIEF RIVERFALLS, MN    US      SAO
+0000000000      OTG     43.65    -95.58   480   WORTHINGTON, MN         US      SAO
+0000000000      GTR     33.45    -88.58    79   GOLDEN TRIANGLE, MS     US      SAO
+0000000000      GLH     33.48    -90.98    40   GREENVILLE, MS          US      SAO
+0000000000      GWO     33.50    -90.08    47   GREENWOOD, MS           US      SAO
+0000000000      GPT     30.40    -89.07     9   GULFPORT, MS            US      SAO
+0000000000      PIB     31.47    -89.33    91   PINE BELT RGNL, MS      US      SAO
+0000000000      MCB     31.18    -90.47   126   MCCOMB, MS              US      SAO
+0000000000      HEZ     31.62    -91.25    83   HRDY-ANDR/NTCHEZ, MS    US      SAO
+0000000000      UOX     34.38    -89.55   137   UNIVRSITY OXFORD, MS    US      SAO
+0000000000      MKC     39.12    -94.60   231   KANSAS CITY MUNI, MO    US      SAO
+0000000000      CGI     37.23    -89.58   104   CAPE GIRARDEAU, MO      US      SAO
+0000000000      JEF     38.60    -92.17   167   JEFFERSON CITY, MO      US      SAO
+0000000000      JLN     37.17    -94.50   299   JOPLIN, MO              US      SAO
+0000000000      IRK     40.10    -92.55   294   KIRKSVILLE/CANON, MO    US      SAO
+0000000000      VIH     38.13    -91.77   350   VICHY/ROLLA, MO         US      SAO
+0000000000      GDV     47.13   -104.80   749   GLENDIVE, MT            US      SAO
+0000000000      MQM     44.57   -112.32  2068   MONIDA, MT              US      SAO
+0000000000      3HT     46.43   -109.83  1268   HARLOWTON, MT           US      SAO
+0000000000      LWT     47.05   -109.45  1279   LEWISTON, MT            US      SAO
+0000000000      BZN     45.78   -111.15  1360   BOZEMAN, MT             US      SAO
+0000000000      LVM     45.70   -110.43  1419   LIVINGSTON/MISSN, MT    US      SAO
+0000000000      4BQ     45.43   -105.40   922   BROADUS, MT             US      SAO
+0000000000      WEY     44.65   -111.10  2031   WEST YELLOWSTONE, MT    US      SAO
+0000000000      BTM     45.95   -112.50  1693   BUTTE/SILVER BOW, MT    US      SAO
+0000000000      DLN     45.25   -112.55  1597   DILLON, MT              US      SAO
+0000000000      3DU     46.67   -113.15  1202   DRUMMOND, MT            US      SAO
+0000000000      CTB     48.60   -112.37  1174   CUT BANK, MT            US      SAO
+0000000000      JDN     47.33   -106.93   809   JORDON, MT              US      SAO
+0000000000      SDY     47.72   -104.18   604   SIDNEY/RICHLAND, MT     US      SAO
+0000000000      3TH     47.60   -115.37   725   THOMPSON FALLS, MT      US      SAO
+0000000000      WYS     44.68   -111.12  2025   W YELLWSTNE ARPT, MT    US      SAO
+0000000000      OLF     48.10   -105.58   605   WOLF POINT, MT          US      SAO
+0000000000      BIE     40.32    -96.75   402   BEATRICE, NE            US      SAO
+0000000000      HSI     40.60    -98.43   596   HASTINGS, NE            US      SAO
+0000000000      BUB     41.78    -99.15   664   BURWELL/CRAM FLD, NE    US      SAO
+0000000000      ANW     42.58    -99.98   789   AINSWORTH, NE           US      SAO
+0000000000      OLU     41.45    -97.35   440   COLUMBUS, NE            US      SAO
+0000000000      MCK     40.22   -100.58   786   MCCOOK, NE              US      SAO
+0000000000      IML     40.53   -101.63  1000   IMPERIAL, NE            US      SAO
+0000000000      MHN     42.05   -101.05   994   MULLEN, NE              US      SAO
+0000000000      BBW     41.43    -99.65   771   BROKEN BOW, NE          US      SAO
+0000000000      AIA     42.05   -102.80  1198   ALLIANCE, NE            US      SAO
+0000000000      CDR     42.83   -103.08  1004   CHADRON, NE             US      SAO
+0000000000      EAR     40.73    -99.00   649   KEARNEY, NE             US      SAO
+0000000000      3FC     40.08    -95.60   445   FALLS CITY, NE          US      SAO
+0000000000      ONL     42.47    -98.68   619   O'NEILL, NE             US      SAO
+0000000000      ODX     41.62    -98.95   629   ORD/SHARP, NE           US      SAO
+0000000000      TPH     38.07   -117.08  1654   TONOPAH, NV             US      SAO
+0000000000      U31     39.50   -117.08  2014   AUSTIN, NV              US      SAO
+0000000000      BAM     40.62   -116.87  1381   BATTLE MOUNTAIN, NV     US      SAO
+0000000000      EKO     40.83   -115.78  1565   ELKO, NV                US      SAO
+0000000000      P68     39.50   -115.97  2123   EUREKA, NV              US      SAO
+0000000000      HTH     38.55   -118.63  1285   HAWTHORNE, NV           US      SAO
+0000000000      LOL     40.07   -118.55  1190   LOVELOCK/DARBY, NV      US      SAO
+0000000000      OWY     41.95   -116.10  1645   OWYHEE, NV              US      SAO
+0000000000      EEN     42.90    -72.27   148   KEENE/DILLANT-HK, NH    US      SAO
+0000000000      LCI     43.57    -71.43   167   LACONIA, NH             US      SAO
+0000000000      LEB     43.63    -72.32   177   LEBANON, NH             US      SAO
+0000000000      MHT     42.93    -71.43    71   MANCHESTER, NH          US      SAO
+0000000000      CDW     40.87    -74.28    53   CALDWELL/FAIRFLD, NJ    US      SAO
+0000000000      MIV     39.37    -75.07    27   MILLVILLE, NJ           US      SAO
+0000000000      MMU     40.80    -74.42    57   MORRISTOWN, NJ          US      SAO
+0000000000      TEB     40.85    -74.05     3   TETERBORO, NJ           US      SAO
+0000000000      TTN     40.28    -74.82    65   TRENTON/MERCER, NJ      US      SAO
+0000000000      4CR     34.10   -105.68  1981   CORONA, NM              US      SAO
+0000000000      DMN     32.25   -107.70  1315   DEMING, NM              US      SAO
+0000000000      NCA     34.70    -77.43     8   NEW RIVER/JACK, NC      US      SAO
+0000000000      GNT     35.17   -107.90  1987   GRANTS, NM              US      SAO
+0000000000      GUP     35.52   -108.78  1972   GALLUP/CLARKE, NM       US      SAO
+0000000000      4MY     34.98   -106.05  1896   MORIARTY, NM            US      SAO
+0000000000      SAF     35.62   -106.08  1934   SANTA FE, NM            US      SAO
+0000000000      4SL     36.02   -106.95  2106   CUBA, NM                US      SAO
+0000000000      FMN     36.75   -108.23  1677   FARMINGTON, NM          US      SAO
+0000000000      E23     36.42   -105.57  2123   TAOS, NM                US      SAO
+0000000000      TCC     35.18   -103.60  1238   TUCUMCARI, NM           US      SAO
+0000000000      CNM     32.33   -104.27  1004   CARLSBAD, NM            US      SAO
+0000000000      RUI     33.35   -105.67  2106   RUIDOSO, NM             US      SAO
+0000000000      E33     36.90   -106.57  2362   CHAMA, NM               US      SAO
+0000000000      P70     35.00   -105.67  2095   CLINES CORNER, NM       US      SAO
+0000000000      LRU     32.30   -106.77  1385   LAS CRUCES, NM          US      SAO
+0000000000      LAM     35.88   -106.28  2179   LOS ALAMOS, NM          US      SAO
+0000000000      LVS     35.65   -105.15  2093   LAS VEGAS, NM           US      SAO
+0000000000      HOB     32.68   -103.20  1115   HOBBS, NM               US      SAO
+0000000000      ELM     42.17    -76.90   290   ELMIRA, NY              US      SAO
+0000000000      FRG     40.73    -73.43    41   FARMINGDALE ARPT, NY    US      SAO
+0000000000      GFL     43.35    -73.62   100   GLENS FALLS, NY         US      SAO
+0000000000      ISP     40.78    -73.10    30   ISLIP/MACARTHUR, NY     US      SAO
+0000000000      ITH     42.48    -76.47   335   ITHACA, NY              US      SAO
+0000000000      JHW     42.15    -79.25   525   JAMESTOWN, NY           US      SAO
+0000000000      MSS     44.93    -74.85    65   MASSENA/RICHARDS, NY    US      SAO
+0000000000      MSV     41.70    -74.80   428   MONTICELLO/SLLVN, NY    US      SAO
+0000000000      SWF     41.50    -74.10   143   STEWART/NEWBURGH, NY    US      SAO
+0000000000      OGS     44.68    -75.40    63   OGDENSBURG, NY          US      SAO
+0000000000      SLK     44.38    -74.20   506   SARANAC LK/ADIRN, NY    US      SAO
+0000000000      SCH     42.85    -73.93   115   SCHENECTADY ARPT, NY    US      SAO
+0000000000      UCA     43.15    -75.38   226   UTICA, NY               US      SAO
+0000000000      ART     44.00    -76.02    99   WATERTOWN, NY           US      SAO
+0000000000      FOK     40.85    -72.63    20   SUFFOLK/WSTHMPTN, NY    US      SAO
+0000000000      HPN     41.07    -73.72   134   WHITE PLAINS, NY        US      SAO
+0000000000      ECG     36.27    -76.18     4   ELIZABETH CITY, NC      US      SAO
+0000000000      IZA     34.60   -120.80   205   SANTA YNEZ, CA          US      SAO
+0000000000      ORS     48.70   -122.90     4   EASTSND(ORCAS IS),WA    US      SAO
+0000000000      7LI     38.60   -112.30  1656   JOSEPH, UT              US      SAO
+0000000000      EFC     44.70   -103.80   969   BELLE FOURCHE, SD       US      SAO
+0000000000      FWS     32.50    -97.30   213   FT WRTH SPINK APT,TX    US      SAO
+0000000000      O54     40.70   -122.90   717   WVRVL/TRINTY APT, CA    US      SAO
+0000000000      S14     44.30   -112.10  1794   SPENCER, ID             US      SAO
+0000000000      FAY     35.00    -78.88    57   FAYETTEVILLE, NC        US      SAO
+0000000000      HKY     35.75    -81.38   362   HICKORY, NC             US      SAO
+0000000000      HSS     35.90    -82.82   451   HOT SPRINGS, NC         US      SAO
+0000000000      OAJ     34.82    -77.62    27   JACKSNVLLE/ELLIS, NC    US      SAO
+0000000000      ISO     35.32    -77.63    29   KINSTON/STALLNGS, NC    US      SAO
+0000000000      EWN     35.08    -77.05     6   NEW BERN, NC            US      SAO
+0000000000      RWI     35.85    -77.88    48   ROCKY MT.WILSON, NC     US      SAO
+0000000000      JMS     46.92    -98.68   457   JAMESTOWN, ND           US      SAO
+0000000000      DIK     46.78   -102.80   789   DICKINSON, ND           US      SAO
+0000000000      DVL     48.12    -98.90   443   DEVILS LAKE/MUNI, ND    US      SAO
+0000000000      GFK     47.95    -97.18   257   GRAND FORKS INTL, ND    US      SAO
+0000000000      P67     46.10    -97.15   351   LIDGERWOOD, ND          US      SAO
+0000000000      MOT     48.27   -101.28   523   MINOT INTL, ND          US      SAO
+0000000000      LUK     39.10    -84.43   149   LUNKEN/CINCNNATI, OH    US      SAO
+0000000000      BKL     41.52    -81.68   178   BURKE LAKEFRONT, OH     US      SAO
+0000000000      CGF     41.57    -81.48   266   CUYAHOGA/CLVLAND, OH    US      SAO
+0000000000      OSU     40.08    -83.07   276   OHIO STATE UNIV, OH     US      SAO
+0000000000      FDY     41.02    -83.67   244   FINDLAY, OH             US      SAO
+0000000000      MFD     40.82    -82.52   395   MANSFIELD/LAHM, OH      US      SAO
+0000000000      ZZV     39.95    -81.90   274   ZANESVILLE, OH          US      SAO
+0000000000      HBR     35.00    -99.05   477   HOBART, OK              US      SAO
+0000000000      CSM     35.35    -99.20   586   CLINT-SHERMAN, OK       US      SAO
+0000000000      GAG     36.30    -99.77   678   GAGE, OK                US      SAO
+0000000000      END     36.33    -97.90   398   ENID/VANCE AFB, OK      US      SAO
+0000000000      PNC     36.73    -97.10   307   PONCA CITY, OK          US      SAO
+0000000000      ADM     34.30    -97.02   232   ARDMORE, OK             US      SAO
+0000000000      RVS     36.03    -95.98   191   TULSA/JONES ARPT, OK    US      SAO
+0000000000      BVO     36.75    -96.00   218   BARTLESVILLE, OK        US      SAO
+0000000000      MLC     34.88    -95.78   235   MCALESTER, OK           US      SAO
+0000000000      WDG     36.38    -97.80   354   ENID/WOODRING, OK       US      SAO
+0000000000      CVS     34.38   -103.32  1309   CLOVIS/CANNON, NM       US      SAO
+0000000000      BKE     44.83   -117.82  1027   BAKER, OR               US      SAO
+0000000000      4BK     42.05   -124.28    24   BROOKINGS, OR           US      SAO
+0000000000      CZK     45.68   -121.88    46   CASCADE LOCKS, OR       US      SAO
+0000000000      HIO     45.53   -122.95    62   HILLSBORO, OR           US      SAO
+0000000000      LMT     42.15   -121.73  1247   KLAMATH FALLS, OR       US      SAO
+0000000000      4LW     42.18   -120.35  1455   LAKEVIEW, OR            US      SAO
+0000000000      MEH     45.50   -118.40  1236   MEACHAM, OR             US      SAO
+0000000000      ONP     44.63   -124.05    48   NEWPORT, OR             US      SAO
+0000000000      OTH     43.42   -124.25     4   NORTH BEND, OR          US      SAO
+0000000000      RDM     44.27   -121.15   938   REDMOND/ROBERTS, OR     US      SAO
+0000000000      P88     42.58   -117.87  1162   ROME, OR                US      SAO
+0000000000      RBG     43.23   -123.37   160   ROSEBURG, OR            US      SAO
+0000000000      SXT     42.62   -123.37  1171   SEXTON SUMMIT, OR       US      SAO
+0000000000      DLS     45.62   -121.15    64   THE DALLES, OR          US      SAO
+0000000000      TTD     45.55   -122.40    11   TROUTDALE/PRTLND, OR    US      SAO
+0000000000      GSB     35.33    -77.97    33   SEYMOUR-JOHNSON, NC     US      SAO
+0000000000      NRS     32.57   -117.12     8   IMPERIAL BEACH, CA      US      SAO
+0000000000      LNS     40.13    -76.30   123   LANCASTER, PA           US      SAO
+0000000000      MDT     40.20    -76.77    94   MIDDLETWN/OLMSTD, PA    US      SAO
+0000000000      PNE     40.08    -75.02    37   N PHILADELPHIA, PA      US      SAO
+0000000000      RDG     40.38    -75.97   105   READING/SPAATZ, PA      US      SAO
+0000000000      7TB     41.18    -75.42   585   TOBYHANNA, PA           US      SAO
+0000000000      BID     41.17    -71.58    36   BLOCK ISLAND, RI        US      SAO
+0000000000      AND     34.50    -82.72   238   ANDERSON, SC            US      SAO
+0000000000      FLO     34.18    -79.72    45   FLORENCE, SC            US      SAO
+0000000000      CRE     33.82    -78.72    10   N MYRTLE BEACH, SC      US      SAO
+0000000000      GMU     34.85    -82.35   317   GREENVILLE-DWNTN, SC    US      SAO
+0000000000      BKX     44.30    -96.80   499   BROOKINGS, SD           US      SAO
+0000000000      ATY     44.92    -97.15   533   WATERTOWN, SD           US      SAO
+0000000000      PHP     44.05   -101.60   674   PHILIP, SD              US      SAO
+0000000000      PIR     44.38   -100.28   531   PIERRE, SD              US      SAO
+0000000000      YKN     42.92    -97.38   397   YANKTON/C GURNEY, SD    US      SAO
+0000000000      Y26     45.53   -100.43   508   MOBRIDGE, SD            US      SAO
+0000000000      Y22     45.93   -102.17   791   LEMMON, SD              US      SAO
+0000000000      0V1     43.44   -103.37  1707   CUSTER, SD              US      SAO
+0000000000      MHE     43.77    -98.03   397   MITCHELL, SD            US      SAO
+0000000000      CSV     35.95    -85.08   573   CROSSVILLE, TN          US      SAO
+0000000000      DYR     36.02    -89.40   103   DYERSBURG, TN           US      SAO
+0000000000      MKL     35.60    -88.92   132   MCKELLAR/JACKSON, TN    US      SAO
+0000000000      NQA     35.35    -89.87    98   MEMPHIS NAS, TN         US      SAO
+0000000000      MWL     32.78    -98.07   294   MINERAL WELLS, TX       US      SAO
+0000000000      PVW     34.17   -101.72  1028   PLAINVIEW, TX           US      SAO
+0000000000      NKX     32.87   -117.15   147   MIRAMAR NAS, CA         US      SAO
+0000000000      FTW     32.82    -97.35   211   FT WORTH/MEACHAM, TX    US      SAO
+0000000000      DHT     36.02   -102.55  1216   DALHART, TX             US      SAO
+0000000000      CDS     34.43   -100.28   595   CHILDRESS, TX           US      SAO
+0000000000      PRX     33.63    -95.45   167   PARIS/COX, TX           US      SAO
+0000000000      ALI     27.73    -98.03    54   ALICE, TX               US      SAO
+0000000000      CLL     30.58    -96.37    97   COLLEGE STATION, TX     US      SAO
+0000000000      COT     28.45    -99.22   144   COTULLA, TX             US      SAO
+0000000000      RBD     32.68    -96.87   201   DALLAS/REDBIRD, TX      US      SAO
+0000000000      HRL     26.23    -97.67    11   HARLINGEN, TX           US      SAO
+0000000000      HDO     29.35    -99.10   283   HONDO, TX               US      SAO
+0000000000      HOU     29.65    -95.28    15   HOUSTON/HOBBY, TX       US      SAO
+0000000000      LFK     31.23    -94.75    88   LUFKIN, TX              US      SAO
+0000000000      MFE     26.18    -98.23    33   MILLER INTL, TX         US      SAO
+0000000000      PSX     28.72    -96.25     5   PALACIOS, TX            US      SAO
+0000000000      TPL     31.15    -97.42   208   TEMPLE/DRAUGHON, TX     US      SAO
+0000000000      TYR     32.37    -95.40   166   TYLER/POUNDS FLD, TX    US      SAO
+0000000000      INK     31.78   -103.20   859   WINK, TX                US      SAO
+0000000000      BCE     37.70   -112.15  2312   BRYCE CANYON, UT        US      SAO
+0000000000      LGU     41.78   -111.85  1357   LOGAN, UT               US      SAO
+0000000000      U17     37.50   -110.70  1110   MARINA/BULLFROG, UT     US      SAO
+0000000000      MIJ     40.18   -112.93  1329   DUGWAY/TOOELE, UT       US      SAO
+0000000000      VEL     40.45   -109.52  1603   VERNAL ARPT, UT         US      SAO
+0000000000      U71     40.47   -109.53  1612   VERNAL, UT              US      SAO
+0000000000      PVU     40.22   -111.72  1369   PROVO, UT               US      SAO
+0000000000      4HV     38.37   -110.72  1314   HANKSVILLE, UT          US      SAO
+0000000000      CDC     37.70   -113.10  1714   CEDAR CITY, UT          US      SAO
+0000000000      U28     39.00   -110.15  1241   GREEN RIVER, UT         US      SAO
+0000000000      U24     39.33   -112.58  1414   DELTA, UT               US      SAO
+0000000000      NUC     33.02   -118.58    55   SAN CLEMENTE IS, CA     US      SAO
+0000000000      CNY     38.77   -109.75  1394   CANYONLANDS/MOAB, UT    US      SAO
+0000000000      SGU     37.08   -113.60   896   SAINT GEORGE, UT        US      SAO
+0000000000      MPV     44.20    -72.57   353   MONTPELIER/KNAPP, VT    US      SAO
+0000000000      RUT     43.53    -72.95   240   RUTLAND, VT             US      SAO
+0000000000      VSF     43.33    -72.52   175   SPRINGFIELD ST, VT      US      SAO
+0000000000      CHO     38.13    -78.45   195   CHARLOTTESVILLE, VA     US      SAO
+0000000000      DAN     36.57    -79.33   177   DANVILLE, VA            US      SAO
+0000000000      HSP     37.95    -79.82  1155   HOT SPRINGS/INGL, VA    US      SAO
+0000000000      PHF     37.13    -76.50    12   PATRICK HENRY, VA       US      SAO
+0000000000      SHD     38.27    -78.85   366   SHENANDOAH/STNTN, VA    US      SAO
+0000000000      BLI     48.80   -122.53    48   BELLINGHAM, WA          US      SAO
+0000000000      PWT     47.48   -122.77   147   BREMERTON, WA           US      SAO
+0000000000      EPH     47.32   -119.52   388   EPHRATA, WA             US      SAO
+0000000000      PAE     47.92   -122.28   184   PAINE/EVERETT, WA       US      SAO
+0000000000      S19     48.50   -123.00    37   FRIDAY HARBOR, WA       US      SAO
+0000000000      HQM     46.97   -123.97     4   HOQUIAM, WA             US      SAO
+0000000000      MWH     47.20   -119.32   362   MOSES LAKE, WA          US      SAO
+0000000000      76S     48.25   -122.68    58   OAK HARBOR ARPT, WA     US      SAO
+0000000000      PSC     46.27   -119.12   123   PASCO/TRI-CITIES, WA    US      SAO
+0000000000      CLM     48.12   -123.50    88   PORT ANGELES, WA        US      SAO
+0000000000      PUW     46.75   -117.12   778   PULLMAN/MOSCOW, WA      US      SAO
+0000000000      RNT     47.50   -122.22     9   RENTON, WA              US      SAO
+0000000000      BFI     47.53   -122.30     5   SEATTLE/BOEING, WA      US      SAO
+0000000000      SHN     47.25   -123.15    85   SHELTON, WA             US      SAO
+0000000000      SFF     47.67   -117.33   595   SPOKANE/FELTS, WA       US      SAO
+0000000000      SMP     47.28   -121.33  1209   STAMPEDE PASS, WA       US      SAO
+0000000000      TIW     47.27   -122.58    89   TACOMA INDUSTRL, WA     US      SAO
+0000000000      TDO     46.48   -122.80   113   TOLEDO/WINLOCK, WA      US      SAO
+0000000000      EAT     47.40   -120.20   379   WENATCHEE/PNGBRN, WA    US      SAO
+0000000000      BLF     37.30    -81.22   871   BLUEFIELD, WV           US      SAO
+0000000000      CKB     39.28    -80.23   366   CLARKSBURG/BNDUM, WV    US      SAO
+0000000000      LWB     37.87    -80.40   701   LEWISBURG, WV           US      SAO
+0000000000      MRB     39.40    -77.98   169   MARTINSBURG, WV         US      SAO
+0000000000      MGW     39.65    -79.92   380   MORGANTOWN, WV          US      SAO
+0000000000      HLG     40.18    -80.65   364   WHEELING, WV            US      SAO
+0000000000      SSU     37.77    -80.33   549   WHITE SULPHR SPR, WV    US      SAO
+0000000000      EAU     44.87    -91.48   276   EAU CLAIRE, WI          US      SAO
+0000000000      JVL     42.62    -89.03   246   JANESVILLE, WI          US      SAO
+0000000000      MTW     44.13    -87.67   198   MANITOWOC, WI           US      SAO
+0000000000      MWC     43.12    -88.05   227   MILWAUKEE/TMMRMN, WI    US      SAO
+0000000000      CWA     44.78    -89.67   388   MOSINEE, WI             US      SAO
+0000000000      OSH     44.00    -88.57   245   OSHKOSH/WITTMAN, WI     US      SAO
+0000000000      RHI     45.63    -89.45   490   RHINELANDER,  WI        US      SAO
+0000000000      NZJ     33.67   -117.73   117   EL TORO MCAS, CA        US      SAO
+0000000000      RWL     41.80   -107.20  2068   RAWLINS, WY             US      SAO
+0000000000      RIW     43.05   -108.45  1679   RIVERTON, WY            US      SAO
+0000000000      JAC     43.60   -110.73  1964   JACKSON, WY             US      SAO
+0000000000      WRL     43.97   -107.97  1294   WORLAND MUNI, WY        US      SAO
+0000000000      4DG     42.75   -105.38  1477   DOUGLAS, WY             US      SAO
+0000000000      NZY     32.70   -117.20     8   NORTH ISLAND NAS, CA    US      SAO
+0000000000      EVW     41.33   -111.00  2012   EVANSTON, WY            US      SAO
+0000000000      LAR     41.32   -105.68  2218   LARAMIE/BREES, WY       US      SAO
+0000000000      PBG     44.65    -73.47    72   PLATTSBURG AFB, NY      US      SAO
+0000000000      RME     43.23    -75.40   154   GRIFFISS AFB, NY        US      SAO
+0000000000      OSC     44.45    -83.40   193   WURTSMITH AFB, MI       US      SAO
+0000000000      SAW     46.35    -87.40   372   K I SAWYER AFB, MI      US      SAO
+0000000000      CHD     33.30   -111.67   422   CHANDLER/WLLIAMS, AZ    US      SAO
+0000000000      LUF     33.58   -112.37   332   LUKE AFB, AZ            US      SAO
+0000000000      DMA     32.17   -110.88   824   DAVIS-MONTHN AFB, AZ    US      SAO
+0000000000      SOW     34.27   -110.00  2016   SHOW LOW, AZ            US      SAO
+0000000000      WRB     32.63    -83.60    90   ROBINS AFB, GA          US      SAO
+0000000000      NIR     28.37    -97.67    58   BEEVILLE/CHASE, TX      US      SAO
+0000000000      MXF     32.38    -86.37    51   MAXWELL AFB/MTGY, AL    US      SAO
+0000000000      HST     25.48    -80.38     2   HOMESTEAD AFB, FL       US      SAO
+0000000000      BSM     30.20    -97.68   165   BERGSTROM AFB, TX       US      SAO
+0000000000      NQI     27.50    -97.82    15   KINGSVILLE NAS, TX      US      SAO
+0000000000      X68     28.62    -80.68     4   NASA SHUTTLE FTY, FL    US      SAO
+0000000000      BAD     32.50    -93.67    51   BARKSDALE AFB, LA       US      SAO
+0000000000      SKF     29.38    -98.58   210   KELLY AFB, TX           US      SAO
+0000000000      RND     29.53    -98.28   232   RANDOLPH AFB, TX        US      SAO
+0000000000      GRK     31.07    -97.83   309   FORT HOOD/R GRAY, TX    US      SAO
+0000000000      DLF     29.37   -100.78   330   LAUGHLIN AFB, TX        US      SAO
+0000000000      DYS     32.43    -99.85   545   DYESS AFB/ABLENE, TX    US      SAO
+0000000000      REE     33.60   -102.05  1017   REESE AFB/LUBOCK, TX    US      SAO
+0000000000      SBD     34.10   -117.23   353   SN BRNDNO/NORTON, CA    US      SAO
+0000000000      FAF     37.13    -76.62     4   FT EUSTIS/FELKER, VA    US      SAO
+0000000000      CBM     33.65    -88.45    67   COLUMBUS AFB, MS        US      SAO
+0000000000      LRF     34.92    -92.15    95   LITTLE ROCK AFB, AR     US      SAO
+0000000000      BYH     35.97    -89.95    78   BLYTHEVILLE AFB, AR     US      SAO
+0000000000      VCV     34.58   -117.38   876   GEORGE AFB, CA          US      SAO
+0000000000      LSV     36.23   -115.03   570   NELLIS AFB, NV          US      SAO
+0000000000      DAA     38.72    -77.18    21   DAVSN/FT BELVOIR, VA    US      SAO
+0000000000      FME     39.08    -76.77    46   FT MEADE/TIPTON, MD     US      SAO
+0000000000      DOV     39.13    -75.47     9   DOVER AFB, DE           US      SAO
+0000000000      WRI     40.02    -74.60    41   MCGUIRE AFB, NJ         US      SAO
+0000000000      LCK     39.82    -82.93   227   RICKENBACKER AFB, OH    US      SAO
+0000000000      SGH     39.83    -83.83   321   SPRINGFIELD, OH         US      SAO
+0000000000      GVW     38.85    -94.55   333   RICHARDS GEBAUR, MO     US      SAO
+0000000000      SZL     38.72    -93.55   265   WHITEMAN AFB, MO        US      SAO
+0000000000      TBN     37.75    -92.15   353   FT LEONARD WOOD, MO     US      SAO
+0000000000      IAB     37.62    -97.27   418   MCCONNELL AFB, KS       US      SAO
+0000000000      IXD     38.82    -94.88   331   JOHNSON CO., KS         US      SAO
+0000000000      BKF     39.72   -104.75  1726   BUCKLEY FLD/DEN, CO     US      SAO
+0000000000      NGP     27.70    -97.28     6   CORPUS CHRISTI, TX      US      SAO
+0000000000      MHR     38.57   -121.30    29   MATHER AFB, CA          US      SAO
+0000000000      MCC     38.67   -121.40    23   MCCLELLAN AFB, CA       US      SAO
+0000000000      BAB     39.13   -121.43    34   BEALE AFB/MRYSVL, CA    US      SAO
+0000000000      OAR     36.68   -121.77    41   FT ORD/FRITZSCHE, CA    US      SAO
+0000000000      NRC     37.40   -121.10    50   CROWS LANDING, CA       US      SAO
+0000000000      MOD     37.63   -120.95    32   MODESTO, CA             US      SAO
+0000000000      NFL     39.42   -118.70  1199   FALLON NAS, NV          US      SAO
+0000000000      IAG     43.10    -78.95   180   NIAGARA FALLS, NY       US      SAO
+0000000000      GUS     40.65    -86.15   248   GRISSOM AFB/PERU, IN    US      SAO
+0000000000      MTC     42.62    -82.83   177   SELFRIDGE ANGB, MI      US      SAO
+0000000000      FNB     40.07    -95.58   300   FALLS CITY/BRNNR, NE    US      SAO
+0000000000      SUS     38.65    -90.63   141   ST LOUIS/SPIRIT, MO     US      SAO
+0000000000      LNR     43.20    -90.18   219   LONE ROCK, WI           US      SAO
+0000000000      VOK     43.93    -90.27   277   VOLK FLD/CMP DGS, WI    US      SAO
+0000000000      MUO     43.05   -115.87   913   MOUNTAN HOME AFB, ID    US      SAO
+0000000000      P61     47.58    -90.83   186   TOFTE, MN               US      SAO
+0000000000      RDR     47.97    -97.40   278   GRAND FORKS AFB, ND     US      SAO
+0000000000      MIB     48.42   -101.35   508   MINOT AFB, ND           US      SAO
+0000000000      GFA     47.50   -111.18  1075   MALMSTROM AFB, MT       US      SAO
+0000000000      SKA     47.62   -117.65   750   SPOKANE/FRCHILD, WA     US      SAO
+0000000000      EFD     29.62    -95.17    12   ELLINGTON/HUSTON, TX    US      SAO
+0000000000      LWM     42.72    -71.12    47   LAWRENCE, MA            US      SAO
+0000000000      NBE     32.73    -96.97   151   HENSLEY FLD/DLLS, TX    US      SAO
+0000000000      AYE     42.57    -71.60    82   FORT DEVENS, MA         US      SAO
+0000000000      NBG     29.83    -90.02     1   NEW ORLEANS NAS, LA     US      SAO
+0000000000      BIX     30.42    -88.92    10   KEESLER AFB, MS         US      SAO
+0000000000      NIP     30.23    -81.68     7   JACKSONVILLE NAS, FL    US      SAO
+0000000000      NQX     24.57    -81.68     2   KEY WEST NAS, FL        US      SAO
+0000000000      NRB     30.40    -81.42     6   MAYPORT NAS, FL         US      SAO
+0000000000      NZC     30.22    -81.88    24   CECIL NAS, FL           US      SAO
+0000000000      RSW     26.65    -81.87     9   FT MYERS/SW FL, FL      US      SAO
+0000000000      NSE     30.72    -87.02    61   WHITING FLD NAS, FL     US      SAO
+0000000000      TOI     31.87    -86.02   122   TROY, AL                US      SAO
+0000000000      OZR     31.28    -85.72    91   FT RUCKER/CAIRNS, AL    US      SAO
+0000000000      MGR     31.08    -83.80    88   MOULTRIE/THMSVIL, GA    US      SAO
+0000000000      NBC     32.48    -80.72    12   BEAUFORT MCAS, SC       US      SAO
+0000000000      NAO     32.85    -79.95     1   CHARLESTON NS, SC       US      SAO
+0000000000      MMT     33.92    -80.80    77   MCENTIRE/COLMBUS, SC    US      SAO
+0000000000      SPA     34.92    -81.95   249   SPARTANBURG, SC         US      SAO
+0000000000      LMS     33.15    -89.07   175   LOUISVILLE/WNSTN, MS    US      SAO
+0000000000      NMM     32.55    -88.57    97   MERIDIAN NAS, MS        US      SAO
+0000000000      POU     41.63    -73.88    50   POUGHKEEPSIE, NY        US      SAO
+0000000000      CIU     46.25    -84.47   244   CHIPPEWA, MI            US      SAO
+0000000000      DET     42.42    -83.02   190   DETROIT CITY, MI        US      SAO
+0000000000      P58     43.83    -82.53   183   HARBOR BEACH, MI        US      SAO
+0000000000      NBU     42.08    -87.82   199   GLENVIEW NAS, IL        US      SAO
+0000000000      P60     44.55   -110.42  2438   YELLOWSTONE LAKE, WY    US      SAO
+0000000000      MYF     32.82   -117.13   124   SN DIEGO/MNTGMRY, CA    US      SAO
+0000000000      STP     44.93    -93.05   232   SAINT PAUL, MN          US      SAO
+0000000000      LIZ     46.95    -67.88   227   LORING/LIMESTONE, ME    US      SAO
+0000000000      PSM     43.08    -70.82    31   PEASE/PORTSMOUTH, NH    US      SAO
+0000000000      BWG     36.97    -86.43   164   BOWLING GREEN, KY       US      SAO
+0000000000      LIC     39.18   -103.70  1695   LIMON, CO               US      SAO
+0000000000      MQY     36.00    -86.50   165   SMYRNA, TN              US      SAO
+0000000000      BLV     38.55    -89.85   138   BELLEVILLE/SCOTT, IL    US      SAO
+0000000000      BJC     39.90   -105.12  1722   BROOMFIELD/JEFCO, CO    US      SAO
+0000000000      APA     39.57   -104.85  1790   ARAPAHOE/ENGLWOD, CO    US      SAO
+0000000000      C96     39.90   -105.77  2761   WINTER PARK, CO         US      SAO
+0000000000      SBS     40.48   -106.82  2097   STEAMBOAT SPRNGS, CO    US      SAO
+0000000000      F39     33.72    -96.67   228   DENISON/SHERMAN, TX     US      SAO
+0000000000      PWA     35.53    -97.65   396   WILEY POST FIELD, OK    US      SAO
+0000000000      P00     28.00    -93.00    15   TENNECO OFFSHORE, LA    US      SAO
+0000000000      SRL     27.30   -112.28   103   SANTA ROSALIA, BS       MX      SAO
+0000000000      MLG     26.88   -112.03    61   MULEGE, BS              MX      SAO
+0000000000      LTO     26.00   -112.37     6   LORETO, BS              MX      SAO
+0000000000      CDM     22.75    -99.00   104   CIUDAD DEL MANTE, TM    MX      SAO
+0000000000      LEN     21.07   -101.55  1829   LEON/SAN CARLOS, GT     MX      SAO
+0000000000      PZA     20.50    -97.47    62   POZA RICA, VC           MX      SAO
+0000000000      CUN     21.03    -86.88     5   CANCUN, QR              MX      SAO
+0000000000      SJD     22.67   -102.55         SAN JOSE TAPIAS, SL     MX      SAO
+0000000000      NAU     20.20    -96.77     3   NAUTLA, VC              MX      SAO
+0000000000      ZLO     19.15   -104.57     5   MANZANILLO, CM          MX      SAO
+0000000000      UPN     19.40   -102.03  1593   URUAPAN/RAYON, MC       MX      SAO
+0000000000      AZG     19.08   -102.40   315   APATZINGAN, MC          MX      SAO
+0000000000      TCN     18.50    -97.42  1679   TEHUACANSAN, PU         PU      SAO
+0000000000      MMMT    18.10    -94.58         MINATITLAN, VC          MX      SAO
+0000000000      ZIH     17.65   -101.45     6   ZIHUATANEJO, GR         MX      SAO
+0000000000      PNO     16.35    -98.07    76   PINOTEPA NCNL, OX       MX      SAO
+0000000000      PTL     15.73    -96.47   152   POCHUTLA, OX            MX      SAO
+0000000000      PAZ     18.27    -92.10    15   PALIZADA, CE            MX      SAO
+0000000000      LZC     18.00   -102.22    12   LAZARO CARDENAS, MC     MX      SAO
+0000000000      YER     24.90    -76.17     3   ROCK SOUND INTL, BA     US      SAO
+0000000000      UMO     20.67    -74.93         MOA, CU                 US      SAO
+0000000000      USJ     22.10    -84.15    30   SAN JULIAN ARPT, CU     US      SAO
+0000000000      USA     22.88    -82.50    50   SN ANTONIO BANOS, CU    US      SAO
+0000000000      UCL     21.63    -81.55     5   CAYO LARGO, CU          US      SAO
+0000000000      FNL     40.45   -105.01  1529   LOVELAND/FT CLNS, CO    US      SAO
+0000000000      HHF     35.90   -100.40   725   CANADIAN, TX            US      SAO
+0000000000      BGD     35.70   -101.24   931   BORGER/HUTCHNSON, TX    US      SAO
+0000000000      RTN     36.75   -104.50  1936   RATON/CREWS FLD, NM     US      SAO
+0000000000      K20     41.78    -99.15   664   BURWELL, NE             US      SAO
+0000000000      6V1     40.55   -101.65  1003   IMPERIAL, NE            US      SAO
+0000000000      FSR     39.95   -105.83  2609   FRASER, CO              US      SAO
+0000000000      GLS     29.27    -94.87     2   GALVESTON, TX           US      SAO
+0000000000      GGG     32.38    -94.72   111   LONGVIEW/GREGG, TX      US      SAO
+0000000000      TUP     34.27    -88.77   110   TUPELO/LEMONS, MS       US      SAO
+0000000000      3B1     45.45    -69.55   427   GREENVILLE, ME          US      SAO
+0000000000      40B     46.62    -69.52   314   CLAYTON LAKE, ME        US      SAO
+0000000000      77M     42.30   -113.37  1435   MALTA, ID               US      SAO
+0000000000      ADS     32.97    -96.83   196   DALLAS/ADDISON, TX      US      SAO
+0000000000      AGC     40.35    -79.93   382   PITTSBURG/ALLEG, PA     US      SAO
+0000000000      AID     40.10    -85.62   280   ANDERSON, IN            US      SAO
+0000000000      ALN     38.88    -90.05   166   ALTON, IL               US      SAO
+0000000000      AOO     40.30    -78.32   458   ALTOONA, PA             US      SAO
+0000000000      APF     26.13    -81.80     2   NAPLES, FL              US      SAO
+0000000000      BDE     48.73    -94.60   330   BAUDETTE, MN            US      SAO
+0000000000      BFD     41.80    -78.63   653   BRADFORD, PA            US      SAO
+0000000000      BMI     40.48    -88.93   267   BLOOMINGTON/NRML, IL    US      SAO
+0000000000      BVI     40.75    -80.33   382   BEAVER COUNTY, PA       US      SAO
+0000000000      BWD     31.80    -98.95   422   BROWNWOOD, TX           US      SAO
+0000000000      CNO     33.97   -117.63   211   CHINO, CA               US      SAO
+0000000000      DTL     46.82    -95.88   426   DETROIT LAKES, MN       US      SAO
+0000000000      DUJ     41.18    -78.90   554   DUBOIS, PA              US      SAO
+0000000000      ELO     47.90    -91.82   437   ELY, MN                 US      SAO
+0000000000      ERV     29.98    -99.08   492   KERRVILLE, TX           US      SAO
+0000000000      FCM     44.83    -93.47   276   FLYING CLOUD, MN        US      SAO
+0000000000      FKL     41.38    -79.87   469   FRANKLIN, PA            US      SAO
+0000000000      FWH     32.78    -97.43   198   FT WORTH/CARSWLL, TX    US      SAO
+0000000000      FXE     26.13    -80.13     4   FORT LAUDERDALE, FL     US      SAO
+0000000000      GPZ     47.22    -93.52   413   GRAND RAPIDS, MN        US      SAO
+0000000000      GVT     33.07    -96.07   166   GREENVILLE, TX          US      SAO
+0000000000      IWS     29.82    -95.67    34   LAKE SIDE, TX           US      SAO
+0000000000      JST     40.32    -78.83   696   JOHNSTOWN, PA           US      SAO
+0000000000      LBE     40.28    -79.40   354   LATROBE, PA             US      SAO
+0000000000      LNN     41.63    -81.40   191   WILLOUGHBY, OH          US      SAO
+0000000000      MIC     45.07    -93.38   265   MINPOLIS/CRYSTAL, MN    US      SAO
+0000000000      MLT     45.65    -68.68   124   MILLINOCKET, ME         US      SAO
+0000000000      MML     44.45    -95.82   360   MARSHALL ARPT, MN       US      SAO
+0000000000      NUW     48.35   -122.65    14   WHIDBEY IS, WA          US      SAO
+0000000000      ONO     44.02   -117.02   667   ONTARIO, OR             US      SAO
+0000000000      PAO     37.47   -122.12     1   PALO ALTO, CA           US      SAO
+0000000000      SQL     37.52   -122.25     1   SAN CARLOS, CA          US      SAO
+0000000000      SVN     32.02    -81.15    13   HUNTER AFF, GA          US      SAO
+0000000000      TMB     25.65    -80.43     3   NEW TAMIAMI, FL         US      SAO
+0000000000      U78     42.65   -111.58  1781   SODA SPRINGS, ID        US      SAO
+0000000000      UNV     40.85    -77.83   389   STATE COLLEGE, PA       US      SAO
+0000000000      Y69     45.13    -94.52   340   LITCHFIELD, MN          US      SAO
+0000000000      MMH     37.63   -118.92  2173   MAMMOTH LAKES, CA       US      SAO
+0000000000      CVN     34.42   -103.08  1284   CLOVIS, NM              US      SAO
+0000000000      ATW     44.25    -88.52   280   APPLETON, WI            US      SAO
+0000000000      AKP     68.13   -151.73   640   ANAKTUVUK, AK           US      SAO
+0000000000      CXF     67.25   -150.20   320   COLDFOOT, AK            US      SAO
+0000000000      MLY     65.00   -150.65    85   MANLEY HOT SPRGS, AK    US      SAO
+0000000000      5TK     65.12   -147.48   197   CHATANIKA/POKER, AK     US      SAO
+0000000000      5CR     64.30   -149.12   168   CLEAR, AK               US      SAO
+0000000000      CRC     65.83   -144.07   182   CIRCLE CITY, AK         US      SAO
+0000000000      Z12     63.32   -142.72   509   TOK, AK                 US      SAO
+0000000000      RED     45.18   -109.27  1756   RED LODGE, MT           US      SAO
+0000000000      SMN     45.12   -113.88  1232   SALMON, ID              US      SAO
+0000000000      T62     40.17   -112.20  1538   TOOELE, UT              US      SAO
+0000000000      1O5     41.73   -122.53     4   MONTAGUE, CA            US      SAO
+0000000000      SRF     38.07   -122.50     1   SAN RAFAEL, CA          US      SAO
+0000000000      SFD     37.77   -122.38    23   MISSION DOLORES, CA     US      SAO
+0000000000      OKL     37.83   -122.20     9   DOWNTOWN OAKLAND, CA    US      SAO
+0000000000      RWC     37.50   -122.17     5   REDWOOD CITY, CA        US      SAO
+0000000000      RIE     45.50    -91.73   349   RICE LAKE, WI           US      SAO
+0000000000      SUE     44.83    -87.37   219   STURGEON BAY, WI        US      SAO
+0000000000      POC     34.10   -117.78   305   LA VERNE, CA            US      SAO
+0000000000      75S     48.50   -122.33    43   BURLINGTON/MT VR, WA    US      SAO
+0000000000      LGD     45.32   -118.13   840   LA GRANDE, OR           US      SAO
+0000000000      GXY     40.42   -104.63  1420   GREELEY, CO             US      SAO
+0000000000      P92     29.50    -91.50     1   SALT POINT, LA          US      SAO
+0000000000      AUO     32.89    -85.50   199   AUBURN, AL              US      SAO
+0000000000      FPR     27.49    -80.37     7   FORT PIERCE, FL         US      SAO
+0000000000      8Y8     48.27    -92.48   341   CRANE LAKE, MN          US      SAO
+0000000000      ILL     45.10    -95.09   344   WILMAR, MN              US      SAO
+0000000000      ROX     48.85    -95.69   323   ROSEAU, MN              US      SAO
+0000000000      STN     33.43    -90.92    39   STONEVILLE, MS          US      SAO
+0000000000      PBH     45.41    -90.24   451   PHILLIPS, WI            US      SAO
+0000000000      JMZ     18.25    -67.15     9   MAYAGUEZ, PR            US      SAO
+0000000000      UPJ     18.45    -64.53     4   BEEF IS. AIRFLD, VI     US      SAO
+0000000000      RHV     37.33   -121.82    41   SAN JSE/REID/HILV,CA    US      SAO
+0000000000      3S2     45.25   -122.75     8   AURORA, OR              US      SAO
+0000000000      JNW     44.63   -124.05    48   NEWPORT FIRE ST, OR     US      SAO
+0000000000      PFC     45.20   -123.96     9   PACIFIC CITY, OR        US      SAO
+0000000000      FBL     44.33    -93.31  1054   FAIRBAULT, MN           US      SAO
+0000000000      SIY     41.78   -122.47   809   MONTAGUE/SISKIYU, CA    US      SAO
+0000000000      SRR     33.35   -105.67  2106   RUIDOSO, NM             US      SAO
+0000000000      NTK     33.70   -117.83    17   TUSTIN MCAS, CA         US      SAO
+0000000000      HMM     46.15   -114.10  3690   HAMILTON, MT            US      SAO
+0000000000      DPG     40.20   -112.93  1326   DUGWAY PRVG GRND, UT    US      SAO
+0000000000      MCE     37.28   -120.52    47   MERCED, CA              US      SAO
+0000000000      B23     40.58   -116.90  1384   BATTLE MOUNTAIN, NV     US      SAO
+0000000000      SJN     34.52   -109.38  1748   ST. JOHNS, AZ           US      SAO
+0000000000      43F     45.13    -94.52   340   LITCHFIELD, MN          US      SAO
+0000000000      SJU     18.43    -66.00    19   SAN JUAN, PU            PU      SAO
+0000000000      SPF     44.48   -103.78  1188   SPEARFISH, SD           US      SAO
+0000000000      TEX     37.93   -107.77  2683   TELLURIDE, CO           US      SAO
+0000000000      AUB     32.89    -85.50   199   AUBURN, AL              US      SAO
+0000000000      IWA     33.29   -111.67   432   CHANDLER/WILLIAMS,AZ    US      SAO
+0000000000      S47     45.27   -123.52     3   TILLAMOOK, OR           US      SAO
+0000000000      5J0     44.26   -118.57  1128   JOHN DAY, OR            US      SAO
+0000000000      9BB     41.15   -114.97  1723   WELLS, NV               US      SAO
+0000000000      AIZ     38.06    -92.33   264   KAISER, MO              US      SAO
+0000000000      GBD     38.21    -98.52   576   GREAT BEND, KS          US      SAO
+0000000000      KLS     46.07   -122.54     5   KELSO, WA               US      SAO
+0000000000      BLM     40.18    -74.12    49   ALLAIRE, NJ             US      SAO
+0000000000      SFM     43.39    -70.70    74   SANFORD, ME             US      SAO
+0000000000      W10     38.72    -77.50    59   MANASSAS, VA            US      SAO
+0000000000      OCF     29.17    -82.22    27   OCALA, FL               US      SAO
+0000000000      OCH     31.57    -94.70   108   NACOGDOCHES, TX         US      SAO
+0000000000      PTN     29.70    -91.33     3   PATTERSON, LA           US      SAO
+0000000000      SQI     41.74    -89.67   197   STERLING ROCK, IL       US      SAO
+0000000000      LKV     42.48   -120.50  2274   LAKEVIEW, OR            US      SAO
+0000000000      S88     48.15   -122.15    42   ARLINGTON, WA           US      SAO
+0000000000      DVT     33.41   -112.05   461   DEAR VALLEY, AZ         US      SAO
+0000000000      FFZ     33.28   -111.44   422   FALCON FLD MESA, AZ     US      SAO
+0000000000      SDL     33.37   -111.55   451   SCOTTSDALE, AZ          US      SAO
+0000000000      2WX     45.36   -103.33   916   BUFFALO, SC             US      SAO
+0000000000      BQK     31.15    -81.38     6   BRUNSWICK GLYNCO, GA    US      SAO
+0000000000      N60     47.60   -101.40   582   GARRISON, ND            US      SAO
+0000000000      AFW     32.20    -97.30   220   ALLIANCE ARPT, TX       US      SAO
+0000000000      3G8     43.20    -78.10   278   BATAVIA, NY             US      SAO
+0000000000      OIC     42.30    -75.30   313   NORWICH, NY             US      SAO
+0000000000      WGH     44.40    -75.80    82   GRENADIER ISLAND, QB    US      SAO
+0000000000      CMA     33.90   -117.30   330   CAMARILLO ARPT, CA      US      SAO
+0000000000      DVX     39.86   -104.67  1656   DENVER INTL, CO         US      SAO
+0000000000      2B4     41.53    -71.28    52   NEWPORT, RI             US      SAO
+0000000000      2B6     42.70    -73.17   199   NORTH ADAMS, MA         US      SAO
+0000000000      2G6     41.63    -80.21   427   MEADVILLE, PA           US      SAO
+0000000000      5WW     70.64   -160.01     9   WAINWRIGHT, AK          US      SAO
+0000000000      7MY     39.94    -74.84    16   MOUNT HOLLY, NJ         US      SAO
+0000000000      9Z1     55.58   -133.08    15   KLAWOCK, AK             US      SAO
+0000000000      ARA     30.03    -91.88     7   NEW IBERIA, LA          US      SAO
+0000000000      CEU     34.67    -82.88   272   CLEMSON, SC             US      SAO
+0000000000      CQX     41.69    -69.99    22   CHATHAM, MA             US      SAO
+0000000000      CUB     33.97    -80.99    65   COLUMBIA, SC            US      SAO
+0000000000      DCU     34.66    -86.94   181   DECATUR, AL             US      SAO
+0000000000      DKK     42.49    -79.28   211   DUNKIRK, NY             US      SAO
+0000000000      EAA     64.78   -141.16   268   EAGLE, AK               US      SAO
+0000000000      ELZ     42.11    -77.98   647   WELLSVILLE, NY          US      SAO
+0000000000      EQY     35.02    -80.62   207   MONROE, NC              US      SAO
+0000000000      FFC     33.36    -84.57   246   ATLANTA, GA             US      SAO
+0000000000      FIT     42.55    -71.76   107   FITCHBURG, MA           US      SAO
+0000000000      GED     38.69    -75.36    16   GEORGETOWN, DE          US      SAO
+0000000000      GRD     34.25    -82.16   192   GREENWOOD, SC           US      SAO
+0000000000      HNS     59.24   -135.51     5   HAINES, AK              US      SAO
+0000000000      HWV     40.82    -72.87    25   SHIRLEY, NY             US      SAO
+0000000000      IJD     41.74    -72.18    75   WILLIMANTIC, CT         US      SAO
+0000000000      LBX     29.12    -95.46     8   ANGLETON JACKSON, TX    US      SAO
+0000000000      MGJ     41.51    -75.27   111   MONTGOMERY, NY          US      SAO
+0000000000      N00     43.35    -76.39   145   FULTON, NY              US      SAO
+0000000000      N22     42.64    -77.05   275   PENN YAN, NY            US      SAO
+0000000000      N52     40.62    -74.67    32   SOMERVILLE, NJ          US      SAO
+0000000000      N63     41.20    -74.63   128   SUSSEX, NJ              US      SAO
+0000000000      N80     38.31    -75.12     4   OCEAN CITY, MD          US      SAO
+0000000000      N87     40.22    -74.61    36   ROBBINSVILLE, NJ        US      SAO
+0000000000      N88     40.34    -75.12   120   DOYLESTOWN, PA          US      SAO
+0000000000      N97     41.05    -78.41   462   CLEARFIELD, PA          US      SAO
+0000000000      OGB     33.46    -80.85    60   ORANGEBURG, SC          US      SAO
+0000000000      OLS     31.42   -110.85  1199   NOGALES, AZ             US      SAO
+0000000000      ORE     42.57    -72.28   169   ORANGE, MA              US      SAO
+0000000000      PLB     44.68    -73.53   113   PLATTSBURGH, NY         US      SAO
+0000000000      PTW     40.24    -75.56    92   POTTSTOWN, PA           US      SAO
+0000000000      PYM     41.91    -70.73    45   PLYMOUTH, MA            US      SAO
+0000000000      SEG     40.82    -76.87   137   SELINSGROVE, PA         US      SAO
+0000000000      SWD     60.13   -149.42     7   SEWARD, AK              US      SAO
+0000000000      TAN     41.88    -71.02    13   TAUNTON, MA             US      SAO
+0000000000      THV     33.92    -76.88   148   YORK, PA                US      SAO
+0000000000      TKI     33.19    -96.59   177   MCKINNEY, TX            US      SAO
+0000000000      W83     37.71    -77.43    63   RICHMOND, VA            US      SAO
+0000000000      WST     41.35    -71.80    25   WESTERLY, RI            US      SAO
+0000000000      3KM     37.70    -97.20   433   WICHITA, KS             US      SAO
+0000000000      DMO     38.70    -93.10   277   SEDALIA, MO             US      SAO
+0000000000      FDR     34.30    -98.90   383   FREDERICK, OK           US      SAO
+0000000000      GOK     35.80    -97.40   327   GUTHRIE, OK             US      SAO
+0000000000      LAA     38.70   -102.60  1129   LAMAR, CO               US      SAO
+0000000000      MKO     35.60    -95.30   186   MUSKOGEE, OK            US      SAO
+0000000000      PPF     37.30    -95.50   274   PARSONS, KS             US      SAO
+0000000000      SWO     36.10    -97.00   300   STILLWATER, OK          US      SAO
+0000000000      TQE     41.70    -96.10   313   TEKAMAH, NEN            US      SAO
+0000000000      WLD     37.10    -97.00   353   ARKANSAS CITY, KS       US      SAO
+0000000000      BVX     35.726   -91.647  141   BATESVILLE, AK          US      SAO
+0000000000      ARG     36.125   -90.924   83   WALNUT RIDGE, AK        US      SAO
+0000000000      SGT     34.60    -91.574  141   STUTTGART, AK           US      SAO
+0000000000      FLP     36.624   -92.588  219   FLIPPIN, AK             US      SAO
+0000000000      ROG     36.372   -94.106  415   ROGERS, AK              US      SAO
+0000000000      H00     36.345   -94.219  395   BENTONVILLE, AK         US      SAO
+0000000000      SLG     36.025   -94.49   363   SILOAM SPRINGS, AK      US      SAO
+0000000000      ASG     36.176   -94.119  412   SPRINGDALE, AK          US      SAO
+0000000000      M39     34.548   -94.207  329   MENA, AK                US      SAO
+0000000000      SFZ     41.90    -71.40   134   PAWTUCKET, RI           US      SAO
+0000000000      OXC     41.40    -73.10   222   OXFORD, CT              US      SAO
+0000000000      PVC     42.00    -70.20     2   PROVINCETOWN, MA        US      SAO
+0000000000      N44     39.90    -74.30    25   TOMS RIVER, NJ          US      SAO
+0000000000      WWD     39.00    -74.90    23   WILDWOOD, NJ            US      SAO
+0000000000      WMT     63.10   -117.25   271   LAC LA MARTRE, NWT      US      SAO
+0000000800      A100                                                    US      SAO
+0000000801      A101                                                    US      SAO
+0000000802      A102                                                    US      SAO
+0000000803      A103                                                    US      SAO
+0000000804      A104                                                    US      SAO
+0000000805      A105                                                    US      SAO
+0000000806      A106                                                    US      SAO
+0000000807      A107                                                    US      SAO
+0000000808      A108                                                    US      SAO
+0000000809      A109                                                    US      SAO
+0000000810      A110                                                    US      SAO
+0000000811      A111                                                    US      SAO
+0000000812      A112                                                    US      SAO
+0000000813      A113                                                    US      SAO
+0000000814      A114                                                    US      SAO
+0000000815      A115                                                    US      SAO
+0000000816      A116                                                    US      SAO
+0000000817      A117                                                    US      SAO
+0000000818      A118                                                    US      SAO
+0000000819      A119                                                    US      SAO
+0000000820      A120                                                    US      SAO
+0000000821      A121                                                    US      SAO
+0000000822      A122                                                    US      SAO
+0000000823      A123                                                    US      SAO
+0000000824      A124                                                    US      SAO
+0000000825      A125                                                    US      SAO
+0000000826      A126                                                    US      SAO
+0000000827      A127                                                    US      SAO
+0000000828      A128                                                    US      SAO
+0000000829      A129                                                    US      SAO
+0000000830      A130                                                    US      SAO
+0000000831      A131                                                    US      SAO
+0000000832      A132                                                    US      SAO
+0000000833      A133                                                    US      SAO
+0000000834      A134                                                    US      SAO
+0000000835      A135                                                    US      SAO
+0000000836      A136                                                    US      SAO
+0000000837      A137                                                    US      SAO
+0000000838      A138                                                    US      SAO
+0000000839      A139                                                    US      SAO
+0000000840      A140                                                    US      SAO
+0000000841      A141                                                    US      SAO
+0000000842      A142                                                    US      SAO
+0000000843      A143                                                    US      SAO
+0000000844      A144                                                    US      SAO
+0000000845      A145                                                    US      SAO
+0000000846      A146                                                    US      SAO
+0000000847      A147                                                    US      SAO
+0000000848      A148                                                    US      SAO
+0000000849      A149                                                    US      SAO
+0000000850      A150                                                    US      SAO
+0000000851      A151                                                    US      SAO
+0000000852      A152                                                    US      SAO
+0000000853      A153                                                    US      SAO
+0000000854      A154                                                    US      SAO
+0000000855      A155                                                    US      SAO
+0000000856      A156                                                    US      SAO
+0000000857      A157                                                    US      SAO
+0000000858      A158                                                    US      SAO
+0000000859      A159                                                    US      SAO
+0000000860      A160                                                    US      SAO
+0000000861      A161                                                    US      SAO
+0000000862      A162                                                    US      SAO
+0000000863      A163                                                    US      SAO
+0000000864      A164                                                    US      SAO
+0000000865      A165                                                    US      SAO
+0000000866      A166                                                    US      SAO
+0000000867      A167                                                    US      SAO
+0000000868      A168                                                    US      SAO
+0000000869      A169                                                    US      SAO
+0000000870      A170                                                    US      SAO
+0000000871      A171                                                    US      SAO
+0000000872      A172                                                    US      SAO
+0000000873      A173                                                    US      SAO
+0000000874      A174                                                    US      SAO
+0000000875      A175                                                    US      SAO
+0000000876      A176                                                    US      SAO
+0000000877      A177                                                    US      SAO
+0000000878      A178                                                    US      SAO
+0000000879      A179                                                    US      SAO
+0000000880      A180                                                    US      SAO
+0000000881      A181                                                    US      SAO
+0000000882      A182                                                    US      SAO
+0000000883      A183                                                    US      SAO
+0000000884      A184                                                    US      SAO
+0000000885      A185                                                    US      SAO
+0000000886      A186                                                    US      SAO
+0000000887      A187                                                    US      SAO
+0000000888      A188                                                    US      SAO
+0000000889      A189                                                    US      SAO
+0000000890      A190                                                    US      SAO
+0000000891      A191                                                    US      SAO
+0000000892      A192                                                    US      SAO
+0000000893      A193                                                    US      SAO
+0000000894      A194                                                    US      SAO
+0000000895      A195                                                    US      SAO
+0000000896      A196                                                    US      SAO
+0000000897      A197                                                    US      SAO
+0000000898      A198                                                    US      SAO
+0000000899      A199                                                    US      SAO
+0000000900      A200                                                    US      SAO
+0000000901      A201                                                    US      SAO
+0000000902      A202                                                    US      SAO
+0000000903      A203                                                    US      SAO
+0000000904      A204                                                    US      SAO
+0000000905      A205                                                    US      SAO
+0000000906      A206                                                    US      SAO
+0000000907      A207                                                    US      SAO
+0000000908      A208                                                    US      SAO
+0000000909      A209                                                    US      SAO
+0000000910      A210                                                    US      SAO
+0000000911      A211                                                    US      SAO
+0000000912      A212                                                    US      SAO
+0000000913      A213                                                    US      SAO
+0000000914      A214                                                    US      SAO
+0000000915      A215                                                    US      SAO
+0000000916      A216                                                    US      SAO
+0000000917      A217                                                    US      SAO
+0000000918      A218                                                    US      SAO
+0000000919      A219                                                    US      SAO
+0000000920      A220                                                    US      SAO
+0000000921      A221                                                    US      SAO
+0000000922      A222                                                    US      SAO
+0000000923      A223                                                    US      SAO
+0000000924      A224                                                    US      SAO
+0000000925      A225                                                    US      SAO
+0000000926      A226                                                    US      SAO
+0000000927      A227                                                    US      SAO
+0000000928      A228                                                    US      SAO
+0000000929      A229                                                    US      SAO
+0000000930      A230                                                    US      SAO
+0000000931      A231                                                    US      SAO
+0000000932      A232                                                    US      SAO
+0000000933      A233                                                    US      SAO
+0000000934      A234                                                    US      SAO
+0000000935      A235                                                    US      SAO
+0000000936      A236                                                    US      SAO
+0000000937      A237                                                    US      SAO
+0000000938      A238                                                    US      SAO
+0000000939      A239                                                    US      SAO
+0000000940      A240                                                    US      SAO
+0000000941      A241                                                    US      SAO
+0000000942      A242                                                    US      SAO
+0000000943      A243                                                    US      SAO
+0000000944      A244                                                    US      SAO
+0000000945      A245                                                    US      SAO
+0000000946      A246                                                    US      SAO
+0000000947      A247                                                    US      SAO
+0000000948      A248                                                    US      SAO
+0000000949      A249                                                    US      SAO
+0000000950      A250                                                    US      SAO
+0000000951      A251                                                    US      SAO
+0000000952      A252                                                    US      SAO
+0000000953      A253                                                    US      SAO
+0000000954      A254                                                    US      SAO
+0000000955      A255                                                    US      SAO
+0000000956      A256                                                    US      SAO
+0000000957      A257                                                    US      SAO
+0000000958      A258                                                    US      SAO
+0000000959      A259                                                    US      SAO
+0000000960      A260                                                    US      SAO
+0000000961      A261                                                    US      SAO
+0000000962      A262                                                    US      SAO
+0000000963      A263                                                    US      SAO
+0000000964      A264                                                    US      SAO
+0000000965      A265                                                    US      SAO
+0000000966      A266                                                    US      SAO
+0000000967      A267                                                    US      SAO
+0000000968      A268                                                    US      SAO
+0000000969      A269                                                    US      SAO
+0000000970      A270                                                    US      SAO
+0000000971      A271                                                    US      SAO
+0000000972      A272                                                    US      SAO
+0000000973      A273                                                    US      SAO
+0000000974      A274                                                    US      SAO
+0000000975      A275                                                    US      SAO
+0000000976      A276                                                    US      SAO
+0000000977      A277                                                    US      SAO
+0000000978      A278                                                    US      SAO
+0000000979      A279                                                    US      SAO
+0000000980      A280                                                    US      SAO
+0000000981      A281                                                    US      SAO
+0000000982      A282                                                    US      SAO
+0000000983      A283                                                    US      SAO
+0000000984      A284                                                    US      SAO
+0000000985      A285                                                    US      SAO
+0000000986      A286                                                    US      SAO
+0000000987      A287                                                    US      SAO
+0000000988      A288                                                    US      SAO
+0000000989      A289                                                    US      SAO
+0000000990      A290                                                    US      SAO
+0000000991      A291                                                    US      SAO
+0000000992      A292                                                    US      SAO
+0000000993      A293                                                    US      SAO
+0000000994      A294                                                    US      SAO
+0000000995      A295                                                    US      SAO
+0000000996      A296                                                    US      SAO
+0000000997      A297                                                    US      SAO
+0000000998      A298                                                    US      SAO
+0000000999      A299                                                    US      SAO
+0000001000      A300                                                    US      SAO
+0000001001      A301                                                    US      SAO
+0000001002      A302                                                    US      SAO
+0000001003      A303                                                    US      SAO
+0000001004      A304                                                    US      SAO
+0000001005      A305                                                    US      SAO
+0000001006      A306                                                    US      SAO
+0000001007      A307                                                    US      SAO
+0000001008      A308                                                    US      SAO
+0000001009      A309                                                    US      SAO
+0000001010      A310                                                    US      SAO
+0000001011      A311                                                    US      SAO
+0000001012      A312                                                    US      SAO
+0000001013      A313                                                    US      SAO
+0000001014      A314                                                    US      SAO
+0000001015      A315                                                    US      SAO
+0000001016      A316                                                    US      SAO
+0000001017      A317                                                    US      SAO
+0000001018      A318                                                    US      SAO
+0000001019      A319                                                    US      SAO
+0000001020      A320                                                    US      SAO
+0000001021      A321                                                    US      SAO
+0000001022      A322                                                    US      SAO
+0000001023      A323                                                    US      SAO
+0000001024      A324                                                    US      SAO
+0000001025      A325                                                    US      SAO
+0000001026      A326                                                    US      SAO
+0000001027      A327                                                    US      SAO
+0000001028      A328                                                    US      SAO
+0000001029      A329                                                    US      SAO
+0000001030      A330                                                    US      SAO
+0000001031      A331                                                    US      SAO
+0000001032      A332                                                    US      SAO
+0000001033      A333                                                    US      SAO
+0000001034      A334                                                    US      SAO
+0000001035      A335                                                    US      SAO
+0000001036      A336                                                    US      SAO
+0000001037      A337                                                    US      SAO
+0000001038      A338                                                    US      SAO
+0000001039      A339                                                    US      SAO
+0000001040      A340                                                    US      SAO
+0000001041      A341                                                    US      SAO
+0000001042      A342                                                    US      SAO
+0000001043      A343                                                    US      SAO
+0000001044      A344                                                    US      SAO
+0000001045      A345                                                    US      SAO
+0000001046      A346                                                    US      SAO
+0000001047      A347                                                    US      SAO
+0000001048      A348                                                    US      SAO
+0000001049      A349                                                    US      SAO
+0000001050      A350                                                    US      SAO
+0000001051      A351                                                    US      SAO
+0000001052      A352                                                    US      SAO
+0000001053      A353                                                    US      SAO
+0000001054      A354                                                    US      SAO
+0000001055      A355                                                    US      SAO
+0000001056      A356                                                    US      SAO
+0000001057      A357                                                    US      SAO
+0000001058      A358                                                    US      SAO
+0000001059      A359                                                    US      SAO
+0000001060      A360                                                    US      SAO
+0000001061      A361                                                    US      SAO
+0000001062      A362                                                    US      SAO
+0000001063      A363                                                    US      SAO
+0000001064      A364                                                    US      SAO
+0000001065      A365                                                    US      SAO
+0000001066      A366                                                    US      SAO
+0000001067      A367                                                    US      SAO
+0000001068      A368                                                    US      SAO
+0000001069      A369                                                    US      SAO
+0000001070      A370                                                    US      SAO
+0000001071      A371                                                    US      SAO
+0000001072      A372                                                    US      SAO
+0000001073      A373                                                    US      SAO
+0000001074      A374                                                    US      SAO
+0000001075      A375                                                    US      SAO
+0000001076      A376                                                    US      SAO
+0000001077      A377                                                    US      SAO
+0000001078      A378                                                    US      SAO
+0000001079      A379                                                    US      SAO
+0000001080      A380                                                    US      SAO
+0000001081      A381                                                    US      SAO
+0000001082      A382                                                    US      SAO
+0000001083      A383                                                    US      SAO
+0000001084      A384                                                    US      SAO
+0000001085      A385                                                    US      SAO
+0000001086      A386                                                    US      SAO
+0000001087      A387                                                    US      SAO
+0000001088      A388                                                    US      SAO
+0000001089      A389                                                    US      SAO
+0000001090      A390                                                    US      SAO
+0000001091      A391                                                    US      SAO
+0000001092      A392                                                    US      SAO
+0000001093      A393                                                    US      SAO
+0000001094      A394                                                    US      SAO
+0000001095      A395                                                    US      SAO
+0000001096      A396                                                    US      SAO
+0000001097      A397                                                    US      SAO
+0000001098      A398                                                    US      SAO
+0000001099      A399                                                    US      SAO
+0000070026      BRW     71.30   -156.78    12   BARROW, AK              US      RAO
+0000070086      BTI     70.13   -143.63    15   BARTER ISLAND, AK       US      RAO
+0000070133      OTZ     66.87   -162.63     5   KOTZEBUE, AK            US      RAO
+0000070174      BTT     66.90   -151.52   203   BETTLES, AK             US      RAO
+0000070192      5TK     65.12   -147.48   197   CHATANIKA, AK           US      RAO
+0000070200      OME     64.50   -165.43     5   NOME, AK                US      RAO
+0000070219      BET     60.78   -161.80    39   BETHEL, AK              US      RAO
+0000070222      AGA     64.73   -156.93    37   GALENA, AK              US      RAO
+0000070231      MCG     62.97   -155.62   103   MCGRATH, AK             US      RAO
+0000070261      FAI     64.82   -147.87   135   FAIRBANKS INT'L, AK     US      RAO
+0000070265      AEI     64.65   -147.07   167   EIELSON AFB, AK         US      RAO
+0000070267      BIG     64.00   -145.73   386   BIG DELTA/ALLEN, AK     US      RAO
+0000070268      5BR     64.33   -147.65   428   BLAIR LAKES, AK         US      RAO
+0000070270      AFR     61.27   -149.65   115   FT RCHRDSON/BRYN, AK    US      RAO
+0000070273      ANC     61.17   -150.02    45   ANCHORAGE INT'L, AK     US      RAO
+0000070292      TSG     63.37   -143.35   488   TANACROSS, AK           US      RAO
+0000070308      SNP     57.15   -170.22    10   SAINT PAUL IS, AK       US      RAO
+0000070316      CDB     55.20   -162.72    30   COLD BAY, AK            US      RAO
+0000070326      AKN     58.68   -156.65    15   KING SALMON, AK         US      RAO
+0000070350      ADQ     57.75   -152.50     4   KODIAK, AK              US      RAO
+0000070361      YAK     59.52   -139.67    12   YAKUTAT, AK             US      RAO
+0000070398      ANN     55.03   -131.57    37   ANNETTE ISLAND, AK      US      RAO
+0000070414      ASY     52.72   -174.10    39   SHEMYA AFB, AK          US      RAO
+0000070454      ADK     51.88   -176.65     4   ADAK/MITCHELL, AK       US      RAO
+0000071043      YVQ     65.28   -126.80    60   NORMAN WELLS, NW        CN      RAO
+0000071051      YSY     72.00   -125.27    84   SACHS HARBOUR, NW       CN      RAO
+0000071062      YWO     65.48   -110.37   451   CONTWOYTO LAKE, NW      CN      RAO
+0000071069      YZH     55.30   -114.78   581   SLAVE LAKE, AB          CN      RAO
+0000071072      YMD     76.23   -119.32    58   MOULD BAY, NW           CN      RAO
+0000071081      YUX     68.78    -81.25     7   HALL BEACH, NW          CN      RAO
+0000071082      YLT     82.50    -62.33    66   ALERT, NW               CN      RAO
+0000071090      WCY     70.45    -68.55     2   CLYDE, NW               CN      RAO
+0000071109      YZT     50.68   -127.37    17   PORT HARDY, BC          CN      RAO
+0000071114      YHE     49.37   -121.48    39   HOPE, BC                CN      RAO
+0000071115      WVK     50.23   -119.28   556   VERNON, BC              CN      RAO
+0000071119      WEG     53.55   -114.10   766   EDMONTON/STNYPLN, AB    CN      RAO
+0000071120      YOD     54.42   -110.28   541   COLD LAKE, AB           CN      RAO
+0000071121      YED     53.67   -113.47   688   EDMONTON/NAMAO, AB      CN      RAO
+0000071123      YEG     53.32   -113.58   723   EDMONTON AIRPORT, AB    CN      RAO
+0000071124      WIQ     54.75   -110.05   702   PRIMROSE LAKE, AB       CN      RAO
+0000071127      WHN     54.92   -109.97   625   JIMMY LAKE, SK          CN      RAO
+0000071128      YSD     50.27   -111.18   770   SUFFIELD, AB            CN      RAO
+0000071145      WGB     53.87    -94.67   238   ISLAND LAKE, MB         CN      RAO
+0000071203      WVK     49.57   -119.23   429   KELOWNA, BC             CN      RAO
+0000071399      WOS     43.72    -65.25    30   SHELBURNE, NS           CN      RAO
+0000071600      WSA     43.93    -60.02     4   SABLE ISLAND, NS        CN      RAO
+0000071601      YAW     44.63    -63.50    51   HALIFAX, NS             CN      RAO
+0000071603      YQI     43.83    -66.08    43   YARMOUTH, NS            CN      RAO
+0000071621      YTR     44.12    -77.53    86   TRENTON, ON             CN      RAO
+0000071624      YYZ     43.68    -79.63   173   TORONTO INT'L, ON       CN      RAO
+0000071625      YWA     45.95    -77.31   130   PETAWAWA, ON            CN      RAO
+0000071627      YUL     45.47    -73.75    36   MONTREAL/DORVAL, QB     CN      RAO
+0000071628      YOW     45.32    -75.67   114   OTTAWA, ON              CN      RAO
+0000071701      YCX     45.83    -66.43    51   CAMP GAGETOWN, NB       CN      RAO
+0000071702      YSU     46.43    -63.83    24   SUMMERSIDE, PE          CN      RAO
+0000071707      YQY     46.17    -60.05    62   SYDNEY, NS              CN      RAO
+0000071714      YQB     46.80    -71.40    73   QUEBEC, QB              CN      RAO
+0000071716      YOY     46.90    -71.50   168   VAL CARTIER, QB         CN      RAO
+0000071717      YCH     47.02    -65.45    34   CHATHAM, NB             CN      RAO
+0000071722      WMW     46.38    -75.97   170   MANIWAKI, QB            CN      RAO
+0000071727      YBG     48.33    -71.00   159   BAGOTVILLE, QB          CN      RAO
+0000071731      YYB     46.37    -79.42   371   NORTH BAY, ON           CN      RAO
+0000072776      TFX     47.45   -111.38  1130   GREAT FALLS, MT         US      RAO
+0000071799      YYJ     48.65   -123.43    19   VICTORIA, BC            CN      RAO
+0000071801      YYT     47.67    -52.75   140   ST. JOHNS/TORBAY, NF    CN      RAO
+0000071803      YQX     48.95    -54.57   151   GANDER, NF              CN      RAO
+0000071805      FSP     46.77    -56.17     7   MIQUELON/ST.PRE, NF     CN      RAO
+0000071807      WAR     47.30    -54.00    16   PLACENTIA, NF           CN      RAO
+0000071811      YZV     50.22    -66.27    53   SEPT-ILES, QB           CN      RAO
+0000071815      YJT     48.53    -58.55    61   STEPHENVILLE, NF        CN      RAO
+0000071816      YYR     53.30    -60.37    36   GOOSE BAY, NF           CN      RAO
+0000071823      YAH     53.75    -73.67   307   LA GRANDE 4, QB         CN      RAO
+0000071826      WNI     53.20    -70.90   539   NITCHEQUON, QB          CN      RAO
+0000071828      YKL     54.80    -66.82   522   SCHEFFERVILLE, QB       CN      RAO
+0000071834      YGQ     49.70    -86.95   331   GERALDTON, ON           CN      RAO
+0000071836      WZC     51.27    -80.65    10   MOOSONEE, ON            CN      RAO
+0000071845      WPL     51.47    -90.20   373   PICKLE LAKE, ON         CN      RAO
+0000071848      WTL     53.83    -89.87   222   TROUT LAKE, ON          CN      RAO
+0000071852      YWG     49.92    -97.23   239   WINNIPEG, MB            CN      RAO
+0000071853      WLO     49.78    -99.65   373   CAMP SHILO, MB          CN      RAO
+0000071855      YDN     51.10   -100.05   305   DAUPHIN, MB             CN      RAO
+0000071860      YYI     50.02   -100.32   473   RIVERS, MB              CN      RAO
+0000071861      WIK     50.38   -102.58   599   BROADVIGIN, SK          CN      RAO
+0000071863      YQR     50.43   -104.67   577   REGINA, SK              CN      RAO
+0000071867      YQD     53.97   -101.10   273   THE PAS, MB             CN      RAO
+0000071869      YPA     53.22   -105.68   428   PRINCE ALBERT, SK       CN      RAO
+0000071874      YQL     49.63   -112.80   929   LETHBRIDGE, AB          CN      RAO
+0000071877      YYC     51.12   -114.02  1074   CALGARY, AB             CN      RAO
+0000071878      YQF     52.18   -113.90   905   RED DEER, AB            CN      RAO
+0000071879      YXD     53.57   -113.52   671   EDMONTON, AB            CN      RAO
+0000071884      YCG     49.30   -117.63   495   CASTLEGAR, BC           CN      RAO
+0000071892      YVR     49.18   -123.17     3   VANCOUVER, BC           CN      RAO
+0000071893      YQQ     49.72   -124.90    24   COMOX, BC               CN      RAO
+0000071896      YXS     53.88   -122.67   676   PRINCE GEORGE, BC       CN      RAO
+0000071906      YVP     58.10    -68.42    36   FORT CHIMO, QB          CN      RAO
+0000071907      YPH     58.45    -78.12     7   INOUCDJOUAC, QB         CN      RAO
+0000071909      YFB     63.75    -68.55    21   FROBISHER BAY, NW       CN      RAO
+0000071913      YYQ     58.75    -94.07    30   CHURCHILL, MB           CN      RAO
+0000071915      YZS     64.20    -83.37    62   CORAL HARBOUR, NW       CN      RAO
+0000071917      WEU     80.00    -85.93    10   EUREKA, NW              CN      RAO
+0000071924      YRB     74.72    -94.95    40   RESOLUTE BAY, NW        CN      RAO
+0000071925      YCB     69.10   -105.12    25   CAMBRIDGE BAY, NW       CN      RAO
+0000071926      YBK     64.30    -96.00    49   BAKER LAKE, NW          CN      RAO
+0000071928      YRM     52.43   -114.90   988   ROCKY MTN. HOUSE, AB    CN      RAO
+0000071932      YMM     56.65   -111.22   369   MCMURRAY, AB            CN      RAO
+0000071934      YSM     60.03   -111.93   203   FORT SMITH, NW          CN      RAO
+0000071938      YCO     67.83   -115.12     7   COPPERMINE, NW          CN      RAO
+0000071945      YYE     58.83   -122.60   382   FORT NELSON, BC         CN      RAO
+0000071953      YQH     60.12   -128.82   689   WATSON LAKE, YK         CN      RAO
+0000071957      YEV     68.32   -133.53    68   INUVIK, NW              CN      RAO
+0000071964      YXY     60.72   -135.07   700   WHITEHORSE, YK          CN      RAO
+0000072201      EYW     24.55    -81.75     4   KEY WEST, FL            US      RAO
+0000072203      PBI     26.68    -80.12     7   WEST PALM BEACH, FL     US      RAO
+0000072206      JAX     30.50    -81.70     9   JACKSONVILLE, FL        US      RAO
+0000072208      CHS     32.90    -80.03    15   CHARLESTON, SC          US      RAO
+0000072209      LHW     31.88    -81.57    14   FT.STEWART/WRGHT, GA    US      RAO
+0000072210      TBW     27.70    -82.40    13   TAMPA BAY, FL           US      RAO
+0000072213      AYS     31.25    -82.40    44   WAYCROSS, GA            US      RAO
+0000072214      TLH     30.40    -84.35    18   TALLAHASSEE, FL         US      RAO
+0000072215      FFC     33.35    -84.56   246   PEACHTREE CITY          US      RAO
+0000072220      AQQ     29.73    -85.03     7   APALACHICOLA, FL        US      RAO
+0000072221      VPS     30.48    -86.52    20   VALPARAISO/EGLIN, FL    US      RAO
+0000072222      PNS     30.47    -87.20    36   PENSACOLA, FL           US      RAO
+0000072224      CSB     29.68    -85.35     1   CAPE SAN BLAS, FL       US      RAO
+0000072225      LSF     32.33    -84.83   130   FORT BENNING, GA        US      RAO
+0000072228      BHM     33.47    -86.83   227   BIRMINGHAM, AL          US      RAO
+0000072229      CKL     32.90    -87.25   140   CNTRVILLE/BRENT, AL     US      RAO
+0000072230      BMX     33.10    -86.70   178   SHELBY CTY ARPT, AL     US      RAO
+0000072232      BVE     29.33    -89.40     1   BOOTHVILLE, LA          US      RAO
+0000072233      SIL     30.33    -89.82     8   SLIDELL, LA             US      RAO
+0000072235      JAN     32.32    -90.08    91   JACKSON, MS             US      RAO
+0000072239      POE     31.10    -93.20   110   FORT POLK, LA           US      RAO
+0000072240      LCH     30.12    -93.22     5   LAKE CHARLES, LA        US      RAO
+0000072243      IAH     29.42    -95.22    13   HOUSTON, TX             US      RAO
+0000072247      GGG     32.35    -94.65   124   LONGVIEW, TX            US      RAO
+0000072248      SHV     32.47    -93.82    79   SHREVEPORT RGNL, LA     US      RAO
+0000072249      FWD     32.80    -97.30   196   FORT WORTH, TX          US      RAO
+0000072250      BRO     25.90    -97.43     7   BROWNSVILLE, TX         US      RAO
+0000072251      CRP     27.77    -97.50    13   CORPUS CHRISTI, TX      US      RAO
+0000072255      VCT     28.85    -96.92    33   VICTORIA, TX            US      RAO
+0000072257      HLK     31.10    -97.33   270   FORT HOOD, TX           US      RAO
+0000072260      SEP     32.22    -98.18   399   STEPHENVILLE, TX        US      RAO
+0000072261      DRT     29.37   -100.92   314   DEL RIO, TX             US      RAO
+0000072265      MAF     31.95   -102.18   873   MIDLAND AFB, TX         US      RAO
+0000072266      ABI     32.42    -99.68   542   ABILENE, TX             US      RAO
+0000072268      ROW     33.30   -104.53  1104   ROSWELL, NM             US      RAO
+0000072269      WSD     32.38   -106.48  1244   WHITE SANDS, NM         US      RAO
+0000072270      ELP     31.80   -106.40  1193   EL PASO, TX             US      RAO
+0000072273      FHU     31.58   -110.33  1428   FORT HUACHUCA, AZ       US      RAO
+0000072274      TUS     32.12   -110.93   787   TUCSON, AZ              US      RAO
+0000072280      YUM     32.87   -114.33   130   YUMA, AZ                US      RAO
+0000072281      NJK     32.82   -115.68    18   EL CENTRO NAF, CA       US      RAO
+0000072290      MYF     32.82   -117.13   124   SN DIEGO/MNTGMRY, CA    US      RAO
+0000072291      NSI     33.25   -119.45   153   SAN NICOLAS IS., CA     US      RAO
+0000072293      NKX     32.84   -117.12   132   MIRAMAR, CA             US      RAO
+0000072295      LAX     33.93   -118.40    34   LOS ANGELES, CA         US      RAO
+0000072303      POB     35.17    -79.03    61   POPE/FAYTTEVILLE, NC    US      RAO
+0000072304      HAT     35.27    -75.55     4   CAPE HATTERAS, NC       US      RAO
+0000072305      MHX     34.70    -76.80    11   NEWPORT,NC              US      RAO
+0000072309      NKT     34.85    -76.88    13   CHERRY PT. MCAS, NC     US      RAO
+0000072311      AHN     33.95    -83.32   246   ATHENS, GA              US      RAO
+0000072317      GSO     36.08    -79.95   275   GREENSBORO, NC          US      RAO
+0000072327      BNA     36.25    -86.57   180   NASHVILLE, TN           US      RAO
+0000072340      1M1     34.83    -92.25   172   N. LITTLE ROCK, AR      US      RAO
+0000072348      PWN     36.73    -91.85   336   WEST PLAINS, MO         US      RAO
+0000072349      UMN     36.88    -93.90   438   MONETT, MO              US      RAO
+0000072352      LTS     34.65    -99.27   420   ALTUS AFB, OK           US      RAO
+0000072353      OKC     35.40    -97.60   392   OK CITY/W.ROGERS, OK    US      RAO
+0000072354      TIK     35.42    -97.38   393   OK CITY/TINKER, OK      US      RAO
+0000072355      FSI     34.60    -98.40   360   FORT SILL, OK           US      RAO
+0000072357      OUN     35.23    -97.47   362   NORMAN, OK              US      RAO
+0000072363      AMA     35.23   -101.70  1094   AMARILLO, TX            US      RAO
+0000072365      ABQ     35.05   -106.62  1619   ALBUQUERQUE, NM         US      RAO
+0000072374      INW     35.02   -110.73  1487   WINSLOW, AZ             US      RAO
+0000072381      EDW     34.92   -117.90   705   EDWARDS AFB, CA         US      RAO
+0000072385      UCC     36.95   -116.05  1198   YUCCA FLATS, NV         US      RAO
+0000072387      DRA     36.62   -116.02  1007   MERCURY, NV             US      RAO
+0000072389      FAT     36.77   -119.72   100   FRESNO, CA              US      RAO
+0000072391      NTD     34.12   -119.12     4   POINT MUGU NAS, CA      US      RAO
+0000072392      PGU     34.57   -120.67     2   POINT ARGUELLO, CA      US      RAO
+0000072393      VBG     34.75   -120.57   100   VANDENBURG AFB, CA      US      RAO
+0000072401      KIC     37.50    -77.33    51   RICHMOND/BYRD, VA       US      RAO
+0000072402      WAL     37.85    -75.48     4   WALLOPS ISLAND, VA      US      RAO
+0000072403      IAD     38.98    -77.47    85   DULLES INT'L APT, VA    US      RAO
+0000072404      NHK     38.28    -76.40    14   PATUXENT RIVER, MD      US      RAO
+0000072405      DCA     38.85    -77.03     5   WASH. NAT'L ARPT, VA    US      RAO
+0000072407      ACY     39.75    -74.67    22   ATLANTIC CITY, NJ       US      RAO
+0000072408      PHL     39.92    -75.18     5   PHILADELPHIA, PA        US      RAO
+0000072409      NEL     40.03    -74.32    24   LAKEHURST, NJ           US      RAO
+0000072414      CRW     38.38    -81.77   182   CHARLESTON, WV          US      RAO
+0000072423      SDF     38.18    -85.73   151   LOUISVILLE, KY          US      RAO
+0000072425      HTS     38.37    -82.55   246   HUNTINGTON, WV          US      RAO
+0000072429      DAY     39.87    -84.12   298   DAYTON, OH              US      RAO
+0000072433      SLO     38.65    -88.97   175   SALEM/LECKRONE, IL      US      RAO
+0000072434      STL     38.62    -90.18   139   SAINT LOUIS, MO         US      RAO
+0000072435      PAH     37.06    -88.77   126   PADUCAH, KY             US      RAO
+0000072440      SGF     37.23    -93.38   387   SPRINGFIELD, MO         US      RAO
+0000072450      ICT     37.65    -97.43   406   WICHITA, KS             US      RAO
+0000072451      DDC     37.77    -99.97   791   DODGE CITY, KS          US      RAO
+0000072455      FRI     39.05    -96.77   325   FORT RILEY, KS          US      RAO
+0000072456      TOP     39.07    -95.62   268   TOPEKA, KS              US      RAO
+0000072468      FCS     38.70   -104.77  1789   FORT CARSON, CO         US      RAO
+0000072469      DEN     39.75   -104.87  1611   DENVER, CO              US      RAO
+0000072476      GJT     39.12   -108.53  1472   GRAND JUNCTION, CO      US      RAO
+0000072477      U20     39.00   -110.15  1241   GREEN RIVER, UT         US      RAO
+0000072481      MER     37.37   -120.57    60   MERCED/CASTLE, CA       US      RAO
+0000072485      TPH     38.07   -117.08  1656   TONOPAH, NV             US      RAO
+0000072486      ELY     39.28   -114.85  1908   ELY, NV                 US      RAO
+0000072489      REV     39.57   -119.80  1516   RENO NV                 US      RAO
+0000072493      OAK     37.75   -122.22     6   OAKLAND INT'L, CA       US      RAO
+0000072497      CIC     39.78   -121.85    72   CHICO, CA               US      RAO
+0000072501      OKX     40.87    -72.87    20   BROOKHAVEN, NY          US      RAO
+0000072503      LGA     40.77    -73.90    13   NEW YORK, NY            US      RAO
+0000072509      BOS     42.36    -71.09    30   BOSTON, MA              US      RAO
+0000072514      IPT     41.25    -76.92   161   WILLIAMSPORT, PA        US      RAO
+0000072518      ALB     42.75    -73.80    86   ALBANY, NY              US      RAO
+0000072519      SYR     43.12    -76.12   128   SYRACRUSE, NY           US      RAO
+0000072520      PIT     40.53    -80.23   359   PITTSBURGH, PA          US      RAO
+0000072524      CLE     41.50    -81.60   213   CLEVELAND, OH           US      RAO
+0000072528      BUF     42.93    -78.73   218   BUFFALO, NY             US      RAO
+0000072530      ORD     41.98    -87.90   203   CHICAGO/O'HARE, IL      US      RAO
+0000072532      PIA     40.67    -89.68   200   PEORIA, IL              US      RAO
+0000072534      MDW     41.78    -87.75   188   CHICAGO/MIDWAY, IL      US      RAO
+0000072537      DTW     42.23    -83.33   191   DETROIT, MI             US      RAO
+0000072545      CID     41.88    -91.70   265   CEDAR RAPIDS, IA        US      RAO
+0000072550      OMA     41.30    -95.90   299   OMAHA/EPPLEY, NE        US      RAO
+0000072553      OVN     41.37    -96.02   406   NORTH OMAHA, NE         US      RAO
+0000072558      OAX     41.32    -96.37   350   VALLEY, NE              US      RAO
+0000072561      SNY     41.10   -102.98  1312   SIDNEY, NE              US      RAO
+0000072562      LBF     41.13   -100.68   847   NORTH PLATTE, NE        US      RAO
+0000072564      CYS     41.15   -104.82  1872   CHEYENNE, WY            US      RAO
+0000072572      SLC     40.77   -111.97  1288   SALT LAKE CITY, UT      US      RAO
+0000072576      LND     42.82   -108.75  1692   LANDER, WY              US      RAO
+0000072581      DPG     40.20   -112.93  1326   DUGWAY PRVG GRND, UT    US      RAO
+0000072583      WMC     40.90   -117.80  1312   WINNEMUCA, NV           US      RAO
+0000072591      RBL     40.15   -122.25   108   RED BLUFF, CA           US      RAO
+0000072597      MFR     42.37   -122.87   401   MEDFORD, OR             US      RAO
+0000072606      PWM     43.65    -70.32    20   PORTLAND, ME            US      RAO
+0000072632      DTX     42.70    -83.47   329   DETROIT, MI             US      RAO
+0000072637      FNT     42.97    -83.75   236   FLINT, MI               US      RAO
+0000072645      GRB     44.48    -88.13   210   GREEN BAY, WI           US      RAO
+0000072654      HON     44.38    -98.22   392   HURON, SD               US      RAO
+0000072655      STC     45.55    -94.07   315   SAINT CLOUD, MN         US      RAO
+0000072656      MPX     45.85    -93.56   287   MINNEAPOLIS, MN         US      RAO
+0000072659      ABR     45.45    -98.43   397   ABERDEEN, SD            US      RAO
+0000072662      RAP     44.05   -103.07   966   RAPID CITY, SD          US      RAO
+0000000000      UNR     44.07   -103.07   1027  RAPID CITY, SD          US      RAO
+0000072681      BOI     43.57   -116.22   871   BOISE, ID               US      RAO
+0000072694      SLE     44.92   -123.00    61   SALEM, OR               US      RAO
+0000072698      PDX     45.60   -122.60     7   PORTLAND, OR            US      RAO
+0000072712      CAR     46.87    -68.02   191   CARIBOU, ME             US      RAO
+0000072734      Y62     46.47    -84.35   221   SAULT ST. MARIE, MI     US      RAO
+0000072747      INL     48.57    -93.38   359   INTERNAT'L FALLS, MN    US      RAO
+0000072764      BIS     46.77   -100.75   503   BISMARCK, ND            US      RAO
+0000072767      ISN     48.18   -103.63   592   WILLISTON, ND           US      RAO
+0000072768      GGW     48.22   -106.62   696   GLASGOW, MT             US      RAO
+0000072775      GTF     47.48   -111.37  1118   GREAT FALLS, MT         US      RAO
+0000072785      GEG     47.63   -117.53   720   SPOKANE, WA             US      RAO
+0000072793      SEA     47.45   -122.30   130   SEATTLE, WA             US      RAO
+0000072797      UIL     47.95   -124.55    56   QUILLAYUTE, WA          US      RAO
+0000074207      GRF     47.08   -122.58    92   GRAY/FT LEWIS, WA       US      RAO
+0000074370      GTB     44.05    -75.73   207   FORT DRUM, NY           US      RAO
+0000074389      GYX     43.89    -70.25   125   GRAY, MAINE             US      RAO
+0000074455      DVN     41.61    -90.58   229   DAVENPORT, IA           US      RAO
+0000074468      MDN     38.80    -85.40   266   PROVING GROUND, IN      US      RAO
+0000074494      CHH     41.67    -69.97    16   CHATHAM, MA             US      RAO
+0000074504      53Q     37.50   -122.50    40   PILLAR POINT AFS, CA    US      RAO
+0000074560      ILX     40.15    -89.34   178   LINCOLN, IL             US      RAO
+0000074606      VBGSO   34.65   -120.57   112   VANDENBURG SOUTH, CA    US      RAO
+0000074611      BYS     35.28   -116.62   218   BICYCLE LAKE, CA        US      RAO
+0000074612      NID     35.68   -117.68   696   CHINA LAKE NAF, CA      US      RAO
+0000074619      4SU     35.33   -117.10   293   SUPERIOR VALLEY, CA     US      RAO
+0000074702      NLC     36.30   -119.90    72   LEMOORE NAS, CA         US      RAO
+0000074724      GBN     32.93   -112.70   264   GILA BEND AUX, AZ       US      RAO
+0000074732      HMN     32.90   -106.10  1258   HOLLOMAN AFB, NM        US      RAO
+0000074794      XMR     28.48    -80.57     3   CAPE CANAVERAL, FL      US      RAO
+0000076151      MILS    28.88   -118.30    23   ISLA GUADALUPE, BN      MX      RAO
+0000076225      MCUU    28.70   -106.07  1429   CHIHUAHUA, CH           MX      RAO
+0000076255      MGYM    27.92   -110.88     4   GUAYMAS, SO             MX      RAO
+0000076256      MEMP    27.95   -110.80    12   EMPALME, SO             MX      RAO
+0000076342      MMOV    26.90   -101.42   586   MONCLOVA, CL            MX      RAO
+0000076361      MLMM    25.80   -109.12    17   LOS MOCHIS, SI          MX      RAO
+0000076382      MTRC    25.53   -103.45  1150   TORREON, CL             MX      RAO
+0000076394      MMTY    25.87   -100.20   450   MONTERREY, NL           MX      RAO
+0000076405      MLAP    24.17   -110.30    18   LA PAZ, BS              MX      RAO
+0000076458      MMZT    23.20   -106.42     4   MAZATLAN, SI            MX      RAO
+0000076491      MCVM    23.73    -99.13   321   CIUDAD VICTORIA, TM     MX      RAO
+0000076499      MSOT    23.77    -98.20    25   SOTO LA MARINA, TM      MX      RAO
+0000076548      MTAM    22.22    -97.85    24   TAMPICO, TM             MX      RAO
+0000076612      MGDJ    20.68   -103.38  1589   GUADALAJARA_1, JL       MX      RAO
+0000076613      MGDL    20.60   -103.38  1526   GUADALAJARA_2, JL       MX      RAO
+0000076644      MMID    20.95    -89.67    11   MERIDA, YU              MX      RAO
+0000076648      MCZL    20.52    -86.95     3   COZUMEL_1, QR           MX      RAO
+0000076649      MCZM    20.48    -86.95     2   COZUMEL_2, QR           MX      RAO
+0000076654      MMZL    19.07   -104.33     6   MANZANILLO, CM          MX      RAO
+0000076665      MMOR    19.70   -101.18  1913   MORELIA, MC             MX      RAO
+0000076679      MMEX    19.43    -99.08  2231   MEXICO INT'L, DF        MX      RAO
+0000076680      MMDF    19.43    -99.13  2237   MEXICO/CENTRAL, DF      MX      RAO
+0000076692      MVER    19.15    -96.12    13   VERACRUZ/HACNDA, VC     MX      RAO
+0000076723      MISC    18.72   -110.95    35   ISLA SOCORRO, CM        MX      RAO
+0000076749      MCME    18.65    -91.85     3   CD. DEL CARMEN, CE      MX      RAO
+0000076805      MACA    16.83    -99.92     3   ACAPULCO, GR            MX      RAO
+0000076830      MIZT    16.53    -95.17    61   IXTEPEC, OX             MX      RAO
+0000076840      MARR    16.23    -93.90    64   ARRIAGA, CS             MX      RAO
+0000076904      MTAP    14.92    -92.25   102   TAPACHULA, CS           MX      RAO
+0000078016      MXKF    32.37    -64.68    27   KINDLEY FIELD, BE       US      RAO
+0000078063      MYGM    26.62    -78.33     2   GRAND BAHAMA AFB, BA    US      RAO
+0000078073      MYNN    25.05    -77.47     2   NASSAU INT'L, BA        US      RAO
+0000078076      MYCE    25.27    -76.30    29   CH/ELEUTHRA, BA         US      RAO
+0000078089      MYSM    24.07    -74.53     9   SAN SALVADOR, BA        US      RAO
+0000078118      MKJT    21.45    -71.15     8   TURKS ISLANDS, TI       US      RAO
+0000078255      MUCM    21.42    -77.85   118   CAMAGUEY/AGRMNTE, CU    US      RAO
+0000078325      MUHA    23.17    -82.35    50   HABANA, CU              US      RAO
+0000078344      MUCF    22.13    -80.45    13   CIENFUEGOS, CU          US      RAO
+0000078355      MUCG    21.40    -77.92   120   CAMAGUEY, CU            US      RAO
+0000078367      MUGM    19.90    -75.15    32   GUANTANAMO BAY, CU      US      RAO
+0000078583      MBH1    17.50    -88.30     0   BELIZE                  US      RAO
+0000078861      TAPA    17.00    -67.70     5   ANTIGUA ISLAND, AT      US      RAO

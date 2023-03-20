@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/VERIF/bin">
+    <!ENTITY EXEC_DIR "/home/amb-verif/VERIF/exec">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/VERIF/verif/cref/log">
+    <!ENTITY MSS_DIR "/BMC/rtrr/5year/amb-verif/verif/cref">
+    
+    <!ENTITY MAIN_DIR "/home/amb-verif/VERIF/verif/cref">
+    <!ENTITY WEB_DIR "/home/amb-verif/VERIF/verif/web">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/VERIF/verif/cref/NSSL/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/amb-verif/VERIF/verif/cref/NSSL/log">
+    <!ENTITY OBS_DIR "/home/amb-verif/VERIF/verif/cref/NSSL/scratch"> 
+    
+    <!ENTITY HRRR_MASK "/home/amb-verif/VERIF/static/hrrr_hgt_mask.nc">
+    <!ENTITY NSSL_MASK "/home/amb-verif/VERIF/static/nssl_hgt_mask.nc">
+    
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "01:00:00">
+    <!ENTITY SERVICE_WALL_LIMIT "01:00:00">
+
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>'>
+	
+    <!ENTITY YMDH
+       '<envar>
+          <name>YEAR</name>
+          <value><cyclestr>@Y</cyclestr></value>
+        </envar>
+        <envar>
+          <name>MONTH</name>
+          <value><cyclestr>@m</cyclestr></value>
+        </envar>
+        <envar>
+          <name>DAY</name>
+          <value><cyclestr>@d</cyclestr></value>
+        </envar>
+        <envar>
+          <name>HOUR</name>
+          <value><cyclestr>@H</cyclestr></value>
+        </envar>'>
+
+    <!ENTITY YMDH43200
+       '<envar>
+          <name>YEAR</name>
+          <value><cyclestr offset="-43200">@Y</cyclestr></value>
+        </envar>
+        <envar>
+          <name>MONTH</name>
+          <value><cyclestr offset="-43200">@m</cyclestr></value>
+        </envar>
+        <envar>
+          <name>DAY</name>
+          <value><cyclestr offset="-43200">@d</cyclestr></value>
+        </envar>
+        <envar>
+          <name>HOUR</name>
+          <value><cyclestr offset="-43200">@H</cyclestr></value>
+        </envar>'>
+
+]>
+
+<workflow realtime="F" scheduler="slurm" cyclethrottle="6" cyclelifespan="0:03:00:00">
+
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <cycledef group="1hr">202101010000 202103012300 1:00:00</cycledef>
+
+  <task name="NSSL_interp" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NSSL_interp</jobname>
+    <join><cyclestr>&OBS_LOG_DIR;/NSSL_interp_reprocess_@Y@m@d@H.log</cyclestr></join>
+    
+    &SERVICE_OPTS;    
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NSSL_interp_reprocess.py</value>
+    </envar>
+    <envar>
+      <name>EXECDIR</name>
+      <value>&EXEC_DIR;</value>
+    </envar>
+    <envar>
+      <name>SCRIPTDIR</name>
+      <value>&SCRIPT_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>OBSDIR</name>
+      <value>&OBS_DIR;</value>
+    </envar>
+    <envar>
+      <name>HPSSDIR</name>
+      <value><cyclestr>/BMC/fdr/Permanent/@Y/@m/@d/data/radar/mrms/</cyclestr></value>
+    </envar>
+    <envar>
+      <name>HRRRMASK</name>
+      <value>&HRRR_MASK;</value>
+    </envar>
+    <envar>
+      <name>NSSLMASK</name>
+      <value>&NSSL_MASK;</value>
+    </envar>
+    <envar>
+      <name>INTERPEXEC</name>
+      <value>cref_new_interp</value>
+    </envar>
+    <envar>
+      <name>NCLSCRIPT</name>
+      <value>plot_cref.ncl</value>
+    </envar>
+    <envar>
+      <name>NSSLVAR</name>
+      <value>MergedReflectivityQCComposite</value>
+    </envar>
+    <envar>
+      <name>GRIB2VAR</name>
+      <value>:MergedReflectivityQCComposite:</value>
+    </envar>
+    <envar>
+      <name>OBSVAR</name>
+      <value>MergedReflectivityQCComposite_500mabovemeansealevel</value>
+    </envar>
+    <envar>
+      <name>NC_OBSVAR</name>
+      <value>cref</value>
+    </envar>
+
+    <envar>
+      <name>IPOPTS</name>
+      <value>2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+    </envar>
+
+  </task>
+
+
+  <task name="NSSL_arch" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NSSL_arch</jobname>
+    <join><cyclestr offset="-43200">&OBS_LOG_DIR;/NSSL_arch_reprocess_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH43200;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/cref_etp_vil_arch.py</value>
+    </envar>
+    <envar>
+      <name>MSSDIR</name>
+      <value>&MSS_DIR;/NSSL</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+
+    <dependency>
+      <taskdep task="NSSL_interp"/>
+    </dependency>
+
+  </task>
+
+</workflow>

@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/ensemble/bin">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/ensemble/verif/precip/log">
+    <!ENTITY MAIN_DIR "/home/amb-verif/ensemble/verif/precip">
+    <!ENTITY WEB_DIR "/home/amb-verif/ensemble/verif/web">
+    <!ENTITY CONFIG_DIR "/home/amb-verif/ensemble/config">
+    <!ENTITY MET_DIR "/contrib/met/9.0/">
+    
+    <!ENTITY HREF_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/HREF/realtime">
+    <!ENTITY HREF_LOG_DIR "/home/amb-verif/ensemble/verif/precip/HREF/log">
+
+    <!ENTITY HRRR_OPS_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/HRRR_OPS/realtime">
+    <!ENTITY HRRR_OPS_LOG_DIR "/home/amb-verif/ensemble/verif/precip/HRRR_OPS/log">
+    <!ENTITY HRRR_OPS_DIR "/public/data/grids/hrrr/conus/wrfsfc/grib2">
+    
+    <!ENTITY ARW_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/ARW/realtime">
+    <!ENTITY ARW_LOG_DIR "/home/amb-verif/ensemble/verif/precip/ARW/log">
+    <!ENTITY ARW_DIR "/public/data/grids/hiresw/conus/arw/grib2">
+    
+    <!ENTITY NMMB_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/NMMB/realtime">
+    <!ENTITY NMMB_LOG_DIR "/home/amb-verif/ensemble/verif/precip/NMMB/log">
+    <!ENTITY NMMB_DIR "/public/data/grids/hiresw/conus/nmmb/grib2">
+    
+    <!ENTITY NSSL_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/NSSL/realtime">
+    <!ENTITY NSSL_LOG_DIR "/home/amb-verif/ensemble/verif/precip/NSSL/log">
+    <!ENTITY NSSL_DIR "/public/data/grids/hiresw/conus/arw2/grib2">
+    
+    <!ENTITY NAM_NEST_REALTIME_DIR "/home/amb-verif/ensemble/verif/precip/NAM_NEST/realtime">
+    <!ENTITY NAM_NEST_LOG_DIR "/home/amb-verif/ensemble/verif/precip/NAM_NEST/log">
+    <!ENTITY NAM_NEST_DIR "/public/data/grids/nam/conusnest/grib2">
+    
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "tjet:ujet:sjet:vjet:xjet">
+<!--
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE "ppa">
+-->
+    <!ENTITY PE_SERVICE "ppa-service">
+    <!ENTITY PE_WALL_LIMIT "00:40:00">
+    <!ENTITY SERVICE_WALL_LIMIT "00:40:00">
+    <!ENTITY DEADLINE "21600">
+    <!ENTITY WAIT "3600">
+    
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE;</partition>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <partition>&PE_SERVICE;</partition>
+        <cores>1</cores>
+	<memory>6G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+	
+    <!ENTITY YMDH10800
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-10800">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-10800">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-10800">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-10800">@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr offset="-10800">@Y@m@d@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH86400
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-86400">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-86400">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-86400">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-86400">@H</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>YYYYMMDDHH</name>
+	  <value><cyclestr offset="-86400">@Y@m@d@H</cyclestr></value>
+	</envar>'>
+
+]>
+
+<workflow realtime="T" scheduler="slurm" cyclethrottle="6" cyclelifespan="0:06:00:00">
+
+  <cycledef group="1hr">0 * * * 2023-2029 *</cycledef>
+  
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <task name="HRRR_OPS_precip_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRR_OPS_init</jobname>
+    <join><cyclestr offset="-10800">&HREF_LOG_DIR;/HRRR_OPS_precip_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH10800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NCEP_WRF_init.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&HRRR_OPS_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>hrrr_ops</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>:APCP:surface:0</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <datadep age="120"><cyclestr offset="-10800">&HRRR_OPS_DIR;/@y@j@H000006</cyclestr></datadep>
+      </and>
+    </dependency>
+
+  </task>
+
+  <task name="HRRR_OPS_pcp_combine" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRR_OPS_pcp_combine</jobname>
+    <join><cyclestr offset="-10800">&HREF_LOG_DIR;/HRRR_OPS_pcp_combine_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH10800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_pcp_combine.py</value>
+    </envar>
+    <envar>
+      <name>MET_DIR</name>
+      <value>&MET_DIR;</value>
+   </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>hrrr_ops</value>
+    </envar>
+    <envar>
+      <name>INTERVAL</name>
+      <value>3</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>APCP</value>
+    </envar>
+
+    <dependency>
+       <taskdep task="HRRR_OPS_precip_init"/>
+    </dependency>
+
+  </task>
+
+  <task name="ARW_precip_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>ARW_init</jobname>
+    <join><cyclestr offset="-10800">&HREF_LOG_DIR;/ARW_precip_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH10800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NCEP_WRF_init.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&ARW_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>hrw_arw</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>:APCP:surface:0</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <datadep age="120"><cyclestr offset="-10800">&ARW_DIR;/@y@j@H000006</cyclestr></datadep>
+      </and>
+    </dependency>
+
+  </task>
+
+  <task name="ARW_pcp_combine" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>ARW_pcp_combine</jobname>
+    <join><cyclestr offset="-10800">&HREF_LOG_DIR;/ARW_pcp_combine_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH10800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_pcp_combine.py</value>
+    </envar>
+    <envar>
+      <name>MET_DIR</name>
+      <value>&MET_DIR;</value>
+   </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>hrw_arw</value>
+    </envar>
+    <envar>
+      <name>INTERVAL</name>
+      <value>3</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>APCP</value>
+    </envar>
+
+    <dependency>
+       <taskdep task="ARW_precip_init"/>
+    </dependency>
+
+  </task>
+
+  <task name="NMMB_precip_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NMMB_init</jobname>
+    <join><cyclestr offset="-10800">&HREF_LOG_DIR;/NMMB_precip_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH10800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NCEP_WRF_init.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&NMMB_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>hrw_nmmb</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>:APCP:surface:</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <datadep age="120"><cyclestr offset="-10800">&NMMB_DIR;/@y@j@H000006</cyclestr></datadep>
+      </and>
+    </dependency>
+
+  </task>
+
+  <task name="NMMB_pcp_combine" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NMMB_pcp_combine</jobname>
+    <join><cyclestr offset="-10800">&HREF_LOG_DIR;/NMMB_pcp_combine_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH10800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_pcp_combine.py</value>
+    </envar>
+    <envar>
+      <name>MET_DIR</name>
+      <value>&MET_DIR;</value>
+   </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>hrw_nmmb</value>
+    </envar>
+    <envar>
+      <name>INTERVAL</name>
+      <value>3</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>APCP</value>
+    </envar>
+
+    <dependency>
+               <taskdep task="NMMB_precip_init"/>
+    </dependency>
+
+  </task>
+
+  <task name="NSSL_precip_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NSSL_init</jobname>
+    <join><cyclestr offset="-10800">&HREF_LOG_DIR;/NSSL_precip_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH10800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NCEP_WRF_init.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&NSSL_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>nssl_wrf</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>:APCP:surface:0</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <datadep age="120"><cyclestr offset="-10800">&NSSL_DIR;/@y@j@H000006</cyclestr></datadep>
+      </and>
+    </dependency>
+
+  </task>
+
+  <task name="NSSL_pcp_combine" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NSSL_pcp_combine</jobname>
+    <join><cyclestr offset="-10800">&HREF_LOG_DIR;/NSSL_pcp_combine_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH10800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_pcp_combine.py</value>
+    </envar>
+    <envar>
+      <name>MET_DIR</name>
+      <value>&MET_DIR;</value>
+   </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>nssl_wrf</value>
+    </envar>
+    <envar>
+      <name>INTERVAL</name>
+      <value>3</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>APCP</value>
+    </envar>
+
+    <dependency>
+       <taskdep task="NSSL_precip_init"/>
+    </dependency>
+
+  </task>
+
+  <task name="NAM_NEST_precip_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NAM_NEST_init</jobname>
+    <join><cyclestr offset="-10800">&HREF_LOG_DIR;/NAM_NEST_precip_init_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH10800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NCEP_WRF_init.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&NAM_NEST_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>nam_nest</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>:APCP:surface:</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <datadep age="120"><cyclestr offset="-10800">&NAM_NEST_DIR;/@y@j@H000006</cyclestr></datadep>
+      </and>
+    </dependency>
+
+  </task>
+
+  <task name="NAM_NEST_pcp_combine" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NAM_NEST_pcp_combine</jobname>
+    <join><cyclestr offset="-10800">&HREF_LOG_DIR;/NAM_NEST_pcp_combine_@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH10800;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/ensemble_pcp_combine.py</value>
+    </envar>
+    <envar>
+      <name>MET_DIR</name>
+      <value>&MET_DIR;</value>
+   </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HREF_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>nam_nest</value>
+    </envar>
+    <envar>
+      <name>INTERVAL</name>
+      <value>3</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36</value>
+    </envar>
+    <envar>
+      <name>VARIABLE</name>
+      <value>APCP</value>
+    </envar>
+
+    <dependency>
+               <taskdep task="NAM_NEST_precip_init"/>
+    </dependency>
+
+  </task>
+
+
+</workflow>

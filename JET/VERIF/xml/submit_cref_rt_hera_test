@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/VERIF/xml/cref_rt_hera_test.xml -d /whome/amb-verif/VERIF/xml/cref_rt_hera_test.db

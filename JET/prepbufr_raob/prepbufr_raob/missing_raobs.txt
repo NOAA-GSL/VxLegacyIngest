@@ -1,0 +1,22 @@
+Missing RAOBs in the temperature comparison at 2022-02-07 0Z, between RAOBs
+and the rt_ccpp_gsd_L128 model for 0h forecast, at 500 mb
+12374   - missing T at all but 7 levels
+17130   - surface only
+17281   - surface only
+17351   - nothing about 774 mb, and only 8 T levels.
+26850   - nothing above 771 mb
+28275   - nothing abouv 925 mb
+30758   - nothing above 537 mb - ditto
+40179   - nothing above 883 mb.
+47909   - nothing above 571 mb|
+82026   - surface only
+82400   - surface only
+82705   - surface only
+82917   - surface only
+83362   - surface only
+83525   - surface only
+83554   - surface only
+83768   - surface only
+96685   - goes from surface to 791.8 mb.
+CHQUR4G  - non numeric.
+

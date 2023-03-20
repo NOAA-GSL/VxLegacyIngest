@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/ensemble/xml/metplus_precip.xml -d /whome/amb-verif/ensemble/xml/db/metplus_precip.db

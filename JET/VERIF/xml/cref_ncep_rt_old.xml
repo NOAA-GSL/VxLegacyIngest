@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/rtrr/VERIF/bin">
+    <!ENTITY EXEC_DIR "/home/rtrr/VERIF/exec">
+    <!ENTITY WF_LOG_DIR "/home/rtrr/verif/cref/log">
+    <!ENTITY MAIN_DIR "/home/rtrr/verif/cref">
+    <!ENTITY WEB_DIR "/home/rtrr/verif/web">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/rtrr/verif/cref/NSSL/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/rtrr/verif/cref/NSSL/log">
+    <!ENTITY OBS_DIR "/public/data/radar/nssl/mrms_binary">
+    
+    <!ENTITY RAP_REALTIME_DIR "/home/rtrr/verif/cref/RAP_OPER/realtime">
+    <!ENTITY RAP_LOG_DIR "/home/rtrr/verif/cref/RAP_OPER/log">
+    <!ENTITY RAP_DIR "/public/data/grids/rr/iso_130/grib2">
+   
+    <!ENTITY HRRR_REALTIME_DIR "/home/rtrr/verif/cref/HRRR_OPER/realtime">
+    <!ENTITY HRRR_LOG_DIR "/home/rtrr/verif/cref/HRRR_OPER/log">
+    <!ENTITY HRRR_DIR "/public/data/grids/hrrr/conus/wrfsfc/grib2">
+ 
+    <!ENTITY NAM_REALTIME_DIR "/home/rtrr/verif/cref/NAM/realtime">
+    <!ENTITY NAM_LOG_DIR "/home/rtrr/verif/cref/NAM/log">
+    <!ENTITY NAM_DIR "/public/data/grids/nam/A218/grib2">
+    
+    <!ENTITY NAM_NEST_REALTIME_DIR "/home/rtrr/verif/cref/NAM_NEST/realtime">
+    <!ENTITY NAM_NEST_LOG_DIR "/home/rtrr/verif/cref/NAM_NEST/log">
+    <!ENTITY NAM_NEST_DIR "/public/data/grids/nam/conusnest/grib2">
+    
+    <!ENTITY HRRR_MASK "/home/rtrr/VERIF/static/hrrr_hgt_mask.nc">
+    <!ENTITY NSSL_MASK "/home/rtrr/VERIF/static/nssl_hgt_mask.nc">
+    
+    <!ENTITY PROJECT "nrtrr">
+    <!ENTITY PE "batch">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "00:20:00">
+    <!ENTITY SERVICE_WALL_LIMIT "00:20:00">
+    <!ENTITY DEADLINE "5400">
+    <!ENTITY WAIT "3600">
+
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE_SERVICE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>
+
+    <!ENTITY YMDH
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-10800">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-10800">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-10800">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-10800">@H</cyclestr></value>
+	</envar>'>
+    
+]>
+
+<workflow realtime="T" scheduler="moabtorque" cyclethrottle="2" cyclelifespan="1:00:00:00">
+
+  <log><cyclestr>&WF_LOG_DIR;/ncep_workflow_@Y@m@d@H.log</cyclestr></log>
+  
+  <cycledef group="1hr">0 * * * 2014-2016 *</cycledef>
+  <cycledef group="3hr">0 */3 * * 2014-2016 *</cycledef>
+
+  <task name="RAP_ncep_cref_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>RAP_ncep_cref_init</jobname>
+    <join><cyclestr offset="-10800">&RAP_LOG_DIR;/RAP_ncep_cref_init@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;    
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NCEP_init_cref_verif.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&RAP_DIR;</value>
+      </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>rap</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&RAP_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>00 01 02 03 04 05 06 07 08 09 10 11 12</value>
+    </envar>
+
+  </task>
+  
+  <metatask>
+
+    <var name="taskname">RAP_ncep_cref_13km RAP_ncep_cref_20km RAP_ncep_cref_40km RAP_ncep_cref_80km</var>
+    <var name="interpgrid">13kmLC 20kmLC 40kmLC 80kmLC</var>
+    <var name="statfile">verif_13km verif_20km verif_40km verif_80km</var>
+    <var name="ipopt">2 2 2 4</var>
+
+    <task name="#taskname#" cycledefs="1hr" maxtries="2">
+      <command>&SCRIPT_DIR;/wrapper.ksh</command>
+      <jobname>#taskname#</jobname>
+      <join><cyclestr offset="-10800">&RAP_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+      
+      &PE_OPTS;    
+      &YMDH;
+
+      <envar>
+        <name>SCRIPT</name>
+        <value>&SCRIPT_DIR;/NCEP_cref_verif.py</value>
+      </envar>
+
+      <envar>
+        <name>EXECDIR</name>
+	<value>&EXEC_DIR;</value>
+      </envar>
+      <envar>
+        <name>REALTIMEDIR</name>
+	<value>&RAP_REALTIME_DIR;</value>
+      </envar>
+      <envar>
+        <name>SCRIPTDIR</name>
+	<value>&SCRIPT_DIR;</value>
+      </envar>
+      <envar>
+        <name>OBSDIR</name>
+	<value>&OBS_REALTIME_DIR;</value>
+      </envar>
+
+      <envar>
+        <name>MODELGRID</name>
+        <value>13kmLC</value>
+      </envar>
+      <envar>
+        <name>INTERPGRID</name>
+        <value>#interpgrid#</value>
+      </envar>
+    
+      <envar>
+        <name>MODEL</name>
+	<value>rap</value>
+      </envar>
+      <envar>
+        <name>NCLMODEL</name>
+        <value>RAP OPER</value>
+      </envar>
+      <envar>
+        <name>STATF</name>
+        <value>#statfile#</value>
+      </envar>
+      <envar>
+        <name>VARIABLE</name>
+        <value>REFC_entireatmosphere_consideredasasinglelayer_</value>
+      </envar>
+      <envar>
+        <name>FCSTLEADS</name>
+        <value>00 01 02 03 04 05 06 07 08 09 10 11 12</value>
+      </envar>
+      <envar>
+        <name>IPOPTS</name>
+        <value>#ipopt# -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+      </envar>
+
+      <dependency>
+        <and>
+	  <taskdep task="RAP_ncep_cref_init"/>
+          <datadep age="120"><cyclestr offset="-10800">&OBS_DIR;/tile4/cref/CREF.@Y@m@d.@H0000.gz</cyclestr></datadep>
+	</and>
+      </dependency>
+
+    </task>
+
+  </metatask>
+
+  <task name="HRRR_ncep_cref_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRR_ncep_cref_init</jobname>
+    <join><cyclestr offset="-10800">&HRRR_LOG_DIR;/HRRR_ncep_cref_init@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NCEP_init_cref_verif.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&HRRR_DIR;</value>
+      </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>hrrr</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HRRR_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>00 01 02 03 04 05 06 07 08 09 10 11 12</value>
+    </envar>
+
+  </task>
+
+  <metatask>
+
+    <var name="taskname">HRRR_ncep_cref_03km HRRR_ncep_cref_13km HRRR_ncep_cref_20km HRRR_ncep_cref_40km HRRR_ncep_cref_80km</var>
+    <var name="interpgrid">03kmLC 13kmLC 20kmLC 40kmLC 80kmLC</var>
+    <var name="statfile">verif_03km verif_13km verif_20km verif_40km verif_80km</var>
+    <var name="ipopt">2 2 4 8 16</var>
+
+    <task name="#taskname#" cycledefs="1hr" maxtries="2">
+      <command>&SCRIPT_DIR;/wrapper.ksh</command>
+      <jobname>#taskname#</jobname>
+      <join><cyclestr offset="-10800">&HRRR_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+      
+      &PE_OPTS;
+      &YMDH;
+
+      <envar>
+        <name>SCRIPT</name>
+        <value>&SCRIPT_DIR;/NCEP_cref_verif.py</value>
+      </envar>
+
+      <envar>
+        <name>EXECDIR</name>
+        <value>&EXEC_DIR;</value>
+      </envar>
+      <envar>
+        <name>REALTIMEDIR</name>
+        <value>&HRRR_REALTIME_DIR;</value>
+      </envar>
+      <envar>
+        <name>SCRIPTDIR</name>
+        <value>&SCRIPT_DIR;</value>
+      </envar>
+      <envar>
+        <name>OBSDIR</name>
+        <value>&OBS_REALTIME_DIR;</value>
+      </envar>
+
+      <envar>
+        <name>MODELGRID</name>
+        <value>03kmLC</value>
+      </envar>
+      <envar>
+        <name>INTERPGRID</name>
+        <value>#interpgrid#</value>
+      </envar>
+   
+      <envar>
+        <name>MODEL</name>
+        <value>hrrr</value>
+      </envar>
+      <envar>
+        <name>NCLMODEL</name>
+        <value>HRRR OPER</value>
+      </envar>
+      <envar>
+        <name>STATF</name>
+        <value>#statfile#</value>
+      </envar>
+      <envar>
+        <name>VARIABLE</name>
+        <value>REFC_entireatmosphere</value>
+      </envar>   
+      <envar>
+        <name>FCSTLEADS</name>
+        <value>00 01 02 03 04 05 06 07 08 09 10 11 12</value>
+      </envar>
+      <envar>
+        <name>IPOPTS</name>
+        <value>#ipopt# -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+      </envar>
+
+      <dependency>
+        <and>
+          <taskdep task="HRRR_ncep_cref_init"/>
+          <datadep age="120"><cyclestr offset="-10800">&OBS_DIR;/tile4/cref/CREF.@Y@m@d.@H0000.gz</cyclestr></datadep>
+        </and>
+      </dependency>
+
+    </task>
+
+  </metatask>
+
+  <task name="NAM_ncep_cref_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NAM_ncep_cref_init</jobname>
+    <join><cyclestr offset="-10800">&NAM_LOG_DIR;/NAM_ncep_cref_init@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NCEP_init_cref_verif.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&NAM_DIR;</value>
+      </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>nam</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&NAM_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>00 01 02 03 04 05 06 07 08 09 10 11 12</value>
+    </envar>
+
+  </task>
+
+  <metatask>
+
+    <var name="taskname">NAM_ncep_cref_13km NAM_ncep_cref_20km NAM_ncep_cref_40km NAM_ncep_cref_80km</var>
+    <var name="interpgrid">13kmLC 20kmLC 40kmLC 80kmLC</var>
+    <var name="statfile">verif_13km verif_20km verif_40km verif_80km</var>
+    <var name="ipopt">2 2 2 4</var>
+
+    <task name="#taskname#" cycledefs="1hr" maxtries="2">
+      <command>&SCRIPT_DIR;/wrapper.ksh</command>
+      <jobname>#taskname#</jobname>
+      <join><cyclestr offset="-10800">&NAM_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+      &PE_OPTS;
+      &YMDH;
+      
+      <envar>
+        <name>SCRIPT</name>
+        <value>&SCRIPT_DIR;/NCEP_cref_verif.py</value>
+      </envar>
+
+      <envar>
+        <name>EXECDIR</name>
+	<value>&EXEC_DIR;</value>
+      </envar>
+      <envar>
+        <name>REALTIMEDIR</name>
+	<value>&NAM_REALTIME_DIR;</value>
+      </envar>
+      <envar>
+        <name>SCRIPTDIR</name>
+	<value>&SCRIPT_DIR;</value>
+      </envar>
+      <envar>
+        <name>OBSDIR</name>
+	<value>&OBS_REALTIME_DIR;</value>
+      </envar>
+
+      <envar>
+        <name>MODELGRID</name>
+        <value>nam_12km</value>
+      </envar>
+      <envar>
+        <name>INTERPGRID</name>
+        <value>#interpgrid#</value>
+      </envar>
+
+      <envar>
+        <name>MODEL</name>
+	<value>nam</value>
+      </envar>
+      <envar>
+        <name>NCLMODEL</name>
+	<value>NAM</value>
+      </envar>
+      <envar>
+        <name>STATF</name>
+	<value>#statfile#</value>
+      </envar>
+      <envar>
+        <name>VARIABLE</name>
+        <value>REFC_entireatmosphere_consideredasasinglelayer_</value>
+      </envar>
+      <envar>
+        <name>FCSTLEADS</name>
+	<value>00 01 02 03 04 05 06 07 08 09 10 11 12</value>
+      </envar>
+      <envar>
+        <name>IPOPTS</name>
+	<value>#ipopt# -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+      </envar>
+
+      <dependency>
+        <and>
+	  <taskdep task="NAM_ncep_cref_init"/>
+          <datadep age="120"><cyclestr offset="-10800">&OBS_DIR;/tile4/cref/CREF.@Y@m@d.@H0000.gz</cyclestr></datadep>
+	</and>
+      </dependency>
+  
+    </task>
+
+  </metatask>
+  
+  <task name="NAM_NEST_ncep_cref_init" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NAM_NEST_ncep_cref_init</jobname>
+    <join><cyclestr offset="-10800">&NAM_NEST_LOG_DIR;/NAM_NEST_ncep_cref_init@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NCEP_init_cref_verif.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&NAM_NEST_DIR;</value>
+      </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>nam_nest</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&NAM_NEST_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>00 01 02 03 04 05 06 07 08 09 10 11 12</value>
+    </envar>
+
+  </task>
+
+  <metatask>
+
+    <var name="taskname">NAM_NEST_ncep_cref_13km NAM_NEST_ncep_cref_20km NAM_NEST_ncep_cref_40km NAM_NEST_ncep_cref_80km</var>
+    <var name="interpgrid">13kmLC 20kmLC 40kmLC 80kmLC</var>
+    <var name="statfile">verif_13km verif_20km verif_40km verif_80km</var>
+    <var name="ipopt">2 2 2 4</var>
+
+    <task name="#taskname#" cycledefs="1hr" maxtries="2">
+      <command>&SCRIPT_DIR;/wrapper.ksh</command>
+      <jobname>#taskname#</jobname>
+      <join><cyclestr offset="-10800">&NAM_NEST_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+      &PE_OPTS;
+      &YMDH;
+      
+      <envar>
+        <name>SCRIPT</name>
+        <value>&SCRIPT_DIR;/NCEP_cref_verif.py</value>
+      </envar>
+
+      <envar>
+        <name>EXECDIR</name>
+	<value>&EXEC_DIR;</value>
+      </envar>
+      <envar>
+        <name>REALTIMEDIR</name>
+	<value>&NAM_NEST_REALTIME_DIR;</value>
+      </envar>
+      <envar>
+        <name>SCRIPTDIR</name>
+	<value>&SCRIPT_DIR;</value>
+      </envar>
+      <envar>
+        <name>OBSDIR</name>
+	<value>&OBS_REALTIME_DIR;</value>
+      </envar>
+
+      <envar>
+        <name>MODELGRID</name>
+        <value>nam_05km</value>
+      </envar>
+      <envar>
+        <name>INTERPGRID</name>
+        <value>#interpgrid#</value>
+      </envar>
+
+      <envar>
+        <name>MODEL</name>
+	<value>nam_nest</value>
+      </envar>
+      <envar>
+        <name>NCLMODEL</name>
+	<value>NAM NEST</value>
+      </envar>
+      <envar>
+        <name>STATF</name>
+	<value>#statfile#</value>
+      </envar>
+      <envar>
+        <name>VARIABLE</name>
+        <value>REFC_entireatmosphere_consideredasasinglelayer_</value>
+      </envar>
+      <envar>
+        <name>FCSTLEADS</name>
+	<value>00 01 02 03 04 05 06 07 08 09 10 11 12</value>
+      </envar>
+      <envar>
+        <name>IPOPTS</name>
+	<value>#ipopt# -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+      </envar>
+
+      <dependency>
+        <and>
+	  <taskdep task="NAM_NEST_ncep_cref_init"/>
+          <datadep age="120"><cyclestr offset="-10800">&OBS_DIR;/tile4/cref/CREF.@Y@m@d.@H0000.gz</cyclestr></datadep>
+	</and>
+      </dependency>
+  
+    </task>
+
+  </metatask>
+
+  <task name="cref_ncep_web" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/cref_web_stage.py</command>
+    <jobname>cref_ncep_web</jobname>
+    <join><cyclestr offset="-10800">&WF_LOG_DIR;/cref_ncep_web@Y@m@d@H.log</cyclestr></join>
+
+    &PE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>MAINDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;</value>
+    </envar>
+    <envar>
+      <name>SRCMODELS</name>
+      <value>RAP_OPER HRRR_OPER NAM NAM_NEST</value>
+    </envar>
+    <envar>
+      <name>SRCGRIDS</name>
+      <value>03kmLC 05kmLC 13kmLC 20kmLC 40kmLC 80kmLC</value>
+    </envar>
+    <envar>
+      <name>DIRMODELS</name>
+      <value>rap hrrr nam nam_nest</value>
+    </envar>
+    <envar>
+      <name>WEBMODELS</name>
+      <value>rap_oper hrrr_oper nam nam_nest</value>
+    </envar>
+    <envar>
+      <name>WEBGRIDS</name>
+      <value>03km 05km 13km 20km 40km 80km</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <taskdep task="RAP_ncep_cref_13km"/>
+        <taskdep task="HRRR_ncep_cref_13km"/>
+	<taskdep task="NAM_ncep_cref_13km"/>
+	<taskdep task="NAM_NEST_ncep_cref_13km"/>
+      </and>
+    </dependency>
+
+  </task>
+
+  <task name="cref_ncep_cp" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/cp_verif_to_gsd.py</command>
+    <jobname>cref_ncep_cp</jobname>
+    <join><cyclestr offset="-10800">&WF_LOG_DIR;/cref_ncep_cp@Y@m@d@H.log</cyclestr></join>
+    
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>MAINDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;</value>
+    </envar>
+    <envar>
+      <name>VAR</name>
+      <value>cref</value>
+    </envar>
+    <envar>
+      <name>WEBMODELS</name>
+      <value>rap_oper hrrr_oper nam nam_nest</value>
+    </envar>
+    <envar>
+      <name>WEBGRIDS</name>
+      <value>03km 05km 13km 20km 40km 80km</value>
+    </envar>
+
+    <dependency>
+      <taskdep task="cref_ncep_web"/>
+    </dependency>
+
+  </task>
+
+  <task name="cref_ncep_db" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/pop_cref_sql_tables.py</command>
+    <jobname>cref_ncep_db</jobname>
+    <join><cyclestr offset="-10800">&WF_LOG_DIR;/cref_ncep_db_@Y@m@d@H.log</cyclestr></join>
+    
+    &SERVICE_OPTS;
+    &YMDH;
+    
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>93</value>
+    </envar>
+    <envar>
+      <name>MODELDIRS</name>
+      <value>RAP_OPER/realtime HRRR_OPER/realtime NAM/realtime NAM_NEST/realtime</value>
+    </envar>
+    <envar>
+      <name>MODELNAMES</name>
+      <value>RAP_OPER HRRR_OPER NAM NAM_NEST</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+
+    <dependency>
+      <timedep><cyclestr offset="&WAIT;">@Y@m@d@H@M@S</cyclestr></timedep>
+    </dependency>
+    
+  </task>
+
+</workflow>

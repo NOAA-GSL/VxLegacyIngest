@@ -1,0 +1,5 @@
+#!/bin/ksh --login
+
+module load rocoto
+
+rocotorun -w /whome/amb-verif/ensemble/xml/stageiv_init_test.xml -d /whome/amb-verif/ensemble/xml/db/stageiv_init_test.db

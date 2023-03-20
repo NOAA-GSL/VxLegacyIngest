@@ -1,0 +1,641 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib
+END
+polatev2.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev2.f
+END
+polatev4.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev4.f
+END
+polatev6.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev6.f
+END
+a.out
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/a.out
+END
+gdswzd01.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd01.f
+END
+gdswzd03.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd03.f
+END
+makgds.f
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/makgds.f
+END
+gdswzdca.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzdca.f
+END
+gdswzd05.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd05.f
+END
+gdswzdc9.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzdc9.f_diffs
+END
+polateg1.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polateg1.f
+END
+ipxetas.f
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ipxetas.f
+END
+ipxwafs2.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ipxwafs2.f_diffs
+END
+gdswiz00.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz00.f_diffs
+END
+gdswiz01.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz01.f_diffs
+END
+gdswiz03.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz03.f_diffs
+END
+gdswiz04.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz04.f_diffs
+END
+gdswiz05.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz05.f_diffs
+END
+polates1.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates1.f
+END
+polates3.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates3.f
+END
+test.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/test.f_diffs
+END
+ipxwafs.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ipxwafs.f_diffs
+END
+polates5.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates5.f
+END
+polfixs.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polfixs.f_diffs
+END
+orig_ipolates.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/orig_ipolates.f
+END
+gdswzd.f
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd.f
+END
+polfixv.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polfixv.f_diffs
+END
+ipxwafs2.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ipxwafs2.f
+END
+polatev0.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev0.f_diffs
+END
+new_polates6.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/new_polates6.f
+END
+polatev1.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev1.f_diffs
+END
+gdswiz00.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz00.f
+END
+polatev2.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev2.f_diffs
+END
+polatev3.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev3.f_diffs
+END
+polatev4.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev4.f_diffs
+END
+gdswiz04.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz04.f
+END
+polatev6.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev6.f_diffs
+END
+gdswizcb.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswizcb.f
+END
+gdswizc9.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswizc9.f_diffs
+END
+test.f
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/test.f
+END
+ipolates.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ipolates.f
+END
+makgds.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/makgds.f_diffs
+END
+ipxwafs.f
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ipxwafs.f
+END
+gdswzdca.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzdca.f_diffs
+END
+gdswzdcb.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzdcb.f_diffs
+END
+gdswiz.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz.f_diffs
+END
+ijkgds.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ijkgds.f_diffs
+END
+polateg0.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polateg0.f_diffs
+END
+polateg1.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polateg1.f_diffs
+END
+polfixv.f
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polfixv.f
+END
+gcdist.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gcdist.f_diffs
+END
+orig_polates6.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/orig_polates6.f_diffs
+END
+polateg4.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polateg4.f_diffs
+END
+polatev1.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev1.f
+END
+polatev3.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev3.f
+END
+gdswzd00.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd00.f
+END
+polates0.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates0.f_diffs
+END
+gdswizc9.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswizc9.f
+END
+polates1.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates1.f_diffs
+END
+polates2.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates2.f_diffs
+END
+polates3.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates3.f_diffs
+END
+gdswzd04.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd04.f
+END
+polates4.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates4.f_diffs
+END
+gdswzdcb.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzdcb.f
+END
+gdswiz.f
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz.f
+END
+polates5.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates5.f_diffs
+END
+movect.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/movect.f_diffs
+END
+polates6.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates6.f_diffs
+END
+ijkgds.f
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ijkgds.f
+END
+orig_ipolates.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/orig_ipolates.f_diffs
+END
+polateg0.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polateg0.f
+END
+gcdist.f
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gcdist.f
+END
+gdswzd.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd.f_diffs
+END
+orig_polates6.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/orig_polates6.f
+END
+polateg4.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polateg4.f
+END
+new_polates6.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/new_polates6.f_diffs
+END
+gdswizca.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswizca.f_diffs
+END
+gdswizcb.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswizcb.f_diffs
+END
+polates0.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates0.f
+END
+polates2.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates2.f
+END
+ipolates.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ipolates.f_diffs
+END
+polates4.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates4.f
+END
+movect.f
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/movect.f
+END
+polates6.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polates6.f
+END
+ipolatev.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ipolatev.f_diffs
+END
+gdswzdc9.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzdc9.f
+END
+gausslat.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gausslat.f_diffs
+END
+mk_iplib
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/mk_iplib
+END
+new_ipolates.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/new_ipolates.f_diffs
+END
+gdsawt.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdsawt.f_diffs
+END
+gdswiz01.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz01.f
+END
+gdswiz03.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz03.f
+END
+gdswizca.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswizca.f
+END
+gdswiz05.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswiz05.f
+END
+gdswzd00.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd00.f_diffs
+END
+gdswzd01.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd01.f_diffs
+END
+gdswzd03.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd03.f_diffs
+END
+gdswzd04.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd04.f_diffs
+END
+gdswzd05.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdswzd05.f_diffs
+END
+ipolatev.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ipolatev.f
+END
+gausslat.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gausslat.f
+END
+polfixs.f
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polfixs.f
+END
+ipxetas.f_diffs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/ipxetas.f_diffs
+END
+new_ipolates.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/new_ipolates.f
+END
+gdsawt.f
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/gdsawt.f
+END
+polatev0.f
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/embverif/!svn/ver/21/branches/verif_src/src/iplib/polatev0.f
+END

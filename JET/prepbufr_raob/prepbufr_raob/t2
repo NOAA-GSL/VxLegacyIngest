@@ -1,0 +1,74 @@
+hours ago: 0
+prepbufr type is gdas
+namelist file is tmp/132987.namelist.input
+0:  namelist_file is |tmp/132987.namelist.input                                                                                                                                                           |
+1: &SETUP
+2:  OBSDATE= 2022092612,
+3:  OBSMIN=          0,
+4:  OBSPATH="/public/data/grids/gdas/prepbufr/restricted                                                                                                                                         ",
+5:  OBSFILENAME="20222691200.gdas.t12z.prepbufr.20220926                                                                                                                                             ",
+6:  SAVEPATH="tmp/                                                                                                                                                                                ",
+7:  PREFIXOBSSAVENAME="conv                                                                                                                                                                                ",
+8:  PREFIXFCSTOBSSAVENAME="unknown                                                                                                                                                                             ",
+9:  FCSTPATH="unknown                                                                                                                                                                             ",
+10:  FCSTFILENAME="unknown                                                                                                                                                                             ",
+11:  /
+12: &OBSSET
+13:  NUMOBSTYPE=          1,
+14:  OBSTYPE= 100*120        ,
+15:  TIMEWINDOW=  6.00000000    , 99*1.00000000      ,
+16:  /
+17:  read obs from file=/public/data/grids/gdas/prepbufr/restricted/20222691200.gdas.t12z.prepbufr.20220926
+18: 
+19:  =================================
+20:  process obstype=         120  with time window=   6.00000000    
+21:  >>>decodeprepbufr_all: read in         562  stations for data type         120
+22:  soundings filename is |tmp/conv_type0120_202209261200.txt|
+23:  mysql filename is |tmp/mysql_202209261200.tmp|
+24: 
+25:  ====list this observation====         120
+26:  maximum level is=         249  2022092612
+27:  variable index: P, T, Q, H, U, V
+28:                  1  2  3  4  5  6
+29:  BAD WIND. name, pressure, error, dir, speed: 04220   600.000000               2   90.0000000       289.000000    
+30:  n_p,n_good_p       66198       65851
+31:  n_t,n_bad_t       30545          81
+32:  n_td,n_bad_td       27914         411
+33:  n_wd,n_bad_wd       44631         134
+34:  n_h,n_bad_h       39070           0
+35:  tot fillable heights, unfilled ones:       27551       37975
+files: tmp/conv_type0120_202209261200.txt tmp/mysql_202209261200.tmp
+query is load data concurrent local infile 'tmp/mysql_202209261200.tmp'
+replace into table hypsometric_summary
+columns terminated by ','
+lines terminated by ',\n'
+(wmoid,time,
+mean_h_diff_500,  max_h_diff_500,  n_h_diff_500,  n_added_500,
+mean_h_diff,  max_h_diff,  n_h_diff,  n_added)
+1050 wmoid records written to table soundings_pb.hypsometric_summary
+
+query is load data concurrent local infile 'tmp/132987.bad_winds.tmp'
+replace into table bad_winds
+columns terminated by ','
+lines terminated by ',\n'
+(valid_time,wmoid,press,dir,spd)
+2 bad winds  written to table soundings_pb.bad_winds
+
+560 soundings written to database soundings_pb, including...
+wmoid's for which we have no site names (though we do have locations):
+08190
+10954
+26435
+47155
+57541
+65046
+66160
+76743
+80371
+89625
+98747
+98753
+ATGU3FT
+FPUW5GN
+XKQLWQB
+1 duplicate entry for 51431. Last one stored in RAOB_raob_soundings

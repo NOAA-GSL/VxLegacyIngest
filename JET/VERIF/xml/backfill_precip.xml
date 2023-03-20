@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/VERIF/bin">
+    <!ENTITY EXEC_DIR "/home/amb-verif/VERIF/exec">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/VERIF/verif/log">
+    
+    <!ENTITY MAIN_DIR "/home/amb-verif/VERIF/verif">
+    <!ENTITY HPSS_DIR "/BMC/rtrr/5year/amb-verif/verif/">
+    
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "batch">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "00:59:00">
+    <!ENTITY SERVICE_WALL_LIMIT "00:59:00">
+    <!ENTITY DEADLINE "5400">
+    <!ENTITY WAIT "3600">
+
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<native>-l partition=tjet:ujet:sjet:vjet:xjet -W umask=022</native>'>
+<!--	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>-->
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE_SERVICE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<native>-l partition=service -W umask=022</native>'>
+<!--	<deadline><cyclestr offset="&DEADLINE;">@Y@m@d@H@M</cyclestr></deadline>'>-->
+
+    <!ENTITY YMDH
+       '<envar>
+          <name>YEAR</name>
+          <value><cyclestr>@Y</cyclestr></value>
+        </envar>
+        <envar>
+          <name>MONTH</name>
+          <value><cyclestr>@m</cyclestr></value>
+        </envar>
+        <envar>
+          <name>DAY</name>
+          <value><cyclestr>@d</cyclestr></value>
+        </envar>
+        <envar>
+          <name>HOUR</name>
+          <value><cyclestr>@H</cyclestr></value>
+        </envar>'>
+	
+    <!ENTITY YMDH21600
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-21600">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-21600">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-21600">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-21600">@H</cyclestr></value>
+	</envar>'>
+]>
+
+<workflow realtime="F" scheduler="moabtorque" cyclethrottle="6" cyclelifespan="0:03:00:00">
+
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <cycledef group="6hr">201812260000 201901290000 06:00:00</cycledef>
+
+  <task name="precip_hpss_pull" cycledefs="6hr" maxtries="4">
+    <command>&SCRIPT_DIR;/grab_precip_hpss.py</command>
+    <jobname>precip_hpss</jobname>
+    <join><cyclestr>&WF_LOG_DIR;/precip_backfill_hpss_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>HPSSDIR</name>
+      <value>&HPSS_DIR;</value>
+    </envar>
+    <envar>
+      <name>VERIFTYPE</name>
+      <value>precip</value>
+    </envar>
+    <envar>
+      <name>MODELNAMES</name>
+      <value>RAP</value>
+    </envar>
+
+  </task>
+
+  <task name="precip_db" cycledefs="6hr" maxtries="4">    
+    <command>&SCRIPT_DIR;/pop_precip_sql_tables.py</command>
+    <jobname>precip_db</jobname>
+    <join><cyclestr>&WF_LOG_DIR;/precip_backfill_db_@Y@m@d@H.log</cyclestr></join>
+        
+    &SERVICE_OPTS;
+    &YMDH;
+        
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;/precip</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>261</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>RAP/backfill</value>
+    </envar>
+    <envar>
+      <name>SQLMODELS</name>
+      <value>RAP</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+  
+    <dependency>
+      <taskdep task="precip_hpss_pull"/>
+    </dependency>
+    
+  </task>
+
+  <task name="precip2_db" cycledefs="6hr" maxtries="4">
+    <command>&SCRIPT_DIR;/pop_precip2_sql_tables.py</command>
+    <jobname>precip2_db</jobname>
+    <join><cyclestr>&WF_LOG_DIR;/precip2_backfill_db_@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;/precip</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>261</value>
+    </envar>
+    <envar>
+      <name>MODELS</name>
+      <value>RAP/backfill</value>
+    </envar>
+    <envar>
+      <name>SQLMODELS</name>
+      <value>RAP</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+
+    <dependency>
+      <taskdep task="precip_hpss_pull"/>
+    </dependency>
+
+  </task>
+
+  <task name="precip_purge" cycledefs="6hr" maxtries="4">    
+    <command>&SCRIPT_DIR;/backfill_purge.py</command>
+    <jobname>precip_purge</jobname>
+    <join><cyclestr offset="-21600">&WF_LOG_DIR;/precip_backfill_purge_@Y@m@d@H.log</cyclestr></join>
+        
+    &SERVICE_OPTS;
+    &YMDH21600;
+
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;/precip</value>
+    </envar>
+    <envar>
+      <name>MODELDIRS</name>
+      <value>RAP/backfill</value>
+    </envar>
+    <envar>
+      <name>MODELNAMES</name>
+      <value>RAP</value>
+    </envar>
+
+    <dependency>
+     <and>
+      <taskdep task="precip_db"/>
+      <taskdep task="precip2_db"/>
+     </and>
+    </dependency>
+
+  </task>
+
+</workflow>

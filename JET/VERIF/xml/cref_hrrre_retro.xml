@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow [
+
+    <!ENTITY SCRIPT_DIR "/home/amb-verif/VERIF/bin">
+    <!ENTITY EXEC_DIR "/home/amb-verif/VERIF/exec">
+    <!ENTITY WF_LOG_DIR "/home/amb-verif/VERIF/verif/cref/log">
+    
+    <!ENTITY MAIN_DIR "/home/amb-verif/VERIF/verif/cref">
+    <!ENTITY WEB_DIR "/home/amb-verif/VERIF/verif/web">
+    
+    <!ENTITY OBS_REALTIME_DIR "/home/amb-verif/VERIF/verif/cref/NSSL_HRRRE/realtime">
+    <!ENTITY OBS_LOG_DIR "/home/amb-verif/VERIF/verif/cref/NSSL_HRRRE/log">
+    <!ENTITY OBS_DIR "/lfs3/projects/amb-verif/scratch/nssl/">
+    
+    <!ENTITY HRRRE_REALTIME_DIR "/home/amb-verif/VERIF/verif/cref/HRRRE/realtime">
+    <!ENTITY HRRRE_LOG_DIR "/home/amb-verif/VERIF/verif/cref/HRRRE/log">
+<!--    <!ENTITY HRRRE_DIR "/pan2/projects/wrfruc/dowell/hrrrens">-->
+    <!ENTITY HRRRE_DIR "/pan2/projects/wrfruc/hrrre">
+    
+    <!ENTITY HRRRE_C_MASK "/lfs3/projects/amb-verif/verif/mask/hrrre_c_hgt_mask.nc"> 
+    <!ENTITY HRRRE_S_MASK "/lfs3/projects/amb-verif/verif/mask/hrrre_s_hgt_mask.nc"> 
+    <!ENTITY HRRRE_SE_MASK "/lfs3/projects/amb-verif/verif/mask/hrrre_se_hgt_mask.nc"> 
+    <!ENTITY HRRRE_NE_MASK "/lfs3/projects/amb-verif/verif/mask/hrrre_ne_hgt_mask.nc"> 
+    <!ENTITY HRRRE_N_MASK "/lfs3/projects/amb-verif/verif/mask/hrrre_n_hgt_mask.nc"> 
+    <!ENTITY NSSL_MASK "/home/amb-verif/VERIF/static/nssl_hgt_mask.nc">
+    
+    <!ENTITY PROJECT "amb-verif">
+    <!ENTITY PE "batch">
+    <!ENTITY PE_SERVICE "service">
+    <!ENTITY PE_WALL_LIMIT "00:40:00">
+    <!ENTITY SERVICE_WALL_LIMIT "00:40:00">
+
+    <!ENTITY WAIT "1800">
+
+    <!ENTITY PE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&PE_WALL_LIMIT;</walltime>
+	<native>-l partition=tjet:ujet:sjet:vjet:xjet -W umask=022</native>
+	'>
+
+    <!ENTITY SERVICE_OPTS 
+       '<account>&PROJECT;</account>
+        <queue>&PE_SERVICE;</queue>
+        <cores>1</cores>
+	<memory>2G</memory>
+	<walltime>&SERVICE_WALL_LIMIT;</walltime>
+	<native>-l partition=service -W umask=022</native>
+	'>
+	
+    <!ENTITY YMDH
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr offset="-7200">@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr offset="-7200">@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr offset="-7200">@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr offset="-7200">@H</cyclestr></value>
+	</envar>'>
+
+    <!ENTITY YMDH_retro
+       '<envar>
+	  <name>YEAR</name>
+	  <value><cyclestr>@Y</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>MONTH</name>
+	  <value><cyclestr>@m</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>DAY</name>
+	  <value><cyclestr>@d</cyclestr></value>
+	</envar>
+	<envar>
+	  <name>HOUR</name>
+	  <value><cyclestr>@H</cyclestr></value>
+	</envar>'>
+]>
+
+<workflow realtime="F" scheduler="moabtorque" cyclethrottle="10" >
+
+  <log><cyclestr>&WF_LOG_DIR;/workflow_@Y@m@d@H.log</cyclestr></log>
+
+  <cycledef group="3hr">201606140000 201606141200 03:00:00</cycledef>
+
+  <task name="NSSL_interp" cycledefs="3hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>NSSL_interp</jobname>
+    <join><cyclestr>&OBS_LOG_DIR;/NSSL_interp@Y@m@d@H.log</cyclestr></join>
+    
+    &PE_OPTS;    
+    &YMDH_retro;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/NSSL_hrrre_interp_retro.py</value>
+    </envar>
+    <envar>
+      <name>EXECDIR</name>
+      <value>&EXEC_DIR;</value>
+    </envar>
+    <envar>
+      <name>SCRIPTDIR</name>
+      <value>&SCRIPT_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&OBS_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>OBSDIR</name>
+      <value>&OBS_DIR;</value>
+    </envar>
+    <envar>
+      <name>HRRREMASK_C</name>
+      <value>&HRRRE_C_MASK;</value>
+    </envar>
+    <envar>
+      <name>HRRREMASK_S</name>
+      <value>&HRRRE_S_MASK;</value>
+    </envar>
+    <envar>
+      <name>HRRREMASK_NE</name>
+      <value>&HRRRE_NE_MASK;</value>
+    </envar>
+    <envar>
+      <name>HRRREMASK_SE</name>
+      <value>&HRRRE_SE_MASK;</value>
+    </envar>
+    <envar>
+      <name>HRRREMASK_N</name>
+      <value>&HRRRE_N_MASK;</value>
+    </envar>
+    <envar>
+      <name>NSSLMASK</name>
+      <value>&NSSL_MASK;</value>
+    </envar>
+    <envar>
+      <name>INTERPEXEC</name>
+      <value>cref_interp_hrrre</value>
+    </envar>
+    <envar>
+      <name>NCLSCRIPT</name>
+      <value>plot_cref.ncl</value>
+    </envar>
+    <envar>
+      <name>NSSLVAR</name>
+      <value>CREF</value>
+    </envar>
+    <envar>
+      <name>NSSLSUBDIR</name>
+      <value>cref</value>
+    </envar>
+    <envar>
+      <name>OBSVAR</name>
+      <value>cref</value>
+    </envar>
+
+    <envar>
+      <name>IPOPTS</name>
+      <value>2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+    </envar>
+
+    <dependency>
+      <datadep age="120"><cyclestr>&OBS_DIR;/@Y@m@d@H/nssl_mosaic.nc</cyclestr></datadep>
+    </dependency>
+
+  </task> 
+
+
+  <task name="HRRRE_cref_init" cycledefs="3hr" maxtries="2">
+    <command>&SCRIPT_DIR;/wrapper.ksh</command>
+    <jobname>HRRRE_cref_init</jobname>
+    <join><cyclestr>&HRRRE_LOG_DIR;/HRRRE_cref_init@Y@m@d@H.log</cyclestr></join>
+    
+    &PE_OPTS;    
+    &YMDH_retro;
+
+    <envar>
+      <name>SCRIPT</name>
+      <value>&SCRIPT_DIR;/cref_hrrre_init.py</value>
+    </envar>
+    <envar>
+      <name>MODELDIR</name>
+      <value>&HRRRE_DIR;</value>
+    </envar>
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&HRRRE_REALTIME_DIR;</value>
+    </envar>
+    <envar>
+      <name>MODEL</name>
+      <value>hrrre</value>
+    </envar>
+    <envar>
+      <name>ENSEMBLE_MEMBERS</name>
+      <value>1 2 3</value>
+    </envar>
+    <envar>
+      <name>GRIB2VAR</name>
+      <value>:var discipline=0 center=59 local_table=1 parmcat=16 parm=196:</value>
+    </envar>
+    <envar>
+      <name>FCSTLEADS</name>
+      <value>00 03 06 09 12 15 18 21 24</value>
+    </envar>
+
+    <dependency>
+      <datadep age="600"><cyclestr>&OBS_REALTIME_DIR;/@Y@m@d-@Hz/nssl_mosaic.nc</cyclestr></datadep>
+    </dependency>
+
+ 
+  </task>
+
+  <metatask>
+
+    <var name="taskname">HRRRE_cref_03km</var>
+    <var name="interpgrid">03kmLC</var>
+    <var name="statfile">verif_03km</var>
+    <var name="ipopt">2</var>  
+
+    <task name="#taskname#" cycledefs="3hr" maxtries="2">     
+      <command>&SCRIPT_DIR;/wrapper.ksh</command>
+      <jobname>#taskname#</jobname>
+      <join><cyclestr>&HRRRE_LOG_DIR;/#taskname#_@Y@m@d@H.log</cyclestr></join>
+
+      &PE_OPTS;    
+      &YMDH_retro;
+
+      <envar>
+        <name>SCRIPT</name>
+        <value>&SCRIPT_DIR;/cref_hrrre_verif.py</value>
+      </envar>
+
+      <envar>
+        <name>EXECDIR</name>
+        <value>&EXEC_DIR;</value>
+      </envar>
+      <envar>
+        <name>REALTIMEDIR</name>
+        <value>&HRRRE_REALTIME_DIR;</value>
+      </envar>
+      <envar>
+        <name>SCRIPTDIR</name>
+        <value>&SCRIPT_DIR;</value>
+      </envar>
+      <envar>
+        <name>OBSDIR</name>
+        <value>&OBS_REALTIME_DIR;</value>
+      </envar>
+
+      <envar>
+        <name>MODELGRID</name>
+        <value>03kmLC</value>
+      </envar>
+      <envar>
+        <name>INTERPGRID</name>
+        <value>#interpgrid#</value>
+      </envar>
+    
+      <envar>
+        <name>MODEL</name>
+        <value>hrrre</value>
+      </envar>
+      <envar>
+        <name>NCLMODEL</name>
+        <value>HRRRE</value>
+      </envar>
+      <envar>
+        <name>STATF</name>
+        <value>#statfile#</value>
+      </envar>
+      <envar>
+        <name>ENSEMBLE_MEMBERS</name>
+        <value>1 2 3</value>
+      </envar>    
+      <envar>
+        <name>FCSTLEADS</name>
+        <value>00 03 06 09 12 15 18 21 24</value>
+      </envar>
+      <envar>
+        <name>IPOPTS</name>
+        <value>#ipopt# -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1</value>
+      </envar>
+
+      <dependency>
+        <and> 
+          <taskdep task="NSSL_interp"/>
+          <taskdep task="HRRRE_cref_init"/>
+        </and>
+      </dependency>
+
+    </task>
+
+  </metatask>
+
+<!--  <task name="cref_web" cycledefs="1hr" maxtries="2">  
+    <command>&SCRIPT_DIR;/cref_web_stage.py</command>
+    <jobname>cref_web</jobname>
+    <join><cyclestr offset="-7200">&WF_LOG_DIR;/cref_web@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+    
+    <envar>
+      <name>MAINDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;</value>
+    </envar>
+    <envar>
+      <name>SRCMODELS</name>
+      <value>HRRR RAP RUC</value>
+    </envar>
+    <envar>
+      <name>SRCGRIDS</name>
+      <value>03kmLC 13kmLC 20kmLC 40kmLC 80kmLC</value>
+    </envar>
+    <envar>
+      <name>DIRMODELS</name>
+      <value>hrrr rap ruc</value>
+    </envar>
+    <envar>
+      <name>WEBMODELS</name>
+      <value>hrrr rap ruc</value>
+    </envar>
+    <envar>
+      <name>WEBGRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+
+    <dependency>
+      <and>
+        <taskdep task="HRRR_cref_03km"/>
+        <taskdep task="RAP_cref_13km"/>
+        <taskdep task="RUC_cref_13km"/> 
+      </and>
+    </dependency>
+
+  </task> -->
+  
+  <!--<task name="cref_cp" cycledefs="1hr" maxtries="2">
+    <command>&SCRIPT_DIR;/cp_verif_to_gsd.py</command>
+    <jobname>cref_cp</jobname>
+    <join><cyclestr offset="-7200">&WF_LOG_DIR;/cref_cp@Y@m@d@H.log</cyclestr></join>
+
+    &SERVICE_OPTS;
+    &YMDH;
+
+    <envar>
+      <name>MAINDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>WEBDIR</name>
+      <value>&WEB_DIR;</value>
+    </envar>
+    <envar>
+      <name>VAR</name>
+      <value>cref</value>
+    </envar>
+    <envar>
+      <name>WEBMODELS</name>
+      <value>hrrr rap ruc</value>
+    </envar>
+    <envar>
+      <name>WEBGRIDS</name>
+      <value>03km 13km 20km 40km 80km</value>
+    </envar>
+
+    <dependency>
+      <taskdep task="cref_web"/>
+    </dependency>
+
+  </task>-->
+
+  <task name="cref_db" cycledefs="3hr" maxtries="4">    
+    <command>&SCRIPT_DIR;/pop_cref_hrrre_sql_tables.py</command>
+    <jobname>cref_db</jobname>
+    <join><cyclestr>&WF_LOG_DIR;/cref_hrrre_db_@Y@m@d@H.log</cyclestr></join>
+        
+    &SERVICE_OPTS;
+    &YMDH_retro;
+        
+    <envar>
+      <name>REALTIMEDIR</name>
+      <value>&MAIN_DIR;</value>
+    </envar>
+    <envar>
+      <name>LINES</name>
+      <value>65</value>
+    </envar>
+    <envar>
+      <name>MODELDIRS</name>
+      <value>HRRRE/realtime</value>
+    </envar>
+    <envar>
+      <name>MODELNAMES</name>
+      <value>HRRRE</value>
+    </envar>
+    <envar>
+      <name>GRIDS</name>
+      <value>03km</value>
+    </envar>
+    <envar>
+      <name>ENSEMBLE_MEMBERS</name>
+      <value>1 2 3</value>
+    </envar>    
+  
+    <dependency>
+      <datadep age="600"><cyclestr>&HRRRE_REALTIME_DIR;/@Y@m@d-@Hz/03kmLC/verif_03km.nml</cyclestr></datadep>
+    </dependency>
+
+  </task>
+   
+</workflow>

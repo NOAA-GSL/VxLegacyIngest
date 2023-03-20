@@ -1,0 +1,28 @@
+CC = gcc -ansi -c #-m32 
+CL = gcc -ansi #-m32
+
+INCS = -I/usr/include/mysql
+LIBS = -L/usr/lib64/mysql -lmysqlclient
+#LIBS = /usr/lib64/mysql/libmysqlclient.so.15
+
+OBJS = my_mysql_util.o w3fb06.o w3fb11.o w3fb08.o get_vis_stations.o write_vis.o
+
+
+#define the rule for compiling .c files
+.c.o:		
+	${CC} $*.c $(INCS)
+
+vis.x:	$(OBJS) vis_driver.o fill_vis_values.o  agrib_vis.o rotLL_geo.o
+	$(CL) $(OBJS) vis_driver.o fill_vis_values.o agrib_vis.o rotLL_geo.o -lm -o vis.x $(INCS) $(LIBS)
+
+#2:	$(OBJS) vis_driver2.o fill_vis_values2.o
+#	$(CL) $(OBJS) vis_driver2.o fill_vis_values2.o -lm -o vis2.x  $(INCS) $(LIBS)
+
+2:	$(OBJS) vis_driver2.o fill_vis_values2.o rotLL_geo.o
+	$(CL) $(OBJS) vis_driver2.o fill_vis_values2.o rotLL_geo.o -lm -o vis2.x  $(INCS) $(LIBS)
+
+3:	$(OBJS) vis_driver2.o fill_vis_values3.o rotLL_geo.o
+	$(CL) $(OBJS) vis_driver2.o fill_vis_values3.o rotLL_geo.o -lm -o vis3.x  $(INCS) $(LIBS)
+
+4:	$(OBJS) vis_driver4.o fill_vis_values4.o agrib_vis.o rotLL_geo.o
+	$(CL) $(OBJS) vis_driver4.o fill_vis_values4.o agrib_vis.o rotLL_geo.o -lm -o vis4.x  $(INCS) $(LIBS)
